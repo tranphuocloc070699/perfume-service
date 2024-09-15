@@ -2,6 +2,7 @@ package com.loctran.service.user;
 
 import com.loctran.service.exception.custom.AlreadyExistException;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.user.dto.UserLoginDto;
 import com.loctran.service.user.dto.UserRegisterDto;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-
   @Value("${application.security.jwt.access-token.name}")
   private String accessTokenName;
 
@@ -20,9 +20,6 @@ public class UserService {
   private int expiration;
   private final UserRepository userRepository;
 
-  public User login(String email, String password) {
-    return null;
-  }
 
   public User register(UserRegisterDto dto) {
     if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
@@ -31,18 +28,18 @@ public class UserService {
     return userRepository.save(dto.mapToUser());
   }
 
-  public User login(UserRegisterDto dto) {
+  public User login(UserLoginDto dto) {
     Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
 
-    if (userOptional==null) {
+    if (userOptional.isEmpty()) {
       throw new ResourceNotFoundException("User", "email", dto.getEmail());
     }
 
-    if(userOptional.get().getPassword().equals(dto.getPassword()))
-
-
-
-    return userRepository.save(dto.mapToUser());
+    User user = userOptional.get();
+    if(!user.getPassword().equals(dto.getPassword())){
+      throw new AlreadyExistException("Tài khoản hoặc mật khẩu không chính xác");
+    }
+    return user;
   }
 
 }
