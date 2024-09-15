@@ -26,14 +26,19 @@ public class JwtService {
 
   private final long jwtExpiration;
 
+  private final String refreshTokenName;
+
   private final long refreshExpiration;
 
   public JwtService(@Value("${application.security.jwt.secret-key}") String secretKey,
       @Value("${application.security.jwt.expiration}") long jwtExpiration,
-      @Value("${application.security.jwt.refresh-token.expiration}") long refreshExpiration) {
+      @Value("${application.security.jwt.refresh-token.expiration}") long refreshExpiration,
+           @Value("${application.security.jwt.refresh-token.name}") String refreshTokenName
+                    ) {
     this.secretKey = secretKey;
     this.jwtExpiration = jwtExpiration;
     this.refreshExpiration = refreshExpiration;
+    this.refreshTokenName = refreshTokenName;
   }
 
   public String extractUsername(String token) {
@@ -105,6 +110,16 @@ public class JwtService {
   private Key getSignInKey() {
     byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
+  }
+
+
+  private void writeCookie(String token, HttpServletResponse response) {
+    Cookie cookie = new Cookie(refreshTokenName, token);
+    cookie.setMaxAge((int) refreshExpiration);
+    cookie.setSecure(false);
+    cookie.setHttpOnly(true);
+    cookie.setPath("/");
+    response.addCookie(cookie);
   }
 
 }
