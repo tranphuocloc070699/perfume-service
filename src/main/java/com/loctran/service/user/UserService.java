@@ -13,11 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-  @Value("${application.security.jwt.access-token.name}")
-  private String accessTokenName;
-
-  @Value("${application.security.jwt.expiration}")
-  private int expiration;
   private final UserRepository userRepository;
 
 
@@ -40,6 +35,11 @@ public class UserService {
       throw new AlreadyExistException("Tài khoản hoặc mật khẩu không chính xác");
     }
     return user;
+  }
+
+  public User findByEmail(String email) {
+
+    return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
   }
 
 }

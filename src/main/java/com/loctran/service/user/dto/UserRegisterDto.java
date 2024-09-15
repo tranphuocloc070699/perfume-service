@@ -29,6 +29,4 @@ public class UserRegisterDto {
     return User.builder().role(Role.USER).avatar(null).email(this.email).name(this.name).password(
         this.password).build();
   }
-
-
 }
