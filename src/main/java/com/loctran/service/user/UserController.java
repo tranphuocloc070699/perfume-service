@@ -2,25 +2,22 @@ package com.loctran.service.user;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.exception.custom.AlreadyExistException;
 import com.loctran.service.exception.custom.ForbiddenException;
 import com.loctran.service.user.dto.JWTResponseDto;
 import com.loctran.service.user.dto.UserLoginDto;
 import com.loctran.service.user.dto.UserRegisterDto;
+import com.loctran.service.utils.FileUploadUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.Optional;
+
+import java.io.IOException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("user")
@@ -94,5 +91,19 @@ public class UserController {
   @PutMapping("/")
   public User update(){
     return null;
+  }
+
+
+  @PostMapping("/upload")
+  public String upload(@RequestParam("image") MultipartFile multipartFile, @RequestParam("id") String id){
+    String filename = multipartFile.getOriginalFilename();
+    String uploadDir = "src/main/resources/static/upload/"+id;
+    System.out.println(uploadDir);
+    try {
+      FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+      return filename;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

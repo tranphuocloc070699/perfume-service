@@ -8,19 +8,21 @@ import java.nio.file.StandardCopyOption;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class FileUploadUtil {
+public  class FileUploadUtil {
 
   public static void saveFile(String uploadDir, String fileName,
       MultipartFile multipartFile) throws IOException {
     Path uploadPath = Paths.get(uploadDir);
-
+    System.out.println("uploadPath:" + uploadPath);
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
+      System.out.println("file not exist");
     }
 
     try (InputStream inputStream = multipartFile.getInputStream()) {
       Path filePath = uploadPath.resolve(fileName);
       Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+      System.out.println("filePath: " + filePath);
     } catch (IOException ex) {
       throw new IOException("Could not save file: " + fileName, ex);
     }

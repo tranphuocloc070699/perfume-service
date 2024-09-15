@@ -1,9 +1,11 @@
 package com.loctran.service.admin;
 
+import com.loctran.service.utils.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("admin")
@@ -14,5 +16,17 @@ public class AdminController {
     @GetMapping("")
     public String hello() {
       return "hello from admin";
+    }
+
+    @PostMapping("/static/upload")
+    public String upload(@RequestParam("image") MultipartFile multipartFile,@RequestParam("id") String id){
+        String filename = multipartFile.getOriginalFilename();
+        String uploadDir = "src/main/resources/upload/"+id;
+        try {
+            FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+            return filename;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

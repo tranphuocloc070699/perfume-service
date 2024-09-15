@@ -40,7 +40,7 @@ public class SecurityConfig {
     httpSecurity
         .authorizeHttpRequests(
             auth -> auth
-                .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/user/**","/upload/**").permitAll()
                 .anyRequest()
                 .authenticated()
         )
