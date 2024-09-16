@@ -16,5 +16,4 @@ import lombok.Setter;
 public class UserUpdateDto {
   private String name;
   private String avatar;
-
 }

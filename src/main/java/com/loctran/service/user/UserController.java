@@ -3,9 +3,13 @@ package com.loctran.service.user;
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.exception.custom.ForbiddenException;
+import com.loctran.service.product.Product;
+import com.loctran.service.product.ProductService;
+import com.loctran.service.product.dto.CreateProductDto;
 import com.loctran.service.user.dto.JWTResponseDto;
 import com.loctran.service.user.dto.UserLoginDto;
 import com.loctran.service.user.dto.UserRegisterDto;
+import com.loctran.service.user.dto.UserUpdateDto;
 import com.loctran.service.utils.FileUploadUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +31,7 @@ public class UserController {
   private final UserService userService;
   private final JwtService jwtService;
   private final CommonService commonService;
+  private final ProductService productService;
 
   @PostMapping("/signup")
   public Object signup(@RequestBody @Valid UserRegisterDto dto, BindingResult bindingResult,
@@ -88,22 +93,41 @@ public class UserController {
     return ResponseEntity.ok(responseDto);
   }
 
-  @PutMapping("/")
-  public User update(){
-    return null;
+  @PutMapping("/{id}")
+  public ResponseEntity<ResponseDto> update(@PathVariable("id") String id,
+      @RequestBody UserUpdateDto dto) {
+    User user = userService.update(id, dto);
+    ResponseDto responseDto = ResponseDto.builder().path("/user/update/" + id)
+        .message("Cập nhật thông tin người dùng thành công").status(200).data(user).build();
+
+    return ResponseEntity.ok(responseDto);
   }
 
-
   @PostMapping("/upload")
-  public String upload(@RequestParam("image") MultipartFile multipartFile, @RequestParam("id") String id){
+  public String upload(@RequestParam("image") MultipartFile multipartFile,
+      @RequestParam("id") String id) {
     String filename = multipartFile.getOriginalFilename();
-    String uploadDir = "src/main/resources/static/upload/"+id;
-    System.out.println(uploadDir);
+    String uploadDir = "src/main/resources/static/upload/" + id;
+
     try {
-      FileUploadUtil.saveFile(uploadDir,filename,multipartFile);
+      FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
       return filename;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /*Temp*/
+  @PostMapping("/product")
+  public ResponseEntity<ResponseDto> createProduct(@RequestBody CreateProductDto dto){
+    Product product = productService.createProduct(dto);
+
+    ResponseDto responseDto = ResponseDto.builder().path("/admin/product").build();
+
+    responseDto.setMessage("Tạo sản phẩm thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(product);
+
+    return ResponseEntity.ok(responseDto);
   }
 }

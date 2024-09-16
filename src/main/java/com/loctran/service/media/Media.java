@@ -1,22 +1,25 @@
-package com.loctran.service.product;
+package com.loctran.service.media;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
+import com.loctran.service.product.Product;
+import com.loctran.service.user.Role;
 import com.loctran.service.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @Builder
@@ -37,11 +40,15 @@ public class Media {
   @Column
   private String path;
 
-  @Column
-  private String type;
+  @Enumerated(EnumType.STRING)
+  private MediaType type;
 
-  @OneToOne(mappedBy = "avatar")
-  private User user;
+  @ManyToOne
+  @JoinColumn(name = "product_gallery_id")
+  private Product productGallery;
 
+  @ManyToOne
+  @JoinColumn(name = "product_outfit_id")
+  private Product productOutfit;
 
 }

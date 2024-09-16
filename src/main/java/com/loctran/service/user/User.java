@@ -1,9 +1,7 @@
 package com.loctran.service.user;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.loctran.service.product.Media;
+import com.loctran.service.media.Media;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,10 +66,9 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String name;
 
-  //  @JsonIgnore
+  @JsonIgnore
   @Column(nullable = false)
   private String password;
-
 
   @JsonIgnore
   @Override
