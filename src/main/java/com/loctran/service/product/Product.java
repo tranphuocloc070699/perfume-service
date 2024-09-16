@@ -4,16 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.media.Media;
 import com.loctran.service.user.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -21,6 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
@@ -41,6 +35,9 @@ public class Product {
   @Column
   private String name;
 
+  @Column(unique = true)
+  private String slug;
+
   @Column
   private String description;
 
@@ -48,11 +45,14 @@ public class Product {
   @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
   private Media thumbnail;
 
-  @OneToMany(mappedBy = "productGallery", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Media> gallery;
 
-  @OneToMany(mappedBy = "productOutfit", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Media> outfit;
+@OneToMany(fetch = FetchType.LAZY)
+
+  private List<Media> galleries;
+
+@OneToMany(fetch = FetchType.LAZY)
+//  @Formula("SELECT m.id FROM tbl_media m WHERE m.product_id = id AND m.type = 'PRODUCT_OUTFIT'")
+  private List<Media> outfits;
 
   private Integer dateReleased;
 

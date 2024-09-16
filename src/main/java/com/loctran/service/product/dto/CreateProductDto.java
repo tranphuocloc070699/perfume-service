@@ -19,19 +19,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateProductDto {
   private String name;
-
+  private String slug;
   private String description;
-
   private Media thumbnail;
-
-  private List<Media> gallery;
-
-  private List<Media> outfit;
-
+  private List<Media> galleries;
+  private List<Media> outfits;
   private Integer dateReleased;
 
   public Product mapToProduct(){
-    Product product = Product.builder().name(this.name).description(this.description).thumbnail(this.thumbnail).dateReleased(this.dateReleased).build();
-  return product;
+      return Product.builder().name(this.name).slug(this.slug).description(this.description).thumbnail(this.thumbnail).dateReleased(this.dateReleased).build();
   }
 }

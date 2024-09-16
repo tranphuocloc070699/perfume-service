@@ -118,6 +118,18 @@ public class UserController {
   }
 
   /*Temp*/
+  @GetMapping("/product/{slug}")
+  public ResponseEntity<ResponseDto> findProductBySlug(@PathVariable("slug")String slug){
+    Product product = productService.findProductBySlug(slug);
+    ResponseDto responseDto = ResponseDto.builder().path("/user/product").build();
+
+    responseDto.setMessage("Lấy thông tin sản phẩm thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(product);
+
+    return ResponseEntity.ok(responseDto);
+  }
+
   @PostMapping("/product")
   public ResponseEntity<ResponseDto> createProduct(@RequestBody CreateProductDto dto){
     Product product = productService.createProduct(dto);
@@ -130,4 +142,18 @@ public class UserController {
 
     return ResponseEntity.ok(responseDto);
   }
+
+  @PutMapping("/product/{slug}")
+  public ResponseEntity<ResponseDto> updateProduct(@PathVariable("slug")String slug,@RequestBody ){
+    Product product = productService.findProductBySlug(slug);
+    ResponseDto responseDto = ResponseDto.builder().path("/user/product").build();
+
+    responseDto.setMessage("Lấy thông tin sản phẩm thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(product);
+
+    return ResponseEntity.ok(responseDto);
+  }
+
+
 }

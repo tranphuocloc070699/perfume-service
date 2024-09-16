@@ -1,6 +1,7 @@
 package com.loctran.service.media;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.product.Product;
 import com.loctran.service.user.Role;
@@ -43,12 +44,17 @@ public class Media {
   @Enumerated(EnumType.STRING)
   private MediaType type;
 
-  @ManyToOne
-  @JoinColumn(name = "product_gallery_id")
-  private Product productGallery;
+//  @ManyToOne
+//  @JoinColumn(name = "product_gallery_id")
+//  private Product productGallery;
+//
+//  @ManyToOne
+//  @JoinColumn(name = "product_outfit_id")
+//  private Product productOutfit;
 
+  @JsonIgnore
   @ManyToOne
-  @JoinColumn(name = "product_outfit_id")
-  private Product productOutfit;
+  @JoinColumn(name = "product_id")
+  private Product product;
 
 }

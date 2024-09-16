@@ -22,6 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,6 +59,7 @@ public class User implements UserDetails {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "avatar_id", referencedColumnName = "id")
+
   private Media avatar;
 
   @Column(nullable = false, unique = true)
