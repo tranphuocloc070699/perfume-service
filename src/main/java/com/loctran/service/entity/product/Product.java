@@ -68,7 +68,7 @@ public class Product {
   private Country country;
 
 
-  @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "brand_id")
   private Brand brand;
 

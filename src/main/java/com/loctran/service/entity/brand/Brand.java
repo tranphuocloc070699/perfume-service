@@ -57,13 +57,13 @@ public class Brand {
   @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
   private Media thumbnail;
 
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+//  @JsonIgnore
+  @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
 
-  @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "brand")
+//  @JsonIgnore
+  @OneToMany(mappedBy = "brand")
   private List<Product> products;
 
   @CreationTimestamp

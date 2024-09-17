@@ -54,7 +54,7 @@ public class Country {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
   private List<Product> products;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
+  @OneToMany(mappedBy = "country")
   private List<Brand> brands;
 
   @CreationTimestamp

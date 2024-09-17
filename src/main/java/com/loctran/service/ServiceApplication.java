@@ -56,20 +56,14 @@ public class ServiceApplication implements CommandLineRunner {
           .type(MediaType.PRODUCT_NOTE_THUMBNAIL)
           .build();
 
-//      Brand brand = Brand.builder()
-//          .name(faker.company().name())
-//          .homepageLink(faker.internet().url())
-//          .description(faker.lorem().paragraph())
-//          .thumbnail(media)
-//          .createdAt(new Date())
-//          .build();
       Brand brand = Brand.builder()
-          .name("Brand" + (i+1))
-          .homepageLink("Brand" + (i+1))
-          .description("Brand" + (i+1))
-//          .thumbnail(media)
+          .name(faker.company().name())
+          .homepageLink(faker.internet().url())
+          .description(faker.lorem().paragraph())
+          .thumbnail(media)
           .createdAt(new Date())
           .build();
+
 
 
 

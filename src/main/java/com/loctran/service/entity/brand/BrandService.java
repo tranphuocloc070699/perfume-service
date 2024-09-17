@@ -25,8 +25,6 @@ public class BrandService {
 
 
   public List<Brand> findAll() {
-
-    System.out.println("findAll trigger...");
     return brandRepository.findAll();
   }
 
