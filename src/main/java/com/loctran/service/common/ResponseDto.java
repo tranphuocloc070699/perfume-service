@@ -12,5 +12,4 @@ public class ResponseDto {
   private Object data;
   private Object errors;
   private String message;
-  private String path;
 }

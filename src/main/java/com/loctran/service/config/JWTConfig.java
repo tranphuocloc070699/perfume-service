@@ -1,7 +1,7 @@
 package com.loctran.service.config;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
-import com.loctran.service.user.UserRepository;
+import com.loctran.service.entity.user.UserRepository;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

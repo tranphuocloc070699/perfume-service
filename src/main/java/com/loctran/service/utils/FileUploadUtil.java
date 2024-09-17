@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public  class FileUploadUtil {
 
-  public static void saveFile(String id, String fileName,
+  public static String saveFile(String id, String fileName,
       MultipartFile multipartFile) throws IOException {
     Path uploadPath = Paths.get("src/main/resources/static/upload/" +id);
     if (!Files.exists(uploadPath)) {
@@ -21,6 +21,7 @@ public  class FileUploadUtil {
     try (InputStream inputStream = multipartFile.getInputStream()) {
       Path filePath = uploadPath.resolve(fileName);
       Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+      return id + "/" +fileName;
 
     } catch (IOException ex) {
       throw new IOException("Could not save file: " + fileName, ex);

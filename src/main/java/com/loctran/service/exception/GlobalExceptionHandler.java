@@ -1,20 +1,17 @@
 package com.loctran.service.exception;
 
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.exception.custom.AlreadyExistException;
+import com.loctran.service.exception.custom.BadRequestException;
 import com.loctran.service.exception.custom.ConflictException;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,7 +31,7 @@ public class GlobalExceptionHandler {
       validationErrors.put(fieldName, validationMsg);
     });
     ResponseDto responseDto = ResponseDto.builder()
-        .path(null)
+
         .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
         .message("Validate failure")
         .errors(validationErrors)
@@ -48,7 +45,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ResponseDto> handleGlobalException(Exception exception,
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
-        .path(webRequest.getContextPath())
+
         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
         .message("Process failure")
         .errors(exception.getMessage())
@@ -62,7 +59,7 @@ public class GlobalExceptionHandler {
       ResourceNotFoundException exception,
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
-        .path(webRequest.getContextPath())
+
         .status(HttpStatus.NOT_FOUND.value())
         .message("Process failure")
         .errors(exception.getMessage())
@@ -75,7 +72,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ResponseDto> handleConflictException(ConflictException exception,
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
-        .path(webRequest.getContextPath())
+
         .status(HttpStatus.CONFLICT.value())
         .message("Process failure")
         .errors(exception.getMessage())
@@ -85,12 +82,12 @@ public class GlobalExceptionHandler {
   }
 
 
-  @ExceptionHandler(AlreadyExistException.class)
+  @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<ResponseDto> handleAlreadyExistsException(
-      AlreadyExistException exception,
+      BadRequestException exception,
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
-        .path(webRequest.getContextPath())
+
         .status(HttpStatus.BAD_REQUEST.value())
         .message("Process failure")
         .errors(exception.getMessage())

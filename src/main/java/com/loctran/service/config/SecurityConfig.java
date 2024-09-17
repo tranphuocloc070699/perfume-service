@@ -40,9 +40,9 @@ public class SecurityConfig {
     httpSecurity
         .authorizeHttpRequests(
             auth -> auth
-                .requestMatchers("/user/**","/upload/**").permitAll()
+                .requestMatchers("/user/**","/upload/**","/notes/**").permitAll()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
         )
         .authenticationProvider(authenticationProvider)
         .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))

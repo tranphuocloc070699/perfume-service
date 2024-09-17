@@ -1,0 +1,12 @@
+package com.loctran.service.entity.media;
+
+public enum MediaType {
+  USER_AVATAR,
+  PRODUCT_THUMBNAIL,
+  PRODUCT_GALLERY,
+  PRODUCT_OUTFIT,
+  PRODUCT_NOTE_THUMBNAIL,
+  BRAND_THUMBNAIL,
+  COUNTRY_THUMBNAIL,
+
+}

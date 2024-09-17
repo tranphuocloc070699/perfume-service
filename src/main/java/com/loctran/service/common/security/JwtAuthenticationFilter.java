@@ -1,9 +1,9 @@
 package com.loctran.service.common.security;
 
 import com.loctran.service.exception.custom.ForbiddenException;
-import com.loctran.service.user.JwtService;
-import com.loctran.service.user.User;
-import com.loctran.service.user.UserRepository;
+import com.loctran.service.entity.user.JwtService;
+import com.loctran.service.entity.user.User;
+import com.loctran.service.entity.user.UserRepository;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,10 +15,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
