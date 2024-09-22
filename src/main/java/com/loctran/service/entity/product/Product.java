@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
+import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.productNote.ProductNote;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -27,9 +29,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(
     name = "tbl_product"
 )
-@JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Product.class, generator = PropertyGenerator.class, property = "id")
 public class Product {
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
@@ -43,15 +44,23 @@ public class Product {
 
   @Column
   private String description;
-
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
   private Media thumbnail;
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "vote_user_id")  // Name of the column in the "product_votes" table
+  private List<Long> votes = new ArrayList<>();
 
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
   @JsonIgnore
   private List<Media> mediaList;
+
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+  private List<Comment> comments;
 
   @Transient
   private List<Media> galleries;
@@ -63,7 +72,7 @@ public class Product {
   @ManyToMany(mappedBy = "products")
   private List<ProductNote> notes;
 
-  @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "country_id")
   private Country country;
 
@@ -89,6 +98,7 @@ public class Product {
     this.outfits = mediaList.stream().filter(media -> media.getType().equals(MediaType.PRODUCT_OUTFIT)).toList();
 
   }
+
 
 }
 

@@ -4,6 +4,7 @@ import com.loctran.service.exception.custom.ForbiddenException;
 import com.loctran.service.entity.user.JwtService;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
+import com.loctran.service.exception.custom.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,23 +37,24 @@ public class JwtAuthenticationFilter   extends OncePerRequestFilter {
 
       if(request.getHeader("Authorization")!=null && !request.getHeader("Authorization").isEmpty()){
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Auth:" + authHeader);
         String jwt = authHeader.substring(7);
-        System.out.println(jwt);
         String userEmail = jwtService.extractUsername(jwt);
-        System.out.println("userEmail:" + userEmail);
-        Optional<User> userOptional = userRepository.findByEmail(userEmail);
-        if(jwtService.isTokenValid(jwt,userOptional.get())  && SecurityContextHolder.getContext().getAuthentication()==null){
+        System.out.println("userEmail:"+userEmail);
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User","email",userEmail));
+        if(jwtService.isTokenValid(jwt,user)  && SecurityContextHolder.getContext().getAuthentication()==null){
           UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-              userOptional.get(),
+              user,
               null,
-              userOptional.get().getAuthorities()
+              user.getAuthorities()
           );
           authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
           SecurityContextHolder.getContext().setAuthentication(authToken);
+
+          request.setAttribute("userId", user.getId());
         }
       }
-    }catch (RuntimeException exception){
+    }
+    catch (RuntimeException exception){
       throw new ForbiddenException(exception.getMessage());
     }
     filterChain.doFilter(request,response);

@@ -1,23 +1,32 @@
-package com.loctran.service.entity.comment;
+package com.loctran.service.entity.voting;
+
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
+import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.Product;
-import com.loctran.service.entity.user.User;
+import com.loctran.service.entity.productNote.ProductNote;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,24 +40,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 @Entity
 @Table(
-    name = "tbl_comment"
+    name = "tbl_voting"
 )
-@JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
-public class Comment {
+@JsonIdentityInfo(scope = Product.class, generator = PropertyGenerator.class, property = "id")
+public class Voting {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
   private Long id;
-
-  @Column
-  private String content;
-
-  @ManyToOne(cascade = CascadeType.ALL)
-  private User user;
-
-  @JsonIgnore
-  @ManyToOne(cascade = CascadeType.ALL)
-  private Product product;
 
   @CreationTimestamp
   @Column(name = "created_at")
@@ -57,4 +56,7 @@ public class Comment {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private Date updatedAt;
+
+
+
 }

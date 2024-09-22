@@ -44,9 +44,9 @@ public class UserService {
     return user;
   }
 
-  public User update(String id, UserUpdateDto dto) {
-    User user = userRepository.findById(Integer.parseInt(id))
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+  public User update(Long id, UserUpdateDto dto) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
     if (!dto.getName().equals(user.getName())) {
       user.setName(dto.getName());
     }

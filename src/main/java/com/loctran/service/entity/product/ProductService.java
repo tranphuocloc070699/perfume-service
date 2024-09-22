@@ -2,6 +2,7 @@ package com.loctran.service.entity.product;
 
 import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.dto.CreateProductDto;
+import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.entity.media.Media;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +27,13 @@ public class ProductService {
 
   private final MediaRepository mediaRepository;
   private final ProductRepository productRepository;
+
+
+  public Page<ListProductDto> getAllProduct(int page, int size,String sortBy,String sortDir,Long brandId, Long countryId, List<Long> notesIds) {
+    Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+    Pageable pageable = PageRequest.of(page, size,sort);
+    return productRepository.findAllProducts(pageable,brandId,countryId,notesIds);
+  }
 
   public Product createProduct(CreateProductDto dto) {
     Product product = dto.mapToProduct();
@@ -66,6 +78,22 @@ public class ProductService {
     return productRepository.save(product);
   }
 
+  public Product toggleVote(Long userId, Long productId) {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
+    if (product.getVotes() == null) {
+      product.setVotes(new ArrayList<>());
+    }
+
+    if (product.getVotes().contains(userId)) {
+      product.getVotes().remove(userId);
+    } else {
+      product.getVotes().add(userId);
+    }
+    return productRepository.save(product);
+  }
+
+
   public Media addProductGallery(Long productId, MultipartFile file){
     Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
 
@@ -94,10 +122,6 @@ public class ProductService {
     Media media = mediaRepository.findById(mediaId).orElseThrow(() -> new ResourceNotFoundException("Media","id",mediaId.toString()));
     mediaRepository.delete(media);
     return media;
-  }
-
-  public List<Product> getAllProduct() {
-    return productRepository.findAll();
   }
 
   public Product deleteProduct(Long id) {

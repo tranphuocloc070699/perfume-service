@@ -1,12 +1,14 @@
-package com.loctran.service.entity.brand;
+package com.loctran.service.entity.comment;
 
 import com.loctran.service.common.ResponseDto;
+import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.dto.CreateBrandDto;
 import com.loctran.service.entity.brand.dto.UpdateBrandDto;
-
+import com.loctran.service.entity.comment.dto.CreateCommentDto;
+import com.loctran.service.entity.comment.dto.UpdateCommentDto;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,57 +20,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("brand")
+@RequestMapping("comment")
 @RequiredArgsConstructor
-public class BrandController {
-private final BrandService brandService;
+public class CommentController {
+  private final CommentService commentService;
+
+
   @GetMapping("")
-  public ResponseEntity<ResponseDto> getAllBrand() {
-    List<Brand> brands = brandService.findAll();
+  public ResponseEntity<ResponseDto> getAllComment(HttpServletRequest request) {
+
+    Long userId = commentService.getUserId(request);
+    List<Comment> comments = commentService.findAll(userId);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Lấy thông tin thành công");
     responseDto.setStatus(200);
-    responseDto.setData(brands);
+    responseDto.setData(comments);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ResponseDto> getBrand(@PathVariable String id) {
-    Brand brand = brandService.findById(Long.parseLong(id));
+  public ResponseEntity<ResponseDto> getComment(@PathVariable Long id) {
+    Comment comment =  commentService.findById(id);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Lấy thông tin thành công");
     responseDto.setStatus(200);
-    responseDto.setData(brand);
+    responseDto.setData(comment);
     return ResponseEntity.ok(responseDto);
   }
 
-  @PostMapping("")
-  public ResponseEntity<ResponseDto> createBrand(@RequestBody CreateBrandDto dto) {
-    Brand brand = brandService.save(dto);
+  @PostMapping("/product/{productId}")
+  public ResponseEntity<ResponseDto> createComment(HttpServletRequest request,@PathVariable("productId")Long productId,@RequestBody CreateCommentDto createCommentDto) {
+    Long userId = commentService.getUserId(request);
+    Comment comment = commentService.saveProductComment(userId, productId, createCommentDto);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm thương hiệu thành công");
+    responseDto.setMessage("Tạo bình luận thành công");
     responseDto.setStatus(200);
-    responseDto.setData(brand);
+    responseDto.setData(comment);
     return ResponseEntity.ok(responseDto);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ResponseDto> updateBrand(@PathVariable("id") String id, @RequestBody UpdateBrandDto dto) {
-    Brand brand = brandService.update(Long.parseLong(id),dto);
+  public ResponseEntity<ResponseDto> update(@PathVariable("id") Long id, @RequestBody UpdateCommentDto dto) {
+    Comment comment = commentService.update(id,dto);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Update thương hiệu thành công");
+    responseDto.setMessage("Update bình luận thành công");
     responseDto.setStatus(200);
-    responseDto.setData(brand);
+    responseDto.setData(comment);
     return ResponseEntity.ok(responseDto);
   }
 
+
   @DeleteMapping("/{id}")
-  public ResponseEntity<ResponseDto> deleteBrand(@PathVariable("id") String id) {
-    Brand brand = brandService.deleteBrand(Long.parseLong(id));
+  public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long id) {
+    Comment comment = commentService.delete(id);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa thương hiệu thành công");
+    responseDto.setMessage("Xóa bình luận thành công");
     responseDto.setStatus(200);
-    responseDto.setData(brand);
+    responseDto.setData(comment);
     return ResponseEntity.ok(responseDto);
   }
+
 }

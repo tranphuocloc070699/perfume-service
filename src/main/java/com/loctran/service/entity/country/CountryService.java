@@ -76,30 +76,10 @@ public class CountryService {
   }
 
 
-
-//  @Transactional
-//  public ProductNote removeNoteFromProduct(Long noteId, Long productId) {
-//    Product product = productRepository.findById(productId)
-//        .orElseThrow(() -> new RuntimeException("Product not found"));
-//    ProductNote productNote = productNoteRepository.findById(noteId)
-//        .orElseThrow(() -> new RuntimeException("ProductNote not found"));
-//
-//    if (productNote.getProducts().contains(product)) {
-//      productNote.getProducts().remove(product);
-//    }
-//
-//    return productNoteRepository.save(productNote);
-//  }
-
   @Transactional
   public Country deleteCountry(Long id) {
     Country country = countryRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Country not found"));
-
-//    for (Product product : productNote.getProducts()) {
-//      product.getNotes().remove(productNote);
-//      productRepository.save(product);
-//    }
     countryRepository.delete(country);
     return country;
   }

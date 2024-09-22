@@ -1,15 +1,20 @@
 package com.loctran.service.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.post.Post;
+import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -58,7 +63,6 @@ public class User implements UserDetails {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "avatar_id", referencedColumnName = "id")
-
   private Media avatar;
 
   @Column(nullable = false, unique = true)
@@ -67,9 +71,15 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String name;
 
+  @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+  private List<Post> posts;
+
   @JsonIgnore
   @Column(nullable = false)
   private String password;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+  private List<Comment> comments;
 
   @JsonIgnore
   @Override

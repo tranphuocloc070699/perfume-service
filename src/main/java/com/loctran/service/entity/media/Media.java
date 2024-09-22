@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.country.Country;
+import com.loctran.service.entity.post.Post;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.productNote.ProductNote;
 import jakarta.persistence.Column;
@@ -65,5 +66,10 @@ public class Media {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "brand_id")
   private Brand brand;
+
+  @JsonIgnore
+  @OneToOne
+  @JoinColumn(name = "post_id")
+  private Post post;
 
 }

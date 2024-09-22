@@ -24,28 +24,15 @@ public class AdminController {
       return "hello from admin";
     }
 
-    @PostMapping("/upload")
-    public String upload(@RequestParam("image") MultipartFile multipartFile, @RequestParam("id") String id){
-        String filename = multipartFile.getOriginalFilename();
-        try {
-          return FileUploadUtil.saveFile(id,filename,multipartFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping("/product")
-    public ResponseEntity<ResponseDto> createProduct(@RequestBody CreateProductDto dto){
-        Product product = productService.createProduct(dto);
-
-        ResponseDto responseDto = ResponseDto.builder().build();
-
-        responseDto.setMessage("Tạo sản phẩm thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(product);
-
-        return ResponseEntity.ok(responseDto);
-    }
-
+//    @PostMapping("/upload")
+//    public String upload(@RequestParam("image") MultipartFile multipartFile, @RequestParam("id") String id){
+//        String filename = multipartFile.getOriginalFilename();
+//        try {
+//          return FileUploadUtil.saveFile(id,filename,multipartFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
 
 }

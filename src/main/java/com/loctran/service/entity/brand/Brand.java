@@ -61,9 +61,8 @@ public class Brand {
   @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
-
 //  @JsonIgnore
-  @OneToMany(mappedBy = "brand")
+  @OneToMany(fetch = FetchType.LAZY,mappedBy = "brand")
   private List<Product> products;
 
   @CreationTimestamp
