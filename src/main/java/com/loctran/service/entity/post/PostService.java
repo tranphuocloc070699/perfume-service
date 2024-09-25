@@ -44,11 +44,8 @@ public class PostService {
     return postRepository.save(post);
   }
 
-
   public Post updatePost(Long id, UpdatePostDto dto) {
       Post post = getPostById(id);
-
-
     post.setTitle(dto.getTitle());
     post.setExcerpt(dto.getExcerpt());
     post.setContent(dto.getContent());
