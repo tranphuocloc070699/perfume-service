@@ -3,6 +3,7 @@ package com.loctran.service.entity.post;
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.post.dto.CreatePostDto;
 import com.loctran.service.entity.post.dto.UpdatePostDto;
+import com.loctran.service.entity.product.Product;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +70,17 @@ private final PostService postService;
     return ResponseEntity.ok(responseDto);
   }
 
+  @PutMapping("/{id}/vote")
+  public ResponseEntity<ResponseDto> toggleVote(HttpServletRequest request, @PathVariable("id") Long postId){
+    Long userId = (Long) request.getAttribute("userId");
+    Post post = postService.toggleVote(userId,postId);
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Toggle vote thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(post);
+    return ResponseEntity.ok(responseDto);
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deletePost(@PathVariable("id") Long id){
     Post post = postService.deletePost(id);
@@ -78,5 +90,4 @@ private final PostService postService;
     responseDto.setData(post);
     return ResponseEntity.ok(responseDto);
   }
-
 }

@@ -8,6 +8,7 @@ import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productNote.ProductNote;
 import jakarta.persistence.*;
 
@@ -50,14 +51,12 @@ public class Product {
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "vote_user_id")  // Name of the column in the "product_votes" table
+  @Column(name = "vote_user_id")
   private List<Long> votes = new ArrayList<>();
-
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
   @JsonIgnore
   private List<Media> mediaList;
-
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
   private List<Comment> comments;
@@ -68,7 +67,6 @@ public class Product {
   @Transient
   private List<Media> outfits;
 
-
   @ManyToMany(mappedBy = "products")
   private List<ProductNote> notes;
 
@@ -76,10 +74,15 @@ public class Product {
   @JoinColumn(name = "country_id")
   private Country country;
 
-
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "brand_id")
   private Brand brand;
+
+  @OneToMany(mappedBy = "productOriginal", fetch = FetchType.LAZY)
+  private List<ProductCompare> originalComparisons;
+
+  @OneToMany(mappedBy = "productCompare", fetch = FetchType.LAZY)
+  private List<ProductCompare> comparedInComparisons;
 
   private Integer dateReleased;
 
@@ -90,7 +93,6 @@ public class Product {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private Date updatedAt;
-
 
   @PostLoad
   public void postLoad(){

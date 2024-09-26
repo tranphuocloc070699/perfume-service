@@ -18,8 +18,4 @@ public class UpdatePostDto {
   private String content;
   private Boolean isPinned;
   private MediaDto thumbnail;
-
-  public Post mapToPost(){
-    return Post.builder().title(this.title).excerpt(this.excerpt).content(this.content).isPinned(this.isPinned).build();
-  }
 }

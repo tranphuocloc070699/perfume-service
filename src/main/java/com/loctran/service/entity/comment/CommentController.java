@@ -49,9 +49,31 @@ public class CommentController {
   }
 
   @PostMapping("/product/{productId}")
-  public ResponseEntity<ResponseDto> createComment(HttpServletRequest request,@PathVariable("productId")Long productId,@RequestBody CreateCommentDto createCommentDto) {
+  public ResponseEntity<ResponseDto> createProductComment(HttpServletRequest request,@PathVariable("productId")Long productId,@RequestBody CreateCommentDto createCommentDto) {
     Long userId = commentService.getUserId(request);
     Comment comment = commentService.saveProductComment(userId, productId, createCommentDto);
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Tạo bình luận thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(comment);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @PostMapping("/post/{postId}")
+  public ResponseEntity<ResponseDto> createPostComment(HttpServletRequest request,@PathVariable("postId")Long postId,@RequestBody CreateCommentDto createCommentDto) {
+    Long userId = commentService.getUserId(request);
+    Comment comment = commentService.savePostComment(userId, postId, createCommentDto);
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Tạo bình luận thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(comment);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @PostMapping("/product-compare/{productCompareId}")
+  public ResponseEntity<ResponseDto> createProductCompareComment(HttpServletRequest request,@PathVariable("productCompareId")Long productCompareId,@RequestBody CreateCommentDto createCommentDto) {
+    Long userId = commentService.getUserId(request);
+    Comment comment = commentService.saveProductCompareComment(userId, productCompareId, createCommentDto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bình luận thành công");
     responseDto.setStatus(200);
