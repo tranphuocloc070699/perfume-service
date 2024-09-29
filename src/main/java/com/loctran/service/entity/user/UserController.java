@@ -4,10 +4,7 @@ import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.media.MediaType;
-import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductService;
-import com.loctran.service.entity.product.dto.CreateProductDto;
-import com.loctran.service.entity.product.dto.UpdateProductDto;
 import com.loctran.service.entity.user.dto.JWTResponseDto;
 import com.loctran.service.entity.user.dto.UserLoginDto;
 import com.loctran.service.entity.user.dto.UserRegisterDto;
@@ -20,7 +17,6 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

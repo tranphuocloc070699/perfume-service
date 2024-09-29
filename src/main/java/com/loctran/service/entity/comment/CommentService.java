@@ -95,8 +95,4 @@ public class CommentService {
     return comment;
   }
 
-
-  public Long getUserId(HttpServletRequest request){
-    return (Long) request.getAttribute("userId");
-  }
 }

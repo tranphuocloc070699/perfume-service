@@ -1,6 +1,7 @@
 package com.loctran.service.common;
 
 import com.loctran.service.utils.FileUploadUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -26,5 +27,9 @@ public class CommonService {
 
           throw new RuntimeException(e);
       }
+  }
+
+  public Long getUserId(HttpServletRequest request){
+    return (Long) request.getAttribute("userId");
   }
 }

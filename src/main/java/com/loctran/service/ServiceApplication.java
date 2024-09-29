@@ -55,7 +55,7 @@ public class ServiceApplication implements CommandLineRunner {
     Faker faker = new Faker(new Locale("vi"));
     for (int i = 0; i < 100; i++) {
       Media media = Media.builder()
-          .path(faker.file().fileName())
+          .path(faker.avatar().image())
           .type(MediaType.PRODUCT_NOTE_THUMBNAIL)
           .build();
 

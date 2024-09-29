@@ -2,6 +2,7 @@ package com.loctran.service.entity.productCompare;
 
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +29,38 @@ public class ProductCompareService {
     return productCompareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductCompare","id",id.toString()));
   }
 
-  public ProductCompare toggleProductCompare(Long productCompareId,Long productId){
+  public ProductCompare deleteProductCompare(Long id) {
+    ProductCompare productCompare = findById(id);
+    productCompareRepository.delete(productCompare);
+    return productCompare;
+  }
+
+  public ProductCompare toggleProductCompareVote(Long productCompareId,Long productId,Long userId){
       ProductCompare productCompare = findById(productCompareId);
       if(Objects.equals(productCompare.getProductOriginal().getId(), productId)){
-        if(productCompare.getOriginalVotes()!=null && productCompare.getOriginalVotes().contains(productId)){
+        if(productCompare.getOriginalVotes()==null){
+          productCompare.setOriginalVotes(new ArrayList<>());
+          productCompare.getOriginalVotes().add(userId);
+        }else{
+          productCompare.getOriginalVotes().add(userId);
+        }
 
+        if(productCompare.getCompareVotes()!=null && productCompare.getCompareVotes().contains(userId)){
+          productCompare.getCompareVotes().remove(userId);
         }
       }else if(Objects.equals(productCompare.getProductCompare().getId(), productId)){
+        if(productCompare.getCompareVotes()==null){
+          productCompare.setCompareVotes(new ArrayList<>());
+          productCompare.getCompareVotes().add(userId);
+        }else{
+          productCompare.getCompareVotes().add(userId);
+        }
 
+        if(productCompare.getOriginalVotes()!=null && productCompare.getOriginalVotes().contains(userId)){
+          productCompare.getOriginalVotes().remove(userId);
+        }
       }
 
-
+    return productCompareRepository.save(productCompare);
   }
 }

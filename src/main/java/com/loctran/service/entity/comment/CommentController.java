@@ -1,5 +1,6 @@
 package com.loctran.service.entity.comment;
 
+import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.dto.CreateBrandDto;
@@ -24,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CommentController {
   private final CommentService commentService;
-
+  private final CommonService commonService;
 
   @GetMapping("")
   public ResponseEntity<ResponseDto> getAllComment(HttpServletRequest request) {
 
-    Long userId = commentService.getUserId(request);
+    Long userId = commonService.getUserId(request);
     List<Comment> comments = commentService.findAll(userId);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Lấy thông tin thành công");
@@ -50,7 +51,7 @@ public class CommentController {
 
   @PostMapping("/product/{productId}")
   public ResponseEntity<ResponseDto> createProductComment(HttpServletRequest request,@PathVariable("productId")Long productId,@RequestBody CreateCommentDto createCommentDto) {
-    Long userId = commentService.getUserId(request);
+    Long userId = commonService.getUserId(request);
     Comment comment = commentService.saveProductComment(userId, productId, createCommentDto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bình luận thành công");
@@ -61,7 +62,7 @@ public class CommentController {
 
   @PostMapping("/post/{postId}")
   public ResponseEntity<ResponseDto> createPostComment(HttpServletRequest request,@PathVariable("postId")Long postId,@RequestBody CreateCommentDto createCommentDto) {
-    Long userId = commentService.getUserId(request);
+    Long userId = commonService.getUserId(request);
     Comment comment = commentService.savePostComment(userId, postId, createCommentDto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bình luận thành công");
@@ -72,7 +73,7 @@ public class CommentController {
 
   @PostMapping("/product-compare/{productCompareId}")
   public ResponseEntity<ResponseDto> createProductCompareComment(HttpServletRequest request,@PathVariable("productCompareId")Long productCompareId,@RequestBody CreateCommentDto createCommentDto) {
-    Long userId = commentService.getUserId(request);
+    Long userId = commonService.getUserId(request);
     Comment comment = commentService.saveProductCompareComment(userId, productCompareId, createCommentDto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bình luận thành công");
