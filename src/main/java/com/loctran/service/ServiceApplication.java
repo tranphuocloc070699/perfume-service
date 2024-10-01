@@ -14,10 +14,9 @@ import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -49,13 +48,29 @@ public class ServiceApplication implements CommandLineRunner {
     createDummyProduct();
   }
 
+  private String generateImage(){
+    List<String> images = new ArrayList<>(){};
+    images.add("https://bizweb.dktcdn.net/thumb/medium/100/358/756/products/neroli-portofino-50ml.jpg?v=1601210049230");
+    images.add("https://bizweb.dktcdn.net/thumb/medium/100/358/756/products/fucking-fabulous-50ml.jpg?v=1601211470253");
+    images.add("https://bizweb.dktcdn.net/thumb/medium/100/358/756/products/jasmin-rouge-50ml.jpg?v=1601209923277");
+    images.add("https://bizweb.dktcdn.net/thumb/medium/100/358/756/products/tony-iommi-monkey-special-50ml-1.png?v=1692030543600");
+    images.add("https://bizweb.dktcdn.net/thumb/medium/100/358/756/products/starlit-mandarin-honey-cologne-100ml-2.png?v=1638780410803");
+
+    Random random = new Random();
+    int randomIndex = random.nextInt(images.size());
+
+    // Return the image URL at the randomly generated index
+    return images.get(randomIndex);
+
+  }
+
 
 
   private void createDummyProduct() {
     Faker faker = new Faker(new Locale("vi"));
     for (int i = 0; i < 100; i++) {
       Media media = Media.builder()
-          .path(faker.avatar().image())
+          .path(generateImage())
           .type(MediaType.PRODUCT_NOTE_THUMBNAIL)
           .build();
 
