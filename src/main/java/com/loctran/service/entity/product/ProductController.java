@@ -6,7 +6,9 @@ import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -26,117 +28,128 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ProductController {
 
-  private final ProductService productService;
+    private final ProductService productService;
 
-  @GetMapping("")
-  public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "id") String sortBy,
-      @RequestParam(defaultValue = "asc") String sortDir,@RequestParam(required = false) Long brandId,
-      @RequestParam(required = false) Long countryId,
-      @RequestParam(required = false) List<Long> notesIds) {
+    @GetMapping("")
+    public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10") int size,
+                                                     @RequestParam(defaultValue = "id") String sortBy,
+                                                     @RequestParam(defaultValue = "asc") String sortDir, @RequestParam(required = false) Long brandId,
+                                                     @RequestParam(required = false) Long countryId,
+                                                     @RequestParam(required = false) List<Long> notesIds) {
 
-    Page<ListProductDto> product = productService.getAllProduct(page, size,sortBy,sortDir,brandId,countryId,notesIds);
+        Page<ListProductDto> product = productService.getAllProduct(page, size, sortBy, sortDir, brandId, countryId, notesIds);
 
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy tất cả thông tin sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
-    return ResponseEntity.ok(responseDto);
-  }
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Lấy tất cả thông tin sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
+        return ResponseEntity.ok(responseDto);
+    }
 
-  @GetMapping("/{slug}")
-  public ResponseEntity<ResponseDto> findProductBySlug(@PathVariable("slug") String slug) {
-    Product product = productService.findProductBySlug(slug);
-    ResponseDto responseDto = ResponseDto.builder().build();
+    @GetMapping("/id")
+    public ResponseEntity<ResponseDto> getAllProductId() {
 
-    responseDto.setMessage("Lấy thông tin sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
+        List<Long> ids = productService.getAllProductId();
 
-    return ResponseEntity.ok(responseDto);
-  }
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Lấy IDs thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(ids);
+        return ResponseEntity.ok(responseDto);
+    }
 
-  @PostMapping("")
-  public ResponseEntity<ResponseDto> createProduct(@RequestBody CreateProductDto dto) {
-    Product product = productService.createProduct(dto);
+    @GetMapping("/{slug}")
+    public ResponseEntity<ResponseDto> findProductBySlug(@PathVariable("slug") String slug) {
+        Product product = productService.findProductBySlug(slug);
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Lấy thông tin sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
 
-    ResponseDto responseDto = ResponseDto.builder().build();
+        return ResponseEntity.ok(responseDto);
+    }
 
-    responseDto.setMessage("Tạo sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
+    @PostMapping("")
+    public ResponseEntity<ResponseDto> createProduct(@RequestBody CreateProductDto dto) {
+        Product product = productService.createProduct(dto);
 
-    return ResponseEntity.ok(responseDto);
-  }
+        ResponseDto responseDto = ResponseDto.builder().build();
 
-  @PutMapping("/{id}/vote")
-  public ResponseEntity<ResponseDto> toggleVote(HttpServletRequest request, @PathVariable("id") Long productId){
-    Long userId = (Long) request.getAttribute("userId");
-      Product product = productService.toggleVote(userId,productId);
-    ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Tạo sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
 
-    responseDto.setMessage("Toggle vote thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
-    return ResponseEntity.ok(responseDto);
-  }
+        return ResponseEntity.ok(responseDto);
+    }
 
-  @PutMapping("/{id}/gallery")
-  public ResponseEntity<ResponseDto> addProductGallery(@PathVariable("id") String id,
-      @RequestParam("image") MultipartFile multipartFile) {
+    @PutMapping("/{id}/vote")
+    public ResponseEntity<ResponseDto> toggleVote(HttpServletRequest request, @PathVariable("id") Long productId) {
+        Long userId = (Long) request.getAttribute("userId");
+        Product product = productService.toggleVote(userId, productId);
+        ResponseDto responseDto = ResponseDto.builder().build();
 
-    Media media = productService.addProductGallery(Long.parseLong(id), multipartFile);
-    ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Toggle vote thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
+        return ResponseEntity.ok(responseDto);
+    }
 
-    responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(media);
-    return ResponseEntity.ok(responseDto);
-  }
+    @PutMapping("/{id}/gallery")
+    public ResponseEntity<ResponseDto> addProductGallery(@PathVariable("id") String id,
+                                                         @RequestParam("image") MultipartFile multipartFile) {
 
-  @PutMapping("/{id}/outfit")
-  public ResponseEntity<ResponseDto> addProductOutfit(@PathVariable("id") String id,
-      @RequestParam("image") MultipartFile multipartFile) {
-    Media media = productService.addProductOutfit(Long.parseLong(id), multipartFile);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(media);
-    return ResponseEntity.ok(responseDto);
-  }
+        Media media = productService.addProductGallery(Long.parseLong(id), multipartFile);
+        ResponseDto responseDto = ResponseDto.builder().build();
 
-  @DeleteMapping("/{id}/media/{mediaId}")
-  public ResponseEntity<ResponseDto> removeProductMedia(@PathVariable("id") String id,
-      @PathVariable("mediaId") String mediaId) {
-    Media media = productService.deleteProductMedia(Long.parseLong(id), Long.parseLong(mediaId));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa Product Media thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(media);
-    return ResponseEntity.ok(responseDto);
-  }
+        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(media);
+        return ResponseEntity.ok(responseDto);
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,
-      @RequestBody UpdateProductDto dto) {
-    System.out.println("update product detail trigger...");
-    Product product = productService.updateProduct(Long.parseLong(id), dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Update thông tin sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
-    return ResponseEntity.ok(responseDto);
-  }
+    @PutMapping("/{id}/outfit")
+    public ResponseEntity<ResponseDto> addProductOutfit(@PathVariable("id") String id,
+                                                        @RequestParam("image") MultipartFile multipartFile) {
+        Media media = productService.addProductOutfit(Long.parseLong(id), multipartFile);
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(media);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @DeleteMapping("/{id}/media/{mediaId}")
+    public ResponseEntity<ResponseDto> removeProductMedia(@PathVariable("id") String id,
+                                                          @PathVariable("mediaId") String mediaId) {
+        Media media = productService.deleteProductMedia(Long.parseLong(id), Long.parseLong(mediaId));
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Xóa Product Media thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(media);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,
+                                                           @RequestBody UpdateProductDto dto) {
+        System.out.println("update product detail trigger...");
+        Product product = productService.updateProduct(Long.parseLong(id), dto);
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Update thông tin sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
+        return ResponseEntity.ok(responseDto);
+    }
 
 
-  @DeleteMapping("/product/{id}")
-  public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("id") String id) {
-    Product product = productService.deleteProduct(Long.parseLong(id));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(product);
-    return ResponseEntity.ok(responseDto);
-  }
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("id") String id) {
+        Product product = productService.deleteProduct(Long.parseLong(id));
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Xóa sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(product);
+        return ResponseEntity.ok(responseDto);
+    }
 }

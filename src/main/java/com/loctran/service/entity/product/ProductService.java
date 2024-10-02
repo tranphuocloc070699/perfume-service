@@ -4,6 +4,8 @@ import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
+import com.loctran.service.entity.year.Year;
+import com.loctran.service.entity.year.YearService;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.media.MediaRepository;
@@ -12,6 +14,8 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +31,17 @@ public class ProductService {
 
   private final MediaRepository mediaRepository;
   private final ProductRepository productRepository;
+  private final YearService yearService;
 
 
   public Page<ListProductDto> getAllProduct(int page, int size,String sortBy,String sortDir,Long brandId, Long countryId, List<Long> notesIds) {
     Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
     Pageable pageable = PageRequest.of(page, size,sort);
     return productRepository.findAllProducts(pageable,brandId,countryId,notesIds);
+  }
+
+  public List<Long> getAllProductId(){
+    return productRepository.findAllIds();
   }
 
   public Product createProduct(CreateProductDto dto) {
@@ -74,7 +83,11 @@ public class ProductService {
       product.setThumbnail(dto.getThumbnail());
     }
     product.setSlug(dto.getSlug());
-    product.setDateReleased(dto.getDateReleased());
+    if(!Objects.equals(dto.getDateReleased(), product.getDateReleased().getValue())){
+      Year year = yearService.findByValue(dto.getDateReleased());
+      product.setDateReleased(year);
+    }
+//    product.setDateReleased(dto.getDateReleased());
     return productRepository.save(product);
   }
 
