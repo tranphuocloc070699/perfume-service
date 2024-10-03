@@ -10,6 +10,7 @@ import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productNote.ProductNote;
+import com.loctran.service.entity.year.Year;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -84,7 +85,9 @@ public class Product {
   @OneToMany(mappedBy = "productCompare", fetch = FetchType.LAZY)
   private List<ProductCompare> comparedInComparisons;
 
-  private Integer dateReleased;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "dateReleased_id")
+  private Year dateReleased;
 
   @CreationTimestamp
   @Column(name = "created_at")

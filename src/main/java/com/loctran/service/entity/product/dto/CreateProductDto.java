@@ -23,9 +23,8 @@ public class CreateProductDto {
   private List<Media> outfits;
   private Brand brand;
   private Country country;
-  private Integer dateReleased;
 
   public Product mapToProduct(){
-      return Product.builder().name(this.name).slug(this.slug).description(this.description).thumbnail(this.thumbnail).dateReleased(this.dateReleased).brand(this.brand).country(this.country).build();
+      return Product.builder().name(this.name).slug(this.slug).description(this.description).thumbnail(this.thumbnail).brand(this.brand).country(this.country).build();
   }
 }
