@@ -93,6 +93,23 @@ public class UserController {
     return ResponseEntity.ok(responseDto);
   }
 
+  @PutMapping("/log-out")
+  public Object logout(HttpServletRequest httpServletRequest,
+      HttpServletResponse httpServletResponse) {
+    String token = jwtService.getCookie(httpServletRequest);
+    String email = jwtService.extractRefreshTokenUsername(token);
+    User user = userService.findByEmail(email);
+    if (!jwtService.isRefreshTokenValid(token, user)) {
+      throw new ForbiddenException("Token invalid");
+    }
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Đăng xuất thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(null);
+    jwtService.deleteCookie(httpServletResponse);
+    return ResponseEntity.ok(responseDto);
+  }
+
   @PutMapping("/{id}")
   public ResponseEntity<ResponseDto> update(@PathVariable("id") Long id,
       @RequestBody UserUpdateDto dto) {

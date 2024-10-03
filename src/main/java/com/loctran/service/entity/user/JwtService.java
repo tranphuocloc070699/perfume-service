@@ -129,10 +129,18 @@ public class JwtService {
     response.addCookie(cookie);
   }
 
+  public void deleteCookie(HttpServletResponse response) {
+    Cookie cookie = new Cookie(refreshTokenName, null);
+    cookie.setMaxAge(0); // This deletes the cookie
+    cookie.setSecure(false);
+    cookie.setHttpOnly(true);
+    cookie.setPath("/"); // Ensure this matches the original cookie's path
+    response.addCookie(cookie);
+  }
+
   public String getCookie(HttpServletRequest request) {
 
     Cookie[] cookies = request.getCookies();
-
     if (cookies != null) {
 
       for (Cookie cookie : cookies) {
@@ -141,8 +149,6 @@ public class JwtService {
         }
       }
     }
-
-    // Return a message if the cookie is not found
     return null;
   }
 }
