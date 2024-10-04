@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         "LEFT JOIN p.brand b " +
         "LEFT JOIN p.notes n " +
         "LEFT JOIN p.dateReleased y " +
-        "WHERE (:brandId IS NULL OR b.id = :brandId) " +
+        "WHERE (:brandId IS NULL OR b.id = :brandId) " +     
         "AND (:countryId IS NULL OR c.id = :countryId) " +
         "AND (:notesIds IS NULL OR n.id IN :notesIds)")
     Page<ListProductDto> findAllProducts(Pageable pageable,

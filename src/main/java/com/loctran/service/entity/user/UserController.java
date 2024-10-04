@@ -11,6 +11,7 @@ import com.loctran.service.entity.user.dto.UserRegisterDto;
 import com.loctran.service.exception.custom.ForbiddenException;
 import com.loctran.service.entity.user.dto.UserUpdateDto;
 import com.loctran.service.utils.FileUploadUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -76,7 +77,13 @@ public class UserController {
   public Object authenticate(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse) {
     String token = jwtService.getCookie(httpServletRequest);
-    String email = jwtService.extractRefreshTokenUsername(token);
+    String email = "";
+    try{
+       email = jwtService.extractRefreshTokenUsername(token);
+    } catch (ExpiredJwtException e) {
+      jwtService.deleteCookie(httpServletResponse);
+      throw new ForbiddenException("Token expired");
+    }
     User user = userService.findByEmail(email);
     if (!jwtService.isRefreshTokenValid(token, user)) {
       throw new ForbiddenException("Token invalid");
