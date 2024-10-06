@@ -2,11 +2,17 @@ package com.loctran.service;
 
 import com.github.javafaker.Faker;
 import com.loctran.service.entity.brand.Brand;
+import com.loctran.service.entity.comment.Comment;
+import com.loctran.service.entity.comment.CommentRepository;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.media.MediaRepository;
 import com.loctran.service.entity.media.MediaType;
+import com.loctran.service.entity.media.dto.MediaDto;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
+import com.loctran.service.entity.productCompare.ProductCompare;
+import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.productNote.ProductNoteRepository;
 import com.loctran.service.entity.user.Role;
@@ -38,7 +44,9 @@ public class ServiceApplication implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final ProductNoteRepository productNoteRepository;
     private final YearService yearService;
-    private final YearRepository yearRepository;
+    private final MediaRepository mediaRepository;
+    private final CommentRepository commentRepository;
+    private final ProductCompareRepository productCompareRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
@@ -51,9 +59,57 @@ public class ServiceApplication implements CommandLineRunner {
         String passwordEncoded = passwordEncoder.encode(password);
         User user = User.builder().name("Quản trị viên ").email("admin@admin.com")
                 .password(passwordEncoded).role(Role.ADMIN).build();
-        userRepository.save(user);
+        User userSaved = userRepository.save(user);
 
-        createDummyProduct();
+        createDummyProduct(userSaved);
+        createProductCompare(userSaved);
+    }
+
+
+    public static Long generateRandomExcluding(int min, int max, Long exclude) {
+        Random random = new Random();
+        Long randomNumber;
+
+        // Ensure min is inclusive and max is exclusive (like nextInt)
+        int range = max - min;
+
+        if (range <= 1) {
+            throw new IllegalArgumentException("Range is too small to exclude a value.");
+        }
+
+        do {
+            randomNumber = (long) (random.nextInt(range) + min);
+        } while (randomNumber == exclude); // Regenerate if it matches the excluded value
+
+        return randomNumber;
+    }
+
+    private void createProductCompare(User user) {
+        List<Product> products = productRepository.findAll();
+        Faker faker = new Faker(new Locale("vi"));
+        for (Product product : products) {
+
+            for (int i = 0; i <= 20; i++) {
+                Long randomId = generateRandomExcluding(1,100,product.getId());
+
+                Optional<Product> productCompare = productRepository.findById(randomId);
+                if(productCompare.isPresent()) {
+                    ProductCompare newProductCompare = new ProductCompare();
+                    newProductCompare.setProductOriginal(product);
+                    newProductCompare.setProductCompare(productCompare.get());
+                  var productCompareSaved =   productCompareRepository.save(newProductCompare);
+                    for (int j = 0; j < 20; j++) {
+                        Comment comment = commentRepository.save(Comment.builder().productCompare(productCompareSaved).user(user).content(faker.lorem().paragraph()).build());
+                        commentRepository.save(comment);
+                    }
+
+                }
+
+            }
+
+
+
+        }
     }
 
     private String generateImage() {
@@ -67,19 +123,53 @@ public class ServiceApplication implements CommandLineRunner {
 
         Random random = new Random();
         int randomIndex = random.nextInt(images.size());
-
-        // Return the image URL at the randomly generated index
         return images.get(randomIndex);
+    }
 
+    private void generateGallery(Product product) {
+        List<String> images = new ArrayList<>() {
+        };
+        images.add("https://plus.unsplash.com/premium_photo-1679106770086-f4355693be1b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
+        images.add("https://images.unsplash.com/photo-1605619082574-e92eee603b95?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
+        images.add("https://images.unsplash.com/photo-1506915925765-ed31516b9080?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+        images.add("https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
+        images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+        images.add("https://images.unsplash.com/photo-1590156221187-1710315f710b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+        images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+        images.add("https://plus.unsplash.com/premium_photo-1678449464118-75786d816fac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+
+        images.forEach((image) -> {
+            Media media = Media.builder().path(image).type(MediaType.PRODUCT_GALLERY).product(product).build();
+            mediaRepository.save(media);
+        });
     }
 
 
-    private void createDummyProduct() {
+    private void generateOutfit(Product product) {
+        List<String> images = new ArrayList<>() {
+        };
+        images.add("https://plus.unsplash.com/premium_photo-1668485968642-30e3d15e9b9c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://images.unsplash.com/photo-1512484580809-b5251c5df9dd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://images.unsplash.com/photo-1515734392280-e60c25eb9f01?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://images.unsplash.com/photo-1547355332-7c6fcb397868?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://plus.unsplash.com/premium_photo-1697183203538-08c30b0a6709?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8b3V0Zml0fGVufDB8fDB8fHww");
+        images.add("https://plus.unsplash.com/premium_photo-1673734625669-7ef119c3ef65?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG91dGZpdHxlbnwwfHwwfHx8MA%3D%3D");
+
+        images.forEach((image) -> {
+            Media media = Media.builder().path(image).type(MediaType.PRODUCT_OUTFIT).product(product).build();
+            mediaRepository.save(media);
+        });
+    }
+
+
+    private void createDummyProduct(User user) {
         Faker faker = new Faker(new Locale("vi"));
         for (int i = 0; i < 100; i++) {
             Media media = Media.builder()
                     .path(generateImage())
-                    .type(MediaType.PRODUCT_NOTE_THUMBNAIL)
+                    .type(MediaType.PRODUCT_THUMBNAIL)
                     .build();
 
             Brand brand = Brand.builder()
@@ -102,14 +192,24 @@ public class ServiceApplication implements CommandLineRunner {
                     .thumbnail(media)
                     .slug(StringUtil.convertToSlug(productName))
                     .country(country)
-
                     .notes(new ArrayList<>())
                     .brand(brand)
                     .build();
 
             // Assuming you have a ProductRepository to save the Product entities
-
+            product.setVotes(new ArrayList<>());
+            product.getVotes().add(user);
             Product productSaved = productRepository.save(product);
+            generateGallery(productSaved);
+            generateOutfit(productSaved);
+
+            for (int j = 0; j < 20; j++) {
+                Comment comment = commentRepository.save(Comment.builder().product(productSaved).user(user).content(faker.lorem().paragraph()).build());
+                commentRepository.save(comment);
+            }
+
+
+
 
             ProductNote productNote1 = new ProductNote();
             productNote1.setName(faker.commerce().productName());

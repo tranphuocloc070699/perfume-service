@@ -14,6 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -25,7 +27,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -65,6 +69,17 @@ public class User implements UserDetails {
   @JoinColumn(name = "avatar_id", referencedColumnName = "id")
   private Media avatar;
 
+
+  @JsonIgnore
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @JoinTable(name = "tbl_product_tbl_user",
+      joinColumns = @JoinColumn(name = "tbl_user_id"),
+      inverseJoinColumns = @JoinColumn(name = "tbl_product_id")
+  )
+  private List<Product> productVotedList;
+
   @Column(nullable = false, unique = true)
   private String email;
 
@@ -78,6 +93,7 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String password;
 
+  @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Comment> comments;
 

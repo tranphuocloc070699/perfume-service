@@ -10,6 +10,7 @@ import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productNote.ProductNote;
+import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.year.Year;
 import jakarta.persistence.*;
 
@@ -50,16 +51,14 @@ public class Product {
   @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
   private Media thumbnail;
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "vote_user_id")
-  private List<Long> votes = new ArrayList<>();
+  @ManyToMany(mappedBy = "productVotedList")
+  private List<User> votes;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
   @JsonIgnore
   private List<Media> mediaList;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)
   private List<Comment> comments;
 
   @Transient

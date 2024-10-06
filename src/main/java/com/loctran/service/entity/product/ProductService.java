@@ -98,11 +98,11 @@ public class ProductService {
       product.setVotes(new ArrayList<>());
     }
 
-    if (product.getVotes().contains(userId)) {
-      product.getVotes().remove(userId);
-    } else {
-      product.getVotes().add(userId);
-    }
+//    if (product.getVotes().contains(userId)) {
+//      product.getVotes().remove(userId);
+//    } else {
+//      product.getVotes().add(userId);
+//    }
     return productRepository.save(product);
   }
 
@@ -141,6 +141,13 @@ public class ProductService {
     Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
     mediaRepository.deleteAll(product.getMediaList());
     productRepository.deleteById(product.getId());
+    return product;
+  }
+
+  public Product findProductById(Long id) {
+    System.out.println("findProductById");
+    Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
+
     return product;
   }
 }

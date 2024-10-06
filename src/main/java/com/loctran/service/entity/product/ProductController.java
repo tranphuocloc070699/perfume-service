@@ -59,9 +59,9 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/{slug}")
-    public ResponseEntity<ResponseDto> findProductBySlug(@PathVariable("slug") String slug) {
-        Product product = productService.findProductBySlug(slug);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto> findProductById(@PathVariable("id") Long id) {
+        Product product = productService.findProductById(id);
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin sản phẩm thành công");
         responseDto.setStatus(200);
