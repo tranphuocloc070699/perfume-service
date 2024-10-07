@@ -1,30 +1,19 @@
 package com.loctran.service.entity.country;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.Product;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import java.util.Date;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -46,10 +35,8 @@ public class Country {
 
   @Column
   private String code;
-
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
-  private Media thumbnail;
+  @Column
+  private String thumbnail;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
   private List<Product> products;

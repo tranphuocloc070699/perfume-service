@@ -13,5 +13,5 @@ import lombok.Setter;
 public class UpdateCountryDto {
   private String name;
   private String code;
-  private Media thumbnail;
+  private String thumbnail;
 }

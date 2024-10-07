@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
+
 import com.loctran.service.entity.post.Post;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.productCompare.ProductCompare;

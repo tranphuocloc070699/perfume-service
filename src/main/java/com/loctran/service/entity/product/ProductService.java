@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ProductService {
 
-  private final MediaRepository mediaRepository;
   private final ProductRepository productRepository;
   private final YearService yearService;
 
@@ -48,20 +47,20 @@ public class ProductService {
     Product product = dto.mapToProduct();
 
     Product productSaved = productRepository.save(product);
-    List<Media> gallerySavedList = new ArrayList<>();
-    List<Media> outfitSavedList = new ArrayList<>();
-
-    mediaRepository.save(dto.getThumbnail());
-    dto.getGalleries().forEach(gallery -> {
-      gallery.setProduct(productSaved);
-      gallerySavedList.add(mediaRepository.save(gallery));
-    });
-    dto.getOutfits().forEach(outfit -> {
-      outfit.setProduct(productSaved);
-      outfitSavedList.add(mediaRepository.save(outfit));
-    });
-    product.setGalleries(gallerySavedList);
-    product.setOutfits(outfitSavedList);
+//    List<Media> gallerySavedList = new ArrayList<>();
+//    List<Media> outfitSavedList = new ArrayList<>();
+//
+//    mediaRepository.save(dto.getThumbnail());
+//    dto.getGalleries().forEach(gallery -> {
+//      gallery.setProduct(productSaved);
+//      gallerySavedList.add(mediaRepository.save(gallery));
+//    });
+//    dto.getOutfits().forEach(outfit -> {
+//      outfit.setProduct(productSaved);
+//      outfitSavedList.add(mediaRepository.save(outfit));
+//    });
+//    product.setGalleries(gallerySavedList);
+//    product.setOutfits(outfitSavedList);
     return product;
   }
 
@@ -130,17 +129,12 @@ public class ProductService {
     }
   }
 
-  public Media deleteProductMedia(Long productId, Long mediaId){
-   productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
-    Media media = mediaRepository.findById(mediaId).orElseThrow(() -> new ResourceNotFoundException("Media","id",mediaId.toString()));
-    mediaRepository.delete(media);
-    return media;
-  }
+
 
   public Product deleteProduct(Long id) {
     Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
-    mediaRepository.deleteAll(product.getMediaList());
-    productRepository.deleteById(product.getId());
+
+    productRepository.delete(product);
     return product;
   }
 

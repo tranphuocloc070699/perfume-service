@@ -32,7 +32,7 @@ public class BrandDto {
   private String name;
   private String description;
   private String homepageLink;
-  private MediaDto thumbnail;
+  private String thumbnail;
   private Date createdAt;
   private Date updatedAt;
 }

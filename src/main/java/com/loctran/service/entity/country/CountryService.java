@@ -5,22 +5,20 @@ import com.loctran.service.entity.brand.BrandService;
 import com.loctran.service.entity.country.dto.CreateCountryDto;
 import com.loctran.service.entity.country.dto.UpdateCountryDto;
 import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
 import com.loctran.service.entity.media.MediaType;
-import com.loctran.service.entity.product.Product;
-import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CountryService {
 
   private final CountryRepository countryRepository;
-  private final MediaRepository mediaRepository;
+
   private final BrandService brandService;
 
   public List<Country> findAll() {
@@ -32,8 +30,6 @@ public class CountryService {
   }
 
   public Country save(CreateCountryDto dto) {
-
-    mediaRepository.save(dto.getThumbnail());
     return countryRepository.save(dto.maptoCountry());
   }
 
@@ -43,15 +39,9 @@ public class CountryService {
     Country country = countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Country","id",id.toString()));
     country.setName(dto.getName());
     country.setCode(dto.getCode());
-    if(dto.getThumbnail().getId()==null && !dto.getThumbnail().getPath().equals(country.getThumbnail().getPath())){
-      Media thumbnail = dto.getThumbnail();
-      thumbnail.setType(MediaType.COUNTRY_THUMBNAIL);
-      thumbnail.setCountry(country);
-      country.setThumbnail(mediaRepository.save(thumbnail));
-    }else{
-      country.setThumbnail(dto.getThumbnail());
-    }
-    return country;
+    country.setThumbnail(dto.getThumbnail());
+    Country countrySaved = countryRepository.save(country);
+    return countrySaved;
   }
 
 

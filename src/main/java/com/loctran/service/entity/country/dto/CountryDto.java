@@ -30,7 +30,7 @@ public class CountryDto {
   private Long id;
   private String name;
   private String code;
-  private MediaDto thumbnail;
+  private String thumbnail;
   private Date createdAt;
   private Date updatedAt;
 }

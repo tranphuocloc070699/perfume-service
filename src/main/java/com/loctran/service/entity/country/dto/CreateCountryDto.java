@@ -14,7 +14,7 @@ import lombok.Setter;
 public class CreateCountryDto {
   private String name;
   private String code;
-  private Media thumbnail;
+  private String thumbnail;
   public Country maptoCountry(){
     return Country.builder().name(this.name).code(this.code).thumbnail(this.thumbnail).build();
   }

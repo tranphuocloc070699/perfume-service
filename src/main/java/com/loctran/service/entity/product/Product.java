@@ -1,28 +1,24 @@
 package com.loctran.service.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.MediaType;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.year.Year;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -47,25 +43,26 @@ public class Product {
 
   @Column
   private String description;
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
-  private Media thumbnail;
+
+  @Column
+  private String thumbnail;
 
   @ManyToMany(mappedBy = "productVotedList")
   private List<User> votes;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-  @JsonIgnore
-  private List<Media> mediaList;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)
   private List<Comment> comments;
 
-  @Transient
-  private List<Media> galleries;
+  @ElementCollection
+  @CollectionTable(name = "product_galleries", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "galleries")
+  private List<String> galleries;
 
-  @Transient
-  private List<Media> outfits;
+  @ElementCollection
+  @CollectionTable(name = "product_outfits", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "outfits")
+  private List<String> outfits;
 
   @ManyToMany(mappedBy = "products")
   private List<ProductNote> notes;
@@ -95,14 +92,6 @@ public class Product {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private Date updatedAt;
-
-  @PostLoad
-  public void postLoad(){
-    this.galleries = mediaList.stream().filter(media -> media.getType().equals(MediaType.PRODUCT_GALLERY)).toList();
-    this.outfits = mediaList.stream().filter(media -> media.getType().equals(MediaType.PRODUCT_OUTFIT)).toList();
-
-  }
-
 
 }
 

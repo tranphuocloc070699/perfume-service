@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class BrandService {
 
   private final BrandRepository brandRepository;
-  private final MediaRepository mediaRepository;
+
 
 
   public List<Brand> findAll() {
@@ -43,14 +43,8 @@ public class BrandService {
     brand.setName(dto.getName());
     brand.setDescription(dto.getDescription());
     brand.setHomepageLink(dto.getHomepageLink());
-    if (dto.getThumbnail().getId() == null && !dto.getThumbnail().getPath().equals(brand.getThumbnail().getPath())) {
-      Media thumbnail = dto.getThumbnail();
-      thumbnail.setType(MediaType.BRAND_THUMBNAIL);
-      thumbnail.setBrand(brand);
-      brand.setThumbnail(mediaRepository.save(thumbnail));
-    } else {
-      brand.setThumbnail(dto.getThumbnail());
-    }
+    brand.setThumbnail(dto.getThumbnail());
+
     return brand;
   }
 

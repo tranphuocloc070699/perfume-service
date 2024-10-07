@@ -60,9 +60,8 @@ public class Post {
   @Column
   private Boolean isPinned;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
-  private Media thumbnail;
+  @Column
+  private String thumbnail;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "post_votes", joinColumns = @JoinColumn(name = "post_id"))

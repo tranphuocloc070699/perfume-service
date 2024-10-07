@@ -1,6 +1,6 @@
 package com.loctran.service.entity.comment.dto;
 
-import com.loctran.service.entity.media.dto.MediaDto;
+
 import com.loctran.service.entity.user.dto.UserDto;
 import java.util.Date;
 import lombok.AllArgsConstructor;
