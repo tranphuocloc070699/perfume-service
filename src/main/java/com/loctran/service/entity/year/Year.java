@@ -3,25 +3,20 @@ package com.loctran.service.entity.year;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.comment.Comment;
-import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.Product;
-import com.loctran.service.entity.productCompare.ProductCompare;
-import com.loctran.service.entity.productNote.ProductNote;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder

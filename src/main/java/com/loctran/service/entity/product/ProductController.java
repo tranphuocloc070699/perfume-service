@@ -1,9 +1,9 @@
 package com.loctran.service.entity.product;
 
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
+import com.loctran.service.entity.product.dto.ProductDetailDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -61,7 +61,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> findProductById(@PathVariable("id") Long id) {
-        Product product = productService.findProductById(id);
+        Object product = productService.findProductById(id);
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin sản phẩm thành công");
         responseDto.setStatus(200);
@@ -95,40 +95,40 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PutMapping("/{id}/gallery")
-    public ResponseEntity<ResponseDto> addProductGallery(@PathVariable("id") String id,
-                                                         @RequestParam("image") MultipartFile multipartFile) {
+//    @PutMapping("/{id}/gallery")
+//    public ResponseEntity<ResponseDto> addProductGallery(@PathVariable("id") String id,
+//                                                         @RequestParam("image") MultipartFile multipartFile) {
+//
+//        Media media = productService.addProductGallery(Long.parseLong(id), multipartFile);
+//        ResponseDto responseDto = ResponseDto.builder().build();
+//
+//        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
+//        responseDto.setStatus(200);
+//        responseDto.setData(media);
+//        return ResponseEntity.ok(responseDto);
+//    }
 
-        Media media = productService.addProductGallery(Long.parseLong(id), multipartFile);
-        ResponseDto responseDto = ResponseDto.builder().build();
-
-        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(media);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @PutMapping("/{id}/outfit")
-    public ResponseEntity<ResponseDto> addProductOutfit(@PathVariable("id") String id,
-                                                        @RequestParam("image") MultipartFile multipartFile) {
-        Media media = productService.addProductOutfit(Long.parseLong(id), multipartFile);
-        ResponseDto responseDto = ResponseDto.builder().build();
-        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(media);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @DeleteMapping("/{id}/media/{mediaId}")
-    public ResponseEntity<ResponseDto> removeProductMedia(@PathVariable("id") String id,
-                                                          @PathVariable("mediaId") String mediaId) {
-        Media media = productService.deleteProductMedia(Long.parseLong(id), Long.parseLong(mediaId));
-        ResponseDto responseDto = ResponseDto.builder().build();
-        responseDto.setMessage("Xóa Product Media thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(media);
-        return ResponseEntity.ok(responseDto);
-    }
+//    @PutMapping("/{id}/outfit")
+//    public ResponseEntity<ResponseDto> addProductOutfit(@PathVariable("id") String id,
+//                                                        @RequestParam("image") MultipartFile multipartFile) {
+//        Media media = productService.addProductOutfit(Long.parseLong(id), multipartFile);
+//        ResponseDto responseDto = ResponseDto.builder().build();
+//        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
+//        responseDto.setStatus(200);
+//        responseDto.setData(media);
+//        return ResponseEntity.ok(responseDto);
+//    }
+//
+//    @DeleteMapping("/{id}/media/{mediaId}")
+//    public ResponseEntity<ResponseDto> removeProductMedia(@PathVariable("id") String id,
+//                                                          @PathVariable("mediaId") String mediaId) {
+//        Media media = productService.deleteProductMedia(Long.parseLong(id), Long.parseLong(mediaId));
+//        ResponseDto responseDto = ResponseDto.builder().build();
+//        responseDto.setMessage("Xóa Product Media thành công");
+//        responseDto.setStatus(200);
+//        responseDto.setData(media);
+//        return ResponseEntity.ok(responseDto);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,

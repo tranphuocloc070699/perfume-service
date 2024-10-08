@@ -1,6 +1,7 @@
 package com.loctran.service.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
@@ -10,6 +11,7 @@ import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.year.Year;
 import jakarta.persistence.*;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,15 +56,17 @@ public class Product {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)
   private List<Comment> comments;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "product_galleries", joinColumns = @JoinColumn(name = "product_id"))
   @Column(name = "galleries")
-  private List<String> galleries;
+  @OrderBy
+  private Set<String> galleries;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "product_outfits", joinColumns = @JoinColumn(name = "product_id"))
   @Column(name = "outfits")
-  private List<String> outfits;
+  @OrderBy
+  private Set<String> outfits;
 
   @ManyToMany(mappedBy = "products")
   private List<ProductNote> notes;
@@ -74,7 +78,6 @@ public class Product {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "brand_id")
   private Brand brand;
-
   @OneToMany(mappedBy = "productOriginal", fetch = FetchType.LAZY)
   private List<ProductCompare> originalComparisons;
 

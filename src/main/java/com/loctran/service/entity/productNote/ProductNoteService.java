@@ -1,14 +1,11 @@
 package com.loctran.service.entity.productNote;
 
-import com.loctran.service.entity.media.MediaType;
+
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.productNote.dto.CreateProductNoteDto;
 import com.loctran.service.entity.productNote.dto.UpdateProductNoteDto;
-import com.loctran.service.exception.custom.BadRequestException;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class ProductNoteService {
   private final ProductRepository productRepository;
   private final ProductNoteRepository productNoteRepository;
-  private final MediaRepository mediaRepository;
   public List<ProductNote> findAll() {
     return productNoteRepository.findAll();
   }
@@ -38,14 +34,8 @@ public class ProductNoteService {
     ProductNote productNote = productNoteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductNote","id",id.toString()));
     productNote.setName(dto.getName());
     productNote.setSlug(dto.getSlug());
-    if(dto.getThumbnail().getId()==null && !dto.getThumbnail().getPath().equals(productNote.getThumbnail().getPath())){
-      Media thumbnail = dto.getThumbnail();
-      thumbnail.setType(MediaType.PRODUCT_NOTE_THUMBNAIL);
-      thumbnail.setProductNote(productNote);
-      productNote.setThumbnail(mediaRepository.save(thumbnail));
-    }else{
-      productNote.setThumbnail(dto.getThumbnail());
-    }
+    productNote.setThumbnail(dto.getThumbnail());
+
     return productNote;
   }
 

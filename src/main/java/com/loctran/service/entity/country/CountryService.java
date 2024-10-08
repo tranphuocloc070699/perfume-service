@@ -4,8 +4,7 @@ import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.BrandService;
 import com.loctran.service.entity.country.dto.CreateCountryDto;
 import com.loctran.service.entity.country.dto.UpdateCountryDto;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaType;
+
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

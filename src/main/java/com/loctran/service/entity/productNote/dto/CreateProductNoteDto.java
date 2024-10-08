@@ -1,6 +1,5 @@
 package com.loctran.service.entity.productNote.dto;
 
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.productNote.ProductNote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 public class CreateProductNoteDto {
   private String name;
   private String slug;
-  private Media thumbnail;
+  private String thumbnail;
   public ProductNote mapToProductNote(){
     return ProductNote.builder().name(this.name).slug(this.slug).thumbnail(this.thumbnail).build();
   }

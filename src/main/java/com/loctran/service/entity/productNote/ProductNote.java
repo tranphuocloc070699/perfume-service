@@ -2,7 +2,6 @@ package com.loctran.service.entity.productNote;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -48,9 +46,8 @@ public class ProductNote {
   @Column
   private String slug;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
-  private Media thumbnail;
+  @Column
+  private String thumbnail;
 
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @EqualsAndHashCode.Exclude

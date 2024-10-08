@@ -1,8 +1,7 @@
 package com.loctran.service.entity.country.dto;
 
 import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.dto.MediaDto;
+
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

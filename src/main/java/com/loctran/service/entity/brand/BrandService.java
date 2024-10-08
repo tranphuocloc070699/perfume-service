@@ -7,9 +7,7 @@ import com.loctran.service.entity.country.CountryRepository;
 import com.loctran.service.entity.country.CountryService;
 import com.loctran.service.entity.country.dto.CreateCountryDto;
 import com.loctran.service.entity.country.dto.UpdateCountryDto;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
-import com.loctran.service.entity.media.MediaType;
+
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -33,7 +31,7 @@ public class BrandService {
   }
 
   public Brand save(CreateBrandDto dto) {
-    mediaRepository.save(dto.getThumbnail());
+
     return brandRepository.save(dto.mapToBrand());
   }
 

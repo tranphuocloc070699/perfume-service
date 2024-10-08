@@ -5,10 +5,6 @@ import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.comment.CommentRepository;
 import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
-import com.loctran.service.entity.media.MediaType;
-import com.loctran.service.entity.media.dto.MediaDto;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.productCompare.ProductCompare;
@@ -18,17 +14,18 @@ import com.loctran.service.entity.productNote.ProductNoteRepository;
 import com.loctran.service.entity.user.Role;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
-
 import com.loctran.service.entity.year.Year;
-import com.loctran.service.entity.year.YearRepository;
 import com.loctran.service.entity.year.YearService;
 import com.loctran.service.entity.year.dto.CreateYearDto;
-import com.loctran.service.entity.year.dto.YearDto;
 import com.loctran.service.utils.StringUtil;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -44,7 +41,6 @@ public class ServiceApplication implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final ProductNoteRepository productNoteRepository;
     private final YearService yearService;
-    private final MediaRepository mediaRepository;
     private final CommentRepository commentRepository;
     private final ProductCompareRepository productCompareRepository;
 
@@ -126,9 +122,8 @@ public class ServiceApplication implements CommandLineRunner {
         return images.get(randomIndex);
     }
 
-    private void generateGallery(Product product) {
-        List<String> images = new ArrayList<>() {
-        };
+    private Set<String> generateGallery() {
+        Set<String> images = new HashSet<>();
         images.add("https://plus.unsplash.com/premium_photo-1679106770086-f4355693be1b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
         images.add("https://images.unsplash.com/photo-1605619082574-e92eee603b95?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
         images.add("https://images.unsplash.com/photo-1506915925765-ed31516b9080?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
@@ -138,16 +133,12 @@ public class ServiceApplication implements CommandLineRunner {
         images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
         images.add("https://plus.unsplash.com/premium_photo-1678449464118-75786d816fac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
 
-        images.forEach((image) -> {
-            Media media = Media.builder().path(image).type(MediaType.PRODUCT_GALLERY).product(product).build();
-            mediaRepository.save(media);
-        });
+        return images;
     }
 
 
-    private void generateOutfit(Product product) {
-        List<String> images = new ArrayList<>() {
-        };
+    private Set<String> generateOutfit() {
+        Set<String> images = new HashSet<>();
         images.add("https://plus.unsplash.com/premium_photo-1668485968642-30e3d15e9b9c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3V0Zml0fGVufDB8fDB8fHww");
         images.add("https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b3V0Zml0fGVufDB8fDB8fHww");
         images.add("https://images.unsplash.com/photo-1512484580809-b5251c5df9dd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8b3V0Zml0fGVufDB8fDB8fHww");
@@ -157,26 +148,20 @@ public class ServiceApplication implements CommandLineRunner {
         images.add("https://plus.unsplash.com/premium_photo-1697183203538-08c30b0a6709?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8b3V0Zml0fGVufDB8fDB8fHww");
         images.add("https://plus.unsplash.com/premium_photo-1673734625669-7ef119c3ef65?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG91dGZpdHxlbnwwfHwwfHx8MA%3D%3D");
 
-        images.forEach((image) -> {
-            Media media = Media.builder().path(image).type(MediaType.PRODUCT_OUTFIT).product(product).build();
-            mediaRepository.save(media);
-        });
+        return images;
     }
 
 
     private void createDummyProduct(User user) {
         Faker faker = new Faker(new Locale("vi"));
         for (int i = 0; i < 100; i++) {
-            Media media = Media.builder()
-                    .path(generateImage())
-                    .type(MediaType.PRODUCT_THUMBNAIL)
-                    .build();
+
 
             Brand brand = Brand.builder()
                     .name(faker.company().name())
                     .homepageLink(faker.internet().url())
                     .description(faker.lorem().paragraph())
-                    .thumbnail(media)
+                    .thumbnail(generateImage())
                     .createdAt(new Date())
                     .build();
             Country country = new Country(); // Assuming Country is a simple entity, you need to set it up
@@ -189,7 +174,7 @@ public class ServiceApplication implements CommandLineRunner {
             Product product = Product.builder()
                     .name(productName)
                     .description(faker.lorem().paragraph())
-                    .thumbnail(media)
+                    .thumbnail(generateImage())
                     .slug(StringUtil.convertToSlug(productName))
                     .country(country)
                     .notes(new ArrayList<>())
@@ -199,9 +184,9 @@ public class ServiceApplication implements CommandLineRunner {
             // Assuming you have a ProductRepository to save the Product entities
             product.setVotes(new ArrayList<>());
             product.getVotes().add(user);
+            product.setGalleries(generateGallery());
+            product.setOutfits(generateOutfit());
             Product productSaved = productRepository.save(product);
-            generateGallery(productSaved);
-            generateOutfit(productSaved);
 
             for (int j = 0; j < 20; j++) {
                 Comment comment = commentRepository.save(Comment.builder().product(productSaved).user(user).content(faker.lorem().paragraph()).build());

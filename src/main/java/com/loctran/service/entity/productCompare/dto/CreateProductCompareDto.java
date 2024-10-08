@@ -1,10 +1,6 @@
 package com.loctran.service.entity.productCompare.dto;
 
 
-import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

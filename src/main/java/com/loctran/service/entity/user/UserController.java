@@ -2,8 +2,6 @@ package com.loctran.service.entity.user;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.ProductService;
 import com.loctran.service.entity.user.dto.JWTResponseDto;
 import com.loctran.service.entity.user.dto.UserLoginDto;
@@ -135,10 +133,10 @@ public class UserController {
     try {
       String path = FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
 
-      Media media = Media.builder().type(MediaType.USER_AVATAR).path(path).build();
+
 
       ResponseDto responseDto = ResponseDto.builder()
-          .message("Cập nhật thông tin người dùng thành công").status(200).data(media).build();
+          .message("Upload file thành công").status(200).data(path).build();
 
       return ResponseEntity.ok(responseDto);
     } catch (IOException e) {

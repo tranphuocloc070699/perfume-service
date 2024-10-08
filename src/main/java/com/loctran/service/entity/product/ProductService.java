@@ -1,28 +1,22 @@
 package com.loctran.service.entity.product;
 
-import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
+import com.loctran.service.entity.product.dto.ProductDetailDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
 import com.loctran.service.entity.year.Year;
 import com.loctran.service.entity.year.YearService;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
-import com.loctran.service.utils.FileUploadUtil;
 import jakarta.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -74,13 +68,7 @@ public class ProductService {
     Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
     product.setName(dto.getName());
     product.setDescription(dto.getDescription());
-    if(dto.getThumbnail().getId()==null && !dto.getThumbnail().getPath().equals(product.getThumbnail().getPath())){
-     Media thumbnail = dto.getThumbnail();
-     thumbnail.setProduct(product);
-     product.setThumbnail(mediaRepository.save(thumbnail));
-    }else{
-      product.setThumbnail(dto.getThumbnail());
-    }
+    product.setThumbnail(dto.getThumbnail());
     product.setSlug(dto.getSlug());
     if(!Objects.equals(dto.getDateReleased(), product.getDateReleased().getValue())){
       Year year = yearService.findByValue(dto.getDateReleased());
@@ -106,28 +94,28 @@ public class ProductService {
   }
 
 
-  public Media addProductGallery(Long productId, MultipartFile file){
-    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
+//  public Media addProductGallery(Long productId, MultipartFile file){
+//    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
+//
+//    String fileDir = "product-" + productId;
+//    try {
+//     String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
+//      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_GALLERY).product(product).build());
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+//  }
 
-    String fileDir = "product-" + productId;
-    try {
-     String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
-      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_GALLERY).product(product).build());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public Media addProductOutfit(Long productId, MultipartFile file){
-    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
-    String fileDir = "product-" + productId;
-    try {
-      String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
-      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_OUTFIT).product(product).build());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
+//  public Media addProductOutfit(Long productId, MultipartFile file){
+//    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
+//    String fileDir = "product-" + productId;
+//    try {
+//      String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
+//      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_OUTFIT).product(product).build());
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+//  }
 
 
 
@@ -138,9 +126,9 @@ public class ProductService {
     return product;
   }
 
-  public Product findProductById(Long id) {
-    System.out.println("findProductById");
-    Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
+  public Object findProductById(Long id) {
+    System.out.println("findProductById: "+ id);
+    Object product = productRepository.findProductDetailById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
 
     return product;
   }

@@ -2,7 +2,6 @@ package com.loctran.service.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loctran.service.entity.comment.Comment;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.post.Post;
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
@@ -17,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -65,9 +63,8 @@ public class User implements UserDetails {
   @Column(columnDefinition = "varchar(50) default 'ADMIN'")
   private Role role = Role.ADMIN;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "avatar_id", referencedColumnName = "id")
-  private Media avatar;
+  @Column
+  private String avatar;
 
 
   @JsonIgnore

@@ -1,12 +1,10 @@
 package com.loctran.service.entity.user;
 
-import com.loctran.service.exception.custom.BadRequestException;
-import com.loctran.service.exception.custom.ResourceNotFoundException;
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
 import com.loctran.service.entity.user.dto.UserLoginDto;
 import com.loctran.service.entity.user.dto.UserRegisterDto;
 import com.loctran.service.entity.user.dto.UserUpdateDto;
+import com.loctran.service.exception.custom.BadRequestException;
+import com.loctran.service.exception.custom.ResourceNotFoundException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final MediaRepository mediaRepository;
   private final PasswordEncoder passwordEncoder;
 
   public User register(UserRegisterDto dto) {
@@ -43,29 +40,13 @@ public class UserService {
     }
     return user;
   }
-
   public User update(Long id, UserUpdateDto dto) {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
     if (!dto.getName().equals(user.getName())) {
       user.setName(dto.getName());
     }
-
-    if (dto.getAvatar()!=null) {
-      Media media = Media.builder()
-
-          .build();
-      if (user.getAvatar() == null) {
-        media.setPath(dto.getAvatar());
-      } else {
-        media = user.getAvatar();
-        media.setPath(dto.getAvatar());
-      }
-      mediaRepository.save(media);
-      user.setAvatar(media);
-      userRepository.save(user);
-    }
-
+    user.setAvatar(dto.getAvatar());
     return userRepository.save(user);
 
   }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.user.User;
 import jakarta.persistence.CascadeType;

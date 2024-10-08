@@ -2,7 +2,6 @@ package com.loctran.service.entity.product.dto;
 
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.Product;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,9 +17,9 @@ public class CreateProductDto {
   private String name;
   private String slug;
   private String description;
-  private Media thumbnail;
-  private List<Media> galleries;
-  private List<Media> outfits;
+  private String thumbnail;
+  private List<String> galleries;
+  private List<String> outfits;
   private Brand brand;
   private Country country;
 
