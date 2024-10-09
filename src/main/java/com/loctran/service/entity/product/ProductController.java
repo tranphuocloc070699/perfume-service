@@ -5,6 +5,7 @@ import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
+import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -29,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 
     private final ProductService productService;
-
     @GetMapping("")
     public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "10") int size,
@@ -62,6 +62,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> findProductById(@PathVariable("id") Long id) {
         Object product = productService.findProductById(id);
+
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin sản phẩm thành công");
         responseDto.setStatus(200);

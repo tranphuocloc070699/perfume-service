@@ -11,6 +11,10 @@ import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.productNote.ProductNoteRepository;
+import com.loctran.service.entity.productPrice.PriceType;
+import com.loctran.service.entity.productPrice.LabelType;
+import com.loctran.service.entity.productPrice.ProductPrice;
+import com.loctran.service.entity.productPrice.ProductPriceRepository;
 import com.loctran.service.entity.user.Role;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
@@ -18,14 +22,9 @@ import com.loctran.service.entity.year.Year;
 import com.loctran.service.entity.year.YearService;
 import com.loctran.service.entity.year.dto.CreateYearDto;
 import com.loctran.service.utils.StringUtil;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -43,6 +42,7 @@ public class ServiceApplication implements CommandLineRunner {
     private final YearService yearService;
     private final CommentRepository commentRepository;
     private final ProductCompareRepository productCompareRepository;
+    private final ProductPriceRepository productPriceRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
@@ -93,6 +93,8 @@ public class ServiceApplication implements CommandLineRunner {
                     ProductCompare newProductCompare = new ProductCompare();
                     newProductCompare.setProductOriginal(product);
                     newProductCompare.setProductCompare(productCompare.get());
+                    newProductCompare.setOriginalVotes(new ArrayList<>(Arrays.asList(1L,2l,3L,4L)));
+                    newProductCompare.setCompareVotes(new ArrayList<>(Arrays.asList(1L,2l,3L,4L)));
                   var productCompareSaved =   productCompareRepository.save(newProductCompare);
                     for (int j = 0; j < 20; j++) {
                         Comment comment = commentRepository.save(Comment.builder().productCompare(productCompareSaved).user(user).content(faker.lorem().paragraph()).build());
@@ -130,7 +132,6 @@ public class ServiceApplication implements CommandLineRunner {
         images.add("https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
         images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
         images.add("https://images.unsplash.com/photo-1590156221187-1710315f710b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
-        images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
         images.add("https://plus.unsplash.com/premium_photo-1678449464118-75786d816fac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
 
         return images;
@@ -154,7 +155,7 @@ public class ServiceApplication implements CommandLineRunner {
 
     private void createDummyProduct(User user) {
         Faker faker = new Faker(new Locale("vi"));
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
 
 
             Brand brand = Brand.builder()
@@ -177,7 +178,9 @@ public class ServiceApplication implements CommandLineRunner {
                     .thumbnail(generateImage())
                     .slug(StringUtil.convertToSlug(productName))
                     .country(country)
-                    .notes(new ArrayList<>())
+                    .topNotes(new ArrayList<>())
+                    .middleNotes(new ArrayList<>())
+                    .baseNotes(new ArrayList<>())
                     .brand(brand)
                     .build();
 
@@ -186,33 +189,43 @@ public class ServiceApplication implements CommandLineRunner {
             product.getVotes().add(user);
             product.setGalleries(generateGallery());
             product.setOutfits(generateOutfit());
-            Product productSaved = productRepository.save(product);
 
+
+            ProductNote productNote1 = new ProductNote();
+            productNote1.setName(faker.commerce().productName());
+            productNote1.setEnName(faker.commerce().productName());
+            productNote1.setSlug(faker.lorem().word());
+            productNote1.setThumbnail("https://fimgs.net/mdimg/sastojci/t.105.jpg");
+            ProductNote productNoteSaved1 = productNoteRepository.save(productNote1);
+
+            ProductNote productNote2 = new ProductNote();
+            productNote2.setName(faker.commerce().productName());
+            productNote2.setEnName(faker.commerce().productName());
+            productNote2.setSlug(faker.lorem().word());
+            productNote2.setThumbnail("https://fimgs.net/mdimg/sastojci/m.373.jpg?1440724256");
+            ProductNote productNoteSaved2 = productNoteRepository.save(productNote2);
+            ProductNote productNote3 = new ProductNote();
+            productNote3.setName(faker.commerce().productName());
+            productNote3.setEnName(faker.commerce().productName());
+            productNote3.setSlug(faker.lorem().word());
+            productNote3.setThumbnail("https://fimgs.net/mdimg/sastojci/m.901.jpg?1598641517");
+            ProductNote productNoteSaved3 = productNoteRepository.save(productNote3);
+
+            product.getTopNotes().add(productNoteSaved1);
+            product.getMiddleNotes().add(productNoteSaved2);
+            product.getBaseNotes().add(productNoteSaved3);
+            Product productSaved = productRepository.save(product);
             for (int j = 0; j < 20; j++) {
                 Comment comment = commentRepository.save(Comment.builder().product(productSaved).user(user).content(faker.lorem().paragraph()).build());
                 commentRepository.save(comment);
             }
 
+            ProductPrice productPrice1 = ProductPrice.builder().labelType(LabelType.LISTED).isSearch(true).value(100L).product(productSaved).priceType(PriceType.USD).link("https://parfumerie.vn/dior-sauvage-edp").build();
+            ProductPrice productPrice2 = ProductPrice.builder().labelType(LabelType.VIETNAM_MARKET).isSearch(true).value(2000000L).product(productSaved).priceType(PriceType.VND).link("https://parfumerie.vn/dior-sauvage-edp").build();
 
+            productPriceRepository.save(productPrice1);
+            productPriceRepository.save(productPrice2);
 
-
-            ProductNote productNote1 = new ProductNote();
-            productNote1.setName(faker.commerce().productName());
-            productNote1.setSlug(faker.lorem().word());
-
-            ProductNote productNote2 = new ProductNote();
-            productNote2.setName(faker.commerce().productName());
-            productNote2.setSlug(faker.lorem().word());
-
-            ProductNote productNoteSaved1 = productNoteRepository.save(productNote1);
-            productNoteSaved1.setProducts(new ArrayList<>());
-            productNoteSaved1.getProducts().add(productSaved);
-            productNoteRepository.save(productNoteSaved1);
-
-            ProductNote productNoteSaved2 = productNoteRepository.save(productNote2);
-            productNoteSaved2.setProducts(new ArrayList<>());
-            productNoteSaved2.getProducts().add(productSaved);
-            productNoteRepository.save(productNoteSaved2);
 
             CreateYearDto dto = new CreateYearDto(faker.number().numberBetween(1900, 2024));
             Year yearSaved = yearService.createYear(dto);

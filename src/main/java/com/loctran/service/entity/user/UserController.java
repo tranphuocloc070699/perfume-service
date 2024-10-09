@@ -74,7 +74,14 @@ public class UserController {
   @GetMapping("")
   public Object authenticate(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse) {
+    ResponseDto responseDto = ResponseDto.builder().build();
     String token = jwtService.getCookie(httpServletRequest);
+    if (token == null) {
+      responseDto.setStatus(400);
+      responseDto.setMessage("Không tìm thấy token");
+      responseDto.setData(null);
+      return responseDto;
+    }
     String email = "";
     try{
        email = jwtService.extractRefreshTokenUsername(token);
@@ -87,7 +94,7 @@ public class UserController {
       throw new ForbiddenException("Token invalid");
     }
     String accessToken = jwtService.generateToken(user);
-    ResponseDto responseDto = ResponseDto.builder().build();
+
     JWTResponseDto jwtResponseDto = JWTResponseDto.builder().data(user).accessToken(accessToken)
         .build();
     responseDto.setMessage("Xác thực thông tin người dùng thành công");

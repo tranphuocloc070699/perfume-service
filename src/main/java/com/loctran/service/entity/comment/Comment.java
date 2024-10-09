@@ -47,7 +47,8 @@ public class Comment {
   @Column
   private String content;
 
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+
+  @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
   private User user;
 
   @JsonIgnore

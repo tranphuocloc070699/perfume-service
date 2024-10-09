@@ -4,6 +4,8 @@ import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
+import com.loctran.service.entity.productCompare.ProductCompareRepository;
+import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.year.Year;
 import com.loctran.service.entity.year.YearService;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
@@ -25,6 +27,7 @@ public class ProductService {
 
   private final ProductRepository productRepository;
   private final YearService yearService;
+  private final ProductCompareRepository productCompareRepository;
 
 
   public Page<ListProductDto> getAllProduct(int page, int size,String sortBy,String sortDir,Long brandId, Long countryId, List<Long> notesIds) {
@@ -127,9 +130,17 @@ public class ProductService {
   }
 
   public Object findProductById(Long id) {
-    System.out.println("findProductById: "+ id);
-    Object product = productRepository.findProductDetailById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
+    Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
+    List<Object[]> objectResponse = productCompareRepository.findProductCompareWithOriginalProductAvatarAndId(id);
+    List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
 
-    return product;
+    objectResponse.forEach((object) -> {
+      ListProductCompareDto dto = new ListProductCompareDto();
+      dto.convertObjectToDto(object);
+      listProductCompareDtos.add(dto);
+    });
+    product.setProductCompares(listProductCompareDtos);
+
+    return objectResponse;
   }
 }

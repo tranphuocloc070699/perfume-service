@@ -72,7 +72,9 @@ public class ProductNoteService {
         .orElseThrow(() -> new RuntimeException("ProductNote not found"));
 
     for (Product product : productNote.getProducts()) {
-      product.getNotes().remove(productNote);
+      product.getTopNotes().remove(productNote);
+      product.getMiddleNotes().remove(productNote);
+      product.getBaseNotes().remove(productNote);
       productRepository.save(product);
     }
     productNoteRepository.delete(productNote);

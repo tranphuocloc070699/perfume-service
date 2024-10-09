@@ -16,16 +16,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description,p.thumbnail, " +
-        "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), p.createdAt, p.updatedAt) " +
-        "FROM Product p " +
-        "LEFT JOIN p.country c " +
-        "LEFT JOIN p.brand b " +
-        "LEFT JOIN p.notes n " +
-        "LEFT JOIN p.dateReleased y " +
-        "WHERE (:brandId IS NULL OR b.id = :brandId) " +     
-        "AND (:countryId IS NULL OR c.id = :countryId) " +
-        "AND (:notesIds IS NULL OR n.id IN :notesIds)")
+    @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description, p.thumbnail, " +
+            "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), p.createdAt, p.updatedAt) " +
+            "FROM Product p " +
+            "LEFT JOIN p.country c " +
+            "LEFT JOIN p.brand b " +
+            "LEFT JOIN p.topNotes tn " +  // Join top notes
+            "LEFT JOIN p.middleNotes mn " +  // Join middle notes
+            "LEFT JOIN p.baseNotes bn " +  // Join base notes
+            "LEFT JOIN p.dateReleased y " +
+            "WHERE (:brandId IS NULL OR b.id = :brandId) " +
+            "AND (:countryId IS NULL OR c.id = :countryId) " +
+            "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds)")
     Page<ListProductDto> findAllProducts(Pageable pageable,
         @Param("brandId") Long brandId,
         @Param("countryId") Long countryId,
@@ -59,7 +61,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
 
     @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ProductDetailDto(p.id, p.name, p.slug, p.description, p.thumbnail,p.galleries,null, "
-        + "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), " // Date released
+        + "new com.loctran.service.entity.year.dto.YearDto(null, null), " // Date released
         + "null, " // Product compare
         + "null, " // Brand
         + "null, " // Country
@@ -68,14 +70,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         + "null, " // Votes
         + "p.createdAt, p.updatedAt) "
         + "FROM Product p "
-        + "LEFT JOIN p.dateReleased y "
-        + "LEFT JOIN p.originalComparisons pc "
-        + "LEFT JOIN p.brand b "
-        + "LEFT JOIN p.country c "
-        + "LEFT JOIN p.comments cm "
-        + "LEFT JOIN cm.user ucm "
         + "WHERE p.id = :id")
     Optional<List<Object>> findProductDetailById(@Param("id") Long id);
-
 
 }

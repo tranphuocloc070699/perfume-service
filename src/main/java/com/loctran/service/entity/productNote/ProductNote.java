@@ -44,6 +44,9 @@ public class ProductNote {
   private String name;
 
   @Column
+  private String enName;
+
+  @Column
   private String slug;
 
   @Column
