@@ -1,5 +1,6 @@
 package com.loctran.service.entity.productCompare;
 
+import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.productNote.ProductNote;
 
 import java.util.List;
@@ -14,11 +15,9 @@ public interface ProductCompareRepository extends JpaRepository<ProductCompare,L
   Page<ProductCompare> findByProductOriginalId(Long productOriginalId, Pageable pageable);
 
 
-  @Query("SELECT p.id, p.createdAt, p.updatedAt, pc.id, pc.name, pc.thumbnail, ov, cv " +
+  @Query("SELECT p.id, p.createdAt, p.updatedAt, pc.id, pc.name, pc.thumbnail,p.originalVotes,p.compareVotes  " +
           "FROM ProductCompare p " +
           "JOIN p.productCompare pc " +
-          "LEFT JOIN p.originalVotes ov " +
-          "LEFT JOIN p.compareVotes cv " +
           "WHERE p.productOriginal.id = :id")
   List<Object[]> findProductCompareWithOriginalProductAvatarAndId(@Param("id") Long id);
 }

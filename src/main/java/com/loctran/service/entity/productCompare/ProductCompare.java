@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -42,14 +43,17 @@ public class ProductCompare {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_original_id", referencedColumnName = "id")
+  @OrderBy
   private Product productOriginal;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_compare_id", referencedColumnName = "id")
+  @OrderBy
   private Product productCompare;
 
   @ElementCollection
   @Column(name = "original_votes")
+  @OrderBy
   private List<Long> originalVotes;
 
   @ElementCollection

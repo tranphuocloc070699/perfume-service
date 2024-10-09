@@ -129,18 +129,20 @@ public class ProductService {
     return product;
   }
 
-  public Object findProductById(Long id) {
+  public Product findProductById(Long id) {
     Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
     List<Object[]> objectResponse = productCompareRepository.findProductCompareWithOriginalProductAvatarAndId(id);
     List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
 
     objectResponse.forEach((object) -> {
       ListProductCompareDto dto = new ListProductCompareDto();
-      dto.convertObjectToDto(object);
+//      List<Long> list = object[6]!=null ? (List<Long>) object[6] : new ArrayList<>();
+//      System.out.println("size:" + list.size());
+//      dto.convertObjectToDto(object);
       listProductCompareDtos.add(dto);
     });
     product.setProductCompares(listProductCompareDtos);
 
-    return objectResponse;
+    return product;
   }
 }
