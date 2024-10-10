@@ -131,7 +131,7 @@ public class ProductService {
 
   public Object findProductById(Long id) {
     Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product","id",id.toString()));
-    List<Object[]> objectResponse = productCompareRepository.findProductCompareWithOriginalProductAvatarAndId(id);
+    List<Object> objectResponse = productCompareRepository.findProductCompareWithOriginalProductAvatarAndId(id);
     List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
 
     objectResponse.forEach((object) -> {
