@@ -2,6 +2,7 @@ package com.loctran.service.entity.productCompare;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.product.Product;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -40,21 +42,28 @@ public class ProductCompare {
   @Column(name = "id")
   private Long id;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_original_id", referencedColumnName = "id")
+  @OrderBy
   private Product productOriginal;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_compare_id", referencedColumnName = "id")
+  @OrderBy
   private Product productCompare;
 
   @ElementCollection
   @Column(name = "original_votes")
+  @OrderBy
   private List<Long> originalVotes;
 
   @ElementCollection
   @Column(name = "compare_votes")
+  @OrderBy
   private List<Long> compareVotes;
+
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCompare")
   private List<Comment> comments;

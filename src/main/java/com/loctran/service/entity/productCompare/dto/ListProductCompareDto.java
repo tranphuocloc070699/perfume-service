@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class ListProductCompareDto {
     private String createdAt;
     private String updatedAt;
     private Product product;
+    private Long totalVotes;
 
 
     public void convertObjectToDto(Object[] objects){
@@ -27,6 +30,7 @@ public class ListProductCompareDto {
         Long productCompareId =  objects[3]!=null ? (Long) objects[3] : 0L;
         String productCompareName =  objects[4]!=null ? objects[4].toString() :  "" ;
         String productCompareThumbnail = objects[5]!=null ?  objects[5].toString() : "";
+        BigDecimal totalVotes = objects[6]!=null ?  (BigDecimal) objects[6] : BigDecimal.valueOf(0);
 
 
         Product dto = new Product();
@@ -38,5 +42,6 @@ public class ListProductCompareDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.product = dto;
+        this.totalVotes = totalVotes.longValue();
     }
 }

@@ -5,10 +5,13 @@ import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
 import com.loctran.service.entity.product.dto.UpdateProductDto;
+import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
+import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -61,13 +64,21 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> findProductById(@PathVariable("id") Long id) {
-        Object product = productService.findProductById(id);
-
+        Product product = productService.findProductById(id);
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin sản phẩm thành công");
         responseDto.setStatus(200);
         responseDto.setData(product);
+        return ResponseEntity.ok(responseDto);
+    }
 
+    @GetMapping("product-compare/{id}")
+    public ResponseEntity<ResponseDto> findProducCompareById(@PathVariable("id") Long id) {
+        ProductCompareDto productCompare = productService.findProductCompare(id);
+        ResponseDto responseDto = ResponseDto.builder().build();
+        responseDto.setMessage("Lấy thông tin sản phẩm thành công");
+        responseDto.setStatus(200);
+        responseDto.setData(productCompare);
         return ResponseEntity.ok(responseDto);
     }
 
