@@ -35,9 +35,9 @@ public class ProductController {
     private final ProductService productService;
     @GetMapping("")
     public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "10") int size,
+                                                     @RequestParam(defaultValue = "12") int size,
                                                      @RequestParam(defaultValue = "id") String sortBy,
-                                                     @RequestParam(defaultValue = "asc") String sortDir, @RequestParam(required = false) Long brandId,
+                                                     @RequestParam(defaultValue = "asc") String sortDir, @RequestParam(required = false)String productName ,@RequestParam(required = false) Long brandId,
                                                      @RequestParam(required = false) Long countryId,
                                                      @RequestParam(required = false) List<Long> notesIds) {
 

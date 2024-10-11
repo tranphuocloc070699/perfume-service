@@ -1,5 +1,7 @@
 package com.loctran.service.entity.product;
 
+import com.loctran.service.entity.brand.Brand;
+import com.loctran.service.entity.brand.BrandRepository;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
@@ -35,6 +37,7 @@ public class ProductService {
   private final YearService yearService;
   private final ProductCompareRepository productCompareRepository;
   private final ProductPriceRepository productPriceRepository;
+  private final BrandRepository brandRepository;
 
 
   public Page<ListProductDto> getAllProduct(int page, int size,String sortBy,String sortDir,Long brandId, Long countryId, List<Long> notesIds) {
@@ -145,6 +148,21 @@ public class ProductService {
       dto.convertObjectToDto(object);
       listProductCompareDtos.add(dto);
     });
+//
+//    if (product.getBrand().getId()!=null) {
+//      List<Object[]> brandRawData = brandRepository.findBrandById((product.getBrand().getId()));
+//      System.out.println("size:" + brandRawData.size());
+//      Object[] firstBrandRawData = brandRawData.getFirst();
+//      //b.name,b.description,b.homepageLink,b.thumbnail
+//      String brandName = firstBrandRawData[1]!=null ? firstBrandRawData[1].toString() : "";
+//      String brandDesc = firstBrandRawData[2]!=null ? firstBrandRawData[2].toString() : "";
+//      String brandHomepageLink = firstBrandRawData[3]!=null ? firstBrandRawData[3].toString() : "";
+//      String brandThumbnail = firstBrandRawData[4]!=null ? firstBrandRawData[4].toString() : "";
+//
+//      Brand brand = Brand.builder().id(product.getBrand().getId()).name(brandName).description(brandDesc).homepageLink(brandHomepageLink).thumbnail(brandThumbnail).build();
+//      product.setBrand(brand);
+//     }
+
     product.setProductCompares(listProductCompareDtos);
 
     return product;

@@ -2,6 +2,7 @@ package com.loctran.service.entity.brand;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.product.Product;
@@ -43,13 +44,14 @@ public class Brand {
   @Column
   private String thumbnail;
 
-//  @JsonIgnore
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
 
-//  @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY,mappedBy = "brand")
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.EAGER,mappedBy = "brand")
   private List<Product> products;
 
   @CreationTimestamp

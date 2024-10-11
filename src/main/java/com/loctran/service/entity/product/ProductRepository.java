@@ -21,11 +21,13 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "LEFT JOIN p.dateReleased y " +
             "WHERE (:brandId IS NULL OR b.id = :brandId) " +
             "AND (:countryId IS NULL OR c.id = :countryId) " +
-            "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds)")
+            "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) " +
+            "AND (:productName IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%')))")
     Page<ListProductDto> findAllProducts(Pageable pageable,
-        @Param("brandId") Long brandId,
-        @Param("countryId") Long countryId,
-        @Param("notesIds") List<Long> notesIds);
+                                         @Param("brandId") Long brandId,
+                                         @Param("countryId") Long countryId,
+                                         @Param("notesIds") List<Long> notesIds,
+                                         @Param("productName") String productName);
 
     @Query("SELECT p.id FROM Product p ORDER BY p.id ASC")
     List<Long> findAllIds();
