@@ -10,19 +10,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description, p.thumbnail, " +
-            "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), p.createdAt, p.updatedAt) " +
-            "FROM Product p " +
-            "LEFT JOIN p.country c " +
-            "LEFT JOIN p.brand b " +
-            "LEFT JOIN p.topNotes tn " +  // Join top notes
-            "LEFT JOIN p.middleNotes mn " +  // Join middle notes
-            "LEFT JOIN p.baseNotes bn " +  // Join base notes
-            "LEFT JOIN p.dateReleased y " +
-            "WHERE (:brandId IS NULL OR b.id = :brandId) " +
-            "AND (:countryId IS NULL OR c.id = :countryId) " +
-            "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) " +
-            "AND (:productName IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%')))")
+    @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description, p.thumbnail, "
+        +
+        "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), p.createdAt, p.updatedAt) "
+        +
+        "FROM Product p " +
+        "LEFT JOIN p.country c " +
+        "LEFT JOIN p.brand b " +
+        "LEFT JOIN p.topNotes tn " +  // Join top notes
+        "LEFT JOIN p.middleNotes mn " +  // Join middle notes
+        "LEFT JOIN p.baseNotes bn " +  // Join base notes
+        "LEFT JOIN p.dateReleased y " +
+        "WHERE (:brandId IS NULL OR b.id = :brandId) " +
+        "AND (:countryId IS NULL OR c.id = :countryId) " +
+        "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) " +
+        "AND (:productName IS NULL OR p.name LIKE %:productName%)")
     Page<ListProductDto> findAllProducts(Pageable pageable,
                                          @Param("brandId") Long brandId,
                                          @Param("countryId") Long countryId,

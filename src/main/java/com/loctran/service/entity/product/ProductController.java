@@ -41,7 +41,7 @@ public class ProductController {
                                                      @RequestParam(required = false) Long countryId,
                                                      @RequestParam(required = false) List<Long> notesIds) {
 
-        Page<ListProductDto> product = productService.getAllProduct(page, size, sortBy, sortDir, brandId, countryId, notesIds);
+        Page<ListProductDto> product = productService.getAllProduct(page, size, sortBy, sortDir, brandId, countryId, notesIds,productName);
 
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy tất cả thông tin sản phẩm thành công");
