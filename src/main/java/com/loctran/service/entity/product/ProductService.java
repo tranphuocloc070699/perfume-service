@@ -10,6 +10,7 @@ import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
+import com.loctran.service.entity.productPrice.LabelType;
 import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.productPrice.ProductPriceRepository;
 import com.loctran.service.entity.year.Year;
@@ -19,6 +20,7 @@ import jakarta.transaction.Transactional;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +43,39 @@ public class ProductService {
 
 
   public Page<ListProductDto> getAllProduct(int page, int size,String sortBy,String sortDir,Long brandId, Long countryId, List<Long> notesIds,String productName) {
-    Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-    Pageable pageable = PageRequest.of(page-1, size,sort);
-    return productRepository.findAllProducts(pageable,brandId,countryId,notesIds,productName);
+    Sort sort = Sort.unsorted();  // Default to unsorted
+    List<String> sortByPrice = Arrays.asList("price_LISTED", "price_VIETNAM_MARKET");
+
+    // Check if sorting by 'dateReleased'
+    if ("dateReleased".equals(sortBy)) {
+      sort = sortDir.equalsIgnoreCase("desc")
+          ? Sort.by("dateReleased.value").descending()
+          : Sort.by("dateReleased.value").ascending();
+    }
+    // Check if sorting by price (optional)
+    else if (sortByPrice.contains(sortBy)) {
+      System.out.println("trigger...");
+      LabelType labelType = "price_LISTED".equals(sortBy) ? LabelType.LISTED : LabelType.VIETNAM_MARKET;
+      // Sort by price in ascending or descending order
+      sort = sortDir.equalsIgnoreCase("desc")
+          ? Sort.by("prices.value").descending()
+          : Sort.by("prices.value").ascending();
+      Pageable pageable = PageRequest.of(page - 1, size, sort);
+      // Return sorted by price based on LabelType
+      return productRepository.findAllProducts(
+          pageable,
+          brandId, countryId, notesIds, productName, labelType, sortBy
+      );
+    }
+    // General sorting for other fields
+    else if (sortBy != null && !sortBy.isEmpty()) {
+      sort = sortDir.equalsIgnoreCase("desc")
+          ? Sort.by(sortBy).descending()
+          : Sort.by(sortBy).ascending();
+    }
+
+    Pageable pageable = PageRequest.of(page - 1, size, sort);
+    return productRepository.findAllProducts(pageable, brandId, countryId, notesIds, productName,null,null);
   }
 
   public List<Long> getAllProductId(){

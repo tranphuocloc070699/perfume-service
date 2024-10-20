@@ -30,7 +30,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "tbl_product"
+        name = "tbl_product_price"
 )
 @JsonIdentityInfo(scope = com.loctran.service.entity.productPrice.ProductPrice.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductPrice {

@@ -1,7 +1,9 @@
 package com.loctran.service.entity.product.dto;
 
+import com.loctran.service.entity.productPrice.dto.ProductPriceDto;
 import com.loctran.service.entity.year.dto.YearDto;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ public class ListProductDto {
   private String description;
   private String thumbnail;
   private YearDto dateReleased;
+  private List<ProductPriceDto> prices;
   private Date createdAt;
   private Date updatedAt;
 }

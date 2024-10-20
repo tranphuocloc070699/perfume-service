@@ -219,9 +219,12 @@ public class ServiceApplication implements CommandLineRunner {
                 Comment comment = commentRepository.save(Comment.builder().product(productSaved).user(user).content(faker.lorem().paragraph()).build());
                 commentRepository.save(comment);
             }
-
-            ProductPrice productPrice1 = ProductPrice.builder().labelType(LabelType.LISTED).isSearch(true).value(100L).product(productSaved).priceType(PriceType.USD).link("https://parfumerie.vn/dior-sauvage-edp").build();
-            ProductPrice productPrice2 = ProductPrice.builder().labelType(LabelType.VIETNAM_MARKET).isSearch(true).value(2000000L).product(productSaved).priceType(PriceType.VND).link("https://parfumerie.vn/dior-sauvage-edp").build();
+            Random random = new Random();
+            long min = 1000L;
+            long max = 2000000L;
+            long randomPrice = min + (long) (random.nextDouble() * (max - min));
+            ProductPrice productPrice1 = ProductPrice.builder().labelType(LabelType.LISTED).isSearch(true).value(randomPrice).product(productSaved).priceType(PriceType.USD).link("https://parfumerie.vn/dior-sauvage-edp").build();
+            ProductPrice productPrice2 = ProductPrice.builder().labelType(LabelType.VIETNAM_MARKET).isSearch(true).value(randomPrice).product(productSaved).priceType(PriceType.VND).link("https://parfumerie.vn/dior-sauvage-edp").build();
 
             productPriceRepository.save(productPrice1);
             productPriceRepository.save(productPrice2);
