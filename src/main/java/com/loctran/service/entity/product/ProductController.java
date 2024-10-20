@@ -40,7 +40,6 @@ public class ProductController {
                                                      @RequestParam(defaultValue = "asc") String sortDir, @RequestParam(required = false)String productName ,@RequestParam(required = false) Long brandId,
                                                      @RequestParam(required = false) Long countryId,
                                                      @RequestParam(required = false) List<Long> notesIds) {
-
         Page<ListProductDto> product = productService.getAllProduct(page, size, sortBy, sortDir, brandId, countryId, notesIds,productName);
 
         ResponseDto responseDto = ResponseDto.builder().build();
