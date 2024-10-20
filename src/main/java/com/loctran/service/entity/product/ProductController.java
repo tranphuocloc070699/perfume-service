@@ -34,7 +34,7 @@ public class ProductController {
 
     private final ProductService productService;
     @GetMapping("")
-    public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<ResponseDto> getAllProduct(@RequestParam(defaultValue = "1") int page,
                                                      @RequestParam(defaultValue = "12") int size,
                                                      @RequestParam(defaultValue = "id") String sortBy,
                                                      @RequestParam(defaultValue = "asc") String sortDir, @RequestParam(required = false)String productName ,@RequestParam(required = false) Long brandId,
