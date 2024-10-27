@@ -30,7 +30,7 @@ public class ListProductCompareDto {
         Long productCompareId =  objects[3]!=null ? (Long) objects[3] : 0L;
         String productCompareName =  objects[4]!=null ? objects[4].toString() :  "" ;
         String productCompareThumbnail = objects[5]!=null ?  objects[5].toString() : "";
-        BigDecimal totalVotes = objects[6]!=null ?  (BigDecimal) objects[6] : BigDecimal.valueOf(0);
+        Long totalVotes = objects[6]!=null ?  (Long) objects[6] : Long.valueOf(0);
 
 
         Product dto = new Product();
@@ -42,6 +42,6 @@ public class ListProductCompareDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.product = dto;
-        this.totalVotes = totalVotes.longValue();
+        this.totalVotes = totalVotes;
     }
 }

@@ -25,11 +25,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 public class ProductPriceDto {
   private Long id;
-  private LabelType labelType;
-  private PriceType priceType;
-  private Long value;
-  private Boolean isSearch;
-  private String link;
-  private Date createdAt;
-  private Date updatedAt;
+//  private LabelType labelType;
+//  private PriceType priceType;
+//  private Long value;
+//  private Boolean isSearch;
+//  private String link;
+//  private Date createdAt;
+//  private Date updatedAt;
 }

@@ -11,14 +11,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductCompareRepository extends JpaRepository<ProductCompare,Long> {
-  @Query(value = "SELECT \n" +
+  @Query(value = "SELECT DISTINCT \n" +
           "    pc.id, \n" +
           "    pc.created_at, \n" +
           "    pc.updated_at, \n" +
           "    p.id AS product_id, \n" +
           "    p.name,\n" +
           "    p.thumbnail, \n" +
-          "    (SUM(COALESCE(cpv.compare_votes, 0)) + SUM(COALESCE(ov.original_votes, 0))) AS total_votes_sum -- Sum of compare votes and original votes\n" +
+          "    (COUNT(DISTINCT cpv.compare_votes) + COUNT(DISTINCT ov.original_votes)) AS total_votes_sum -- Sum of compare votes and original votes\n" +
           "FROM public.tbl_product_compare pc\n" +
           "LEFT JOIN public.tbl_product p ON pc.product_compare_id = p.id\n" +
           "LEFT JOIN public.product_compare_compare_votes cpv ON pc.id = cpv.product_compare_id\n" +
@@ -39,6 +39,9 @@ public interface ProductCompareRepository extends JpaRepository<ProductCompare,L
           "pc.productCompare.id,pc.productCompare.name,pc.productCompare.thumbnail " +
           "FROM ProductCompare pc WHERE pc.id = :id")
   List<Object[]> findByProductCompareId(@Param("id") Long id);
+
+
+  List<ProductCompare> findByProductOriginalId(Long productOriginalId);
 
 
 }

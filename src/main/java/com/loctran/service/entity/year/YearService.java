@@ -15,7 +15,8 @@ public class YearService {
     private final YearRepository yearRepository;
 
     public List<Year> getAllYear(){
-        return yearRepository.findAll();
+
+        return yearRepository.findAllByOrderByValueDesc();
     }
 
     public Year findById(Long id){

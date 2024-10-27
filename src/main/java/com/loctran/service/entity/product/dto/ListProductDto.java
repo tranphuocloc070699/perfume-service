@@ -1,5 +1,6 @@
 package com.loctran.service.entity.product.dto;
 
+import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.productPrice.dto.ProductPriceDto;
 import com.loctran.service.entity.year.dto.YearDto;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class ListProductDto {
   private String description;
   private String thumbnail;
   private YearDto dateReleased;
-  private List<ProductPriceDto> prices;
+  private List<ProductPrice> prices;
   private Date createdAt;
   private Date updatedAt;
 }

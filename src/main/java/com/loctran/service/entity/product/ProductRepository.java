@@ -27,8 +27,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         + "WHERE p.id = :id")
     Optional<List<Object>> findProductDetailById(@Param("id") Long id);
 
-    @Query("SELECT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description, p.thumbnail, "
-        + "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), null, p.createdAt, p.updatedAt) "
+    @Query("SELECT DISTINCT new com.loctran.service.entity.product.dto.ListProductDto(p.id, p.name, p.slug, p.description, p.thumbnail, "
+        + "new com.loctran.service.entity.year.dto.YearDto(y.id, y.value), "
+        + "null,"
+        + " p.createdAt, p.updatedAt) "
         + "FROM Product p "
         + "LEFT JOIN p.country c "
         + "LEFT JOIN p.brand b "
@@ -40,19 +42,13 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         + "WHERE (:brandId IS NULL OR b.id = :brandId) "
         + "AND (:countryId IS NULL OR c.id = :countryId) "
         + "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) "
-        + "AND (:productName IS NULL OR p.name LIKE %:productName%) "
-        + "AND (:labelType IS NULL OR pr.labelType = :labelType) " // Include labelType conditionally if provided
-        + "ORDER BY "
-        + "CASE WHEN :sortBy = 'price_LISTED' THEN (SELECT DISTINCT pr.value FROM ProductPrice pr WHERE pr.product = p AND pr.labelType = com.loctran.service.entity.productPrice.LabelType.LISTED) END , "
-        + "CASE WHEN :sortBy = 'price_VIETNAM_MARKET' THEN (SELECT DISTINCT pr.value FROM ProductPrice pr WHERE pr.product = p AND pr.labelType = com.loctran.service.entity.productPrice.LabelType.VIETNAM_MARKET) END, "
-        + "CASE WHEN :sortBy = 'dateReleased' THEN y.value END")
+        + "AND (:productName IS NULL OR p.name LIKE %:productName%) ")
     Page<ListProductDto> findAllProducts(Pageable pageable,
         @Param("brandId") Long brandId,
         @Param("countryId") Long countryId,
         @Param("notesIds") List<Long> notesIds,
-        @Param("productName") String productName,
-        @Param("labelType") LabelType labelType,
-        @Param("sortBy") String sortBy);
+        @Param("productName") String productName
+        );
 
 
 

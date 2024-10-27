@@ -100,13 +100,8 @@ public class ServiceApplication implements CommandLineRunner {
                         Comment comment = commentRepository.save(Comment.builder().productCompare(productCompareSaved).user(user).content(faker.lorem().paragraph()).build());
                         commentRepository.save(comment);
                     }
-
                 }
-
             }
-
-
-
         }
     }
 
