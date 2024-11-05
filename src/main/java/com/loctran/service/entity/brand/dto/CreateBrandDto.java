@@ -17,7 +17,8 @@ public class CreateBrandDto {
   private String description;
   private String homepageLink;
   private String thumbnail;
+  private Country country;
   public Brand mapToBrand(){
-    return Brand.builder().name(this.name).description(this.description).homepageLink(this.homepageLink).thumbnail(this.thumbnail).build();
+    return Brand.builder().name(this.name).description(this.description).homepageLink(this.homepageLink).thumbnail(this.thumbnail).country(this.country).build();
   }
 }

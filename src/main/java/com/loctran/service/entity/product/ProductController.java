@@ -154,7 +154,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("id") String id) {
         Product product = productService.deleteProduct(Long.parseLong(id));
         ResponseDto responseDto = ResponseDto.builder().build();

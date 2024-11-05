@@ -132,26 +132,26 @@ public class UserController {
     return ResponseEntity.ok(responseDto);
   }
 
-  @PostMapping("/upload")
-  public ResponseEntity<ResponseDto> upload(@RequestParam("image") MultipartFile multipartFile) {
-    String filename = multipartFile.getOriginalFilename();
-    String uploadDir = "";
-    try {
-      String path = FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
-
-      System.out.println("path: "+ path);
-
-      ResponseDto responseDto = ResponseDto.builder()
-          .message("Upload file thành công").status(200).data(path).build();
-
-      return ResponseEntity.ok(responseDto);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    catch (RuntimeException e) {
-      throw new RuntimeException(e);
-    }
-  }
+//  @PostMapping("/upload")
+//  public ResponseEntity<ResponseDto> upload(@RequestParam("image") MultipartFile multipartFile) {
+//    String filename = multipartFile.getOriginalFilename();
+//    String uploadDir = "";
+//    try {
+//      String path = FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
+//
+//
+//
+//      ResponseDto responseDto = ResponseDto.builder()
+//          .message("Upload file thành công").status(200).data(path).build();
+//
+//      return ResponseEntity.ok(responseDto);
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+//    catch (RuntimeException e) {
+//      throw new RuntimeException(e);
+//    }
+//  }
 
 
 }

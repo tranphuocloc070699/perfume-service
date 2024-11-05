@@ -31,7 +31,6 @@ public class BrandService {
   }
 
   public Brand save(CreateBrandDto dto) {
-
     return brandRepository.save(dto.mapToBrand());
   }
 
