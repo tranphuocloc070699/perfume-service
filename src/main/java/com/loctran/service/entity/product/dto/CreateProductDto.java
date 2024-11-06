@@ -3,6 +3,7 @@ package com.loctran.service.entity.product.dto;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.product.Product;
+import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.year.Year;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class CreateProductDto {
   private Brand brand;
   private Country country;
   private Year year;
+  private List<ProductNote> productNotes;
 
   public Product mapToProduct(){
       return Product.builder().name(this.name).slug(this.slug).description(this.description).thumbnail(this.thumbnail).brand(this.brand).country(this.country).dateReleased(this.year).build();
