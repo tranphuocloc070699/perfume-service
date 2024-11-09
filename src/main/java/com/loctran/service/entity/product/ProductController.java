@@ -106,45 +106,11 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-//    @PutMapping("/{id}/gallery")
-//    public ResponseEntity<ResponseDto> addProductGallery(@PathVariable("id") String id,
-//                                                         @RequestParam("image") MultipartFile multipartFile) {
-//
-//        Media media = productService.addProductGallery(Long.parseLong(id), multipartFile);
-//        ResponseDto responseDto = ResponseDto.builder().build();
-//
-//        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-//        responseDto.setStatus(200);
-//        responseDto.setData(media);
-//        return ResponseEntity.ok(responseDto);
-//    }
 
-//    @PutMapping("/{id}/outfit")
-//    public ResponseEntity<ResponseDto> addProductOutfit(@PathVariable("id") String id,
-//                                                        @RequestParam("image") MultipartFile multipartFile) {
-//        Media media = productService.addProductOutfit(Long.parseLong(id), multipartFile);
-//        ResponseDto responseDto = ResponseDto.builder().build();
-//        responseDto.setMessage("Thêm gallery vào sản phẩm thành công");
-//        responseDto.setStatus(200);
-//        responseDto.setData(media);
-//        return ResponseEntity.ok(responseDto);
-//    }
-//
-//    @DeleteMapping("/{id}/media/{mediaId}")
-//    public ResponseEntity<ResponseDto> removeProductMedia(@PathVariable("id") String id,
-//                                                          @PathVariable("mediaId") String mediaId) {
-//        Media media = productService.deleteProductMedia(Long.parseLong(id), Long.parseLong(mediaId));
-//        ResponseDto responseDto = ResponseDto.builder().build();
-//        responseDto.setMessage("Xóa Product Media thành công");
-//        responseDto.setStatus(200);
-//        responseDto.setData(media);
-//        return ResponseEntity.ok(responseDto);
-//    }
-
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}",consumes={"application/json;charset=UTF-8"})
     public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,
-                                                           @RequestBody UpdateProductDto dto) {
-        System.out.println("update product detail trigger...");
+                                                           @RequestBody CreateProductDto dto) {
+
         Product product = productService.updateProduct(Long.parseLong(id), dto);
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Update thông tin sản phẩm thành công");

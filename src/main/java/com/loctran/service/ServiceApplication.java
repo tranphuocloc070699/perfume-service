@@ -2,9 +2,11 @@ package com.loctran.service;
 
 import com.github.javafaker.Faker;
 import com.loctran.service.entity.brand.Brand;
+import com.loctran.service.entity.brand.BrandRepository;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.comment.CommentRepository;
 import com.loctran.service.entity.country.Country;
+import com.loctran.service.entity.country.CountryRepository;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.productCompare.ProductCompare;
@@ -43,6 +45,8 @@ public class ServiceApplication implements CommandLineRunner {
     private final CommentRepository commentRepository;
     private final ProductCompareRepository productCompareRepository;
     private final ProductPriceRepository productPriceRepository;
+    private final CountryRepository countryRepository;
+    private final BrandRepository brandRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
@@ -164,8 +168,12 @@ public class ServiceApplication implements CommandLineRunner {
             country.setName(faker.address().country());
             country.setCode(faker.book().genre());
 
+            country = countryRepository.save(country);
+
 
             brand.setCountry(country);
+
+            brand = brandRepository.save(brand);
             String productName = faker.commerce().productName();
             Product product = Product.builder()
                     .name(productName)

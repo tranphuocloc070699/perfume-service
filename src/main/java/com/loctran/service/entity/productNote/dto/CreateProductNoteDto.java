@@ -13,8 +13,9 @@ import lombok.Setter;
 public class CreateProductNoteDto {
   private String name;
   private String slug;
+  private String enName;
   private String thumbnail;
   public ProductNote mapToProductNote(){
-    return ProductNote.builder().name(this.name).slug(this.slug).thumbnail(this.thumbnail).build();
+    return ProductNote.builder().name(this.name).enName(this.enName).slug(this.slug).thumbnail(this.thumbnail).build();
   }
 }

@@ -2,6 +2,7 @@ package com.loctran.service.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
@@ -79,27 +80,30 @@ public class Product {
   @JoinTable(name = "tbl_product_top_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
+  @JsonManagedReference
   private List<ProductNote> topNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_middle_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
+  @JsonManagedReference
   private List<ProductNote> middleNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_base_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
+  @JsonManagedReference
   private List<ProductNote> baseNotes;
 
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "country_id")
   private Country country;
 
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "brand_id")
   private Brand brand;
 
@@ -116,7 +120,7 @@ public class Product {
   private List<ListProductCompareDto> productCompares;
 
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "dateReleased_id")
   private Year dateReleased;
 

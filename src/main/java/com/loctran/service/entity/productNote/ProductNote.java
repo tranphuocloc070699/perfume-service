@@ -1,6 +1,10 @@
 package com.loctran.service.entity.productNote;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
@@ -14,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -33,7 +38,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(
     name = "tbl_product_note"
 )
-@JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = ProductNote.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductNote {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,13 +57,14 @@ public class ProductNote {
   @Column
   private String thumbnail;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   @JoinTable(name = "tbl_product_tbl_product_note",
       joinColumns = @JoinColumn(name = "tbl_product_note_id"),
       inverseJoinColumns = @JoinColumn(name = "tbl_product_id")
   )
+  @JsonBackReference
   private List<Product> products;
 
   @CreationTimestamp

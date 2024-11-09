@@ -105,7 +105,7 @@ public class ProductService {
 
     Product productSaved = productRepository.save(product);
 
-    return product;
+    return productSaved;
   }
 
   public Product findProductBySlug(String slug) {
@@ -115,18 +115,34 @@ public class ProductService {
     return product;
   }
 
-  public Product updateProduct(Long id, UpdateProductDto dto) {
+  public Product updateProduct(Long id, CreateProductDto dto) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
+
+//    System.out.println(product.toString());
+
+
+    List<ProductPrice> productPrices = dto.getPrices().stream().map(productPrice -> {
+      productPrice.setProduct(product);
+      return productPrice;
+    }).collect(Collectors.toList());
+
+//    System.out.println("length: " + productPrices.size());
     product.setName(dto.getName());
-    product.setDescription(dto.getDescription());
-    product.setThumbnail(dto.getThumbnail());
     product.setSlug(dto.getSlug());
-    if (!Objects.equals(dto.getDateReleased(), product.getDateReleased().getValue())) {
-      Year year = yearService.findByValue(dto.getDateReleased());
-      product.setDateReleased(year);
-    }
-//    product.setDateReleased(dto.getDateReleased());
+    product.setThumbnail(dto.getThumbnail());
+    product.setDescription(dto.getDescription());
+    product.setGalleries(dto.getGalleries());
+    product.setOutfits(dto.getOutfits());
+    product.setPrices(productPrices);
+    product.setDateReleased(dto.getDateReleased());
+    product.setBrand(dto.getBrand());
+    product.setCountry(dto.getCountry());
+    product.setTopNotes(dto.getTopNotes());
+    product.setMiddleNotes(dto.getMiddleNotes());
+    product.setBaseNotes(dto.getBaseNotes());
+
+
     return productRepository.save(product);
   }
 
