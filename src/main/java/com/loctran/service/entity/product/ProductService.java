@@ -10,6 +10,7 @@ import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
+import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.productPrice.LabelType;
 import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.productPrice.ProductPriceRepository;
@@ -103,9 +104,11 @@ public class ProductService {
   public Product createProduct(CreateProductDto dto) {
     Product product = dto.mapToProduct();
 
-    Product productSaved = productRepository.save(product);
+    // Set the product reference in each ProductPrice
+    product.getPrices().forEach(price -> price.setProduct(product));
 
-    return productSaved;
+    // Save the product, which will also save prices due to cascade setting
+    return productRepository.save(product);
   }
 
   public Product findProductBySlug(String slug) {
@@ -115,19 +118,16 @@ public class ProductService {
     return product;
   }
 
+
   public Product updateProduct(Long id, CreateProductDto dto) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
-
-//    System.out.println(product.toString());
-
 
     List<ProductPrice> productPrices = dto.getPrices().stream().map(productPrice -> {
       productPrice.setProduct(product);
       return productPrice;
     }).collect(Collectors.toList());
 
-//    System.out.println("length: " + productPrices.size());
     product.setName(dto.getName());
     product.setSlug(dto.getSlug());
     product.setThumbnail(dto.getThumbnail());

@@ -21,6 +21,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -57,15 +59,18 @@ public class ProductNote {
   @Column
   private String thumbnail;
 
-  @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  @JoinTable(name = "tbl_product_tbl_product_note",
-      joinColumns = @JoinColumn(name = "tbl_product_note_id"),
-      inverseJoinColumns = @JoinColumn(name = "tbl_product_id")
-  )
-  @JsonBackReference
-  private List<Product> products;
+
+  @ManyToMany(mappedBy = "topNotes")
+  @JsonIgnore
+  private Set<Product> productsWithTopNotes;
+
+  @ManyToMany(mappedBy = "middleNotes")
+  @JsonIgnore
+  private Set<Product> productsWithMiddleNotes;
+
+  @ManyToMany(mappedBy = "baseNotes")
+  @JsonIgnore
+  private Set<Product> productsWithBaseNotes;
 
   @CreationTimestamp
   @Column(name = "created_at")

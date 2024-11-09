@@ -6,22 +6,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
+import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.user.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +43,9 @@ public class Post {
   private String excerpt;
 
   @Column
+  private String slug;
+
+  @Column
   private String content;
 
   @Column
@@ -61,6 +53,11 @@ public class Post {
 
   @Column
   private String thumbnail;
+
+
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "varchar(50) default 'NEWS'")
+  private PostType type ;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "post_votes", joinColumns = @JoinColumn(name = "post_id"))

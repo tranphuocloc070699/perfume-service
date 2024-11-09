@@ -3,6 +3,7 @@ package com.loctran.service.entity.product;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
@@ -33,7 +34,7 @@ import java.util.List;
 @Table(
     name = "tbl_product"
 )
-@JsonIdentityInfo(scope = Product.class, generator = PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(scope = Product.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,6 +48,7 @@ public class Product {
   private String slug;
 
   @Column
+  @Lob
   private String description;
 
   @Column
@@ -59,7 +61,7 @@ public class Product {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)
   private List<Comment> comments;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
   private List<ProductPrice> prices;
 
 
@@ -80,21 +82,18 @@ public class Product {
   @JoinTable(name = "tbl_product_top_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
   private List<ProductNote> topNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_middle_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
   private List<ProductNote> middleNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_base_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
   private List<ProductNote> baseNotes;
 
 

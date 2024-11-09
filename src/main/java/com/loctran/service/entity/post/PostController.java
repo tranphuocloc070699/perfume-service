@@ -1,11 +1,8 @@
 package com.loctran.service.entity.post;
 
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.post.dto.CreatePostDto;
-import com.loctran.service.entity.post.dto.UpdatePostDto;
-import com.loctran.service.entity.product.Product;
+import com.loctran.service.entity.post.dto.UpsavePostDto;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 private final PostService postService;
   @GetMapping("")
-  public ResponseEntity<ResponseDto> getAllPost(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "id") String sortBy,
-      @RequestParam(defaultValue = "asc") String sortDir){
+  public ResponseEntity<ResponseDto> getAllPost(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size,
+          @RequestParam(defaultValue = "id") String sortBy,
+          @RequestParam(defaultValue = "asc") String sortDir,
+          @RequestParam(required = false) String title) {
 
-    Page<Post> posts = postService.getAllPost(page,size,sortBy,sortDir);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy tất cả thông tin bài viết thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(posts);
+    Page<Post> posts;
+    if (title != null && !title.isEmpty()) {
+      posts = postService.getPostsByTitle(title, page, size, sortBy, sortDir);
+    } else {
+      posts = postService.getAllPost(page, size, sortBy, sortDir);
+    }
+
+    ResponseDto responseDto = ResponseDto.builder()
+            .message("Lấy tất cả thông tin bài viết thành công")
+            .status(200)
+            .data(posts)
+            .build();
     return ResponseEntity.ok(responseDto);
   }
 
@@ -50,7 +56,7 @@ private final PostService postService;
 
 
   @PostMapping("")
-  public ResponseEntity<ResponseDto> createPost(HttpServletRequest request,@RequestBody CreatePostDto dto) {
+  public ResponseEntity<ResponseDto> createPost(HttpServletRequest request,@RequestBody UpsavePostDto dto) {
     Long userId = (Long) request.getAttribute("userId");
     Post post = postService.createPost(userId,dto);
     ResponseDto responseDto = ResponseDto.builder().build();
@@ -61,7 +67,7 @@ private final PostService postService;
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ResponseDto> updatePost(@PathVariable("id") Long id,@RequestBody UpdatePostDto dto){
+  public ResponseEntity<ResponseDto> updatePost(@PathVariable("id") Long id,@RequestBody UpsavePostDto dto){
     Post post = postService.updatePost(id,dto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Chỉnh sửa bài viết thành công");

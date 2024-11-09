@@ -1,8 +1,7 @@
 package com.loctran.service.entity.post;
 
 
-import com.loctran.service.entity.post.dto.CreatePostDto;
-import com.loctran.service.entity.post.dto.UpdatePostDto;
+import com.loctran.service.entity.post.dto.UpsavePostDto;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
@@ -22,17 +21,23 @@ public class PostService {
     private final UserRepository userRepository;
 
 
-  public Page<Post> getAllPost(int page, int size,String sortBy,String sortDir) {
+  public Page<Post> getAllPost(int page, int size, String sortBy, String sortDir) {
     Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-    Pageable pageable = PageRequest.of(page, size,sort);
+    Pageable pageable = PageRequest.of(page, size, sort);
     return postRepository.findAll(pageable);
+  }
+
+  public Page<Post> getPostsByTitle(String title, int page, int size, String sortBy, String sortDir) {
+    Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+    Pageable pageable = PageRequest.of(page, size, sort);
+    return postRepository.findByTitleContainingIgnoreCase(title, pageable);
   }
 
   public Post getPostById(Long id) {
     return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post","id",id.toString()));
   }
 
-  public Post createPost(Long userId, CreatePostDto dto) {
+  public Post createPost(Long userId, UpsavePostDto dto) {
     User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","id",
         userId.toString()));
     Post post = dto.mapToPost();
@@ -41,7 +46,7 @@ public class PostService {
     return postRepository.save(post);
   }
 
-  public Post updatePost(Long id, UpdatePostDto dto) {
+  public Post updatePost(Long id, UpsavePostDto dto) {
       Post post = getPostById(id);
     post.setTitle(dto.getTitle());
     post.setExcerpt(dto.getExcerpt());

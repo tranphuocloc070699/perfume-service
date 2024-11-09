@@ -48,9 +48,9 @@ public class ProductNoteService {
     ProductNote productNote = productNoteRepository.findById(noteId)
         .orElseThrow(() -> new ResourceNotFoundException("ProductNote","id",noteId.toString()));
 
-    if (!productNote.getProducts().contains(product)) {
-      productNote.getProducts().add(product);
-    }
+//    if (!productNote.getProducts().contains(product)) {
+//      productNote.getProducts().add(product);
+//    }
     return productNoteRepository.save(productNote);
   }
 
@@ -60,8 +60,8 @@ public class ProductNoteService {
         .orElseThrow(() -> new RuntimeException("Product not found"));
     ProductNote productNote = productNoteRepository.findById(noteId)
         .orElseThrow(() -> new RuntimeException("ProductNote not found"));
-
-    productNote.getProducts().remove(product);
+//
+//    productNote.getProducts().remove(product);
 
     return productNoteRepository.save(productNote);
   }
@@ -71,12 +71,12 @@ public class ProductNoteService {
     ProductNote productNote = productNoteRepository.findById(noteId)
         .orElseThrow(() -> new RuntimeException("ProductNote not found"));
 
-    for (Product product : productNote.getProducts()) {
-      product.getTopNotes().remove(productNote);
-      product.getMiddleNotes().remove(productNote);
-      product.getBaseNotes().remove(productNote);
-      productRepository.save(product);
-    }
+//    for (Product product : productNote.getProducts()) {
+//      product.getTopNotes().remove(productNote);
+//      product.getMiddleNotes().remove(productNote);
+//      product.getBaseNotes().remove(productNote);
+//      productRepository.save(product);
+//    }
     productNoteRepository.delete(productNote);
 
     return productNote;
