@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,10 +41,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(
     name = "tbl_product_note"
 )
-@JsonIdentityInfo(scope = ProductNote.class,generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonSerialize(using = ProductNoteSerializer.class)
 public class ProductNote {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
 
@@ -60,17 +62,14 @@ public class ProductNote {
   private String thumbnail;
 
 
-  @ManyToMany(mappedBy = "topNotes")
-  @JsonIgnore
-  private Set<Product> productsWithTopNotes;
-
-  @ManyToMany(mappedBy = "middleNotes")
-  @JsonIgnore
-  private Set<Product> productsWithMiddleNotes;
-
-  @ManyToMany(mappedBy = "baseNotes")
-  @JsonIgnore
-  private Set<Product> productsWithBaseNotes;
+//  @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//  @EqualsAndHashCode.Exclude
+//  @ToString.Exclude
+//  @JoinTable(name = "tbl_product_tbl_product_note",
+//      joinColumns = @JoinColumn(name = "tbl_product_note_id"),
+//      inverseJoinColumns = @JoinColumn(name = "tbl_product_id")
+//  )
+//  private Set<Product> products;
 
   @CreationTimestamp
   @Column(name = "created_at")

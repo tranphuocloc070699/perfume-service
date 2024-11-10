@@ -27,9 +27,9 @@ public class CreateProductDto {
   private Brand brand;
   private Country country;
   private Year dateReleased;
-  private List<ProductNote> topNotes;
-  private List<ProductNote> middleNotes;
-  private List<ProductNote> baseNotes;
+  private Set<ProductNote> topNotes;
+  private Set<ProductNote> middleNotes;
+  private Set<ProductNote> baseNotes;
   private List<ProductPrice> prices;
 
   public Product mapToProduct(){

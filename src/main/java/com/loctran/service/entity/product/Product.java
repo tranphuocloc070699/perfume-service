@@ -82,19 +82,25 @@ public class Product {
   @JoinTable(name = "tbl_product_top_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  private List<ProductNote> topNotes;
+  @JsonManagedReference
+  private Set<ProductNote> topNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_middle_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  private List<ProductNote> middleNotes;
+  @JsonManagedReference
+  private Set<ProductNote> middleNotes;
 
   @ManyToMany
   @JoinTable(name = "tbl_product_base_note",
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
-  private List<ProductNote> baseNotes;
+  @JsonManagedReference
+  private Set<ProductNote> baseNotes;
+
+
+
 
 
   @ManyToOne(cascade = CascadeType.MERGE)

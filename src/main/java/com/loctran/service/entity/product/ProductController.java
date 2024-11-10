@@ -107,7 +107,7 @@ public class ProductController {
     }
 
 
-    @PutMapping(value = "/{id}",consumes={"application/json;charset=UTF-8"})
+    @PutMapping(value = "/{id}")
     public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,
                                                            @RequestBody CreateProductDto dto) {
 

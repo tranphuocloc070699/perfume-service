@@ -181,9 +181,9 @@ public class ServiceApplication implements CommandLineRunner {
                     .thumbnail(generateImage())
                     .slug(StringUtil.convertToSlug(productName))
                     .country(country)
-                    .topNotes(new ArrayList<>())
-                    .middleNotes(new ArrayList<>())
-                    .baseNotes(new ArrayList<>())
+                    .topNotes(new HashSet<>())
+                    .middleNotes(new HashSet<>())
+                    .baseNotes(new HashSet<>())
                     .brand(brand)
                     .build();
 
