@@ -34,19 +34,16 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         + "FROM Product p "
         + "LEFT JOIN p.country c "
         + "LEFT JOIN p.brand b "
-        + "LEFT JOIN p.topNotes tn " // Join top notes
-        + "LEFT JOIN p.middleNotes mn " // Join middle notes
-        + "LEFT JOIN p.baseNotes bn " // Join base notes
         + "LEFT JOIN p.dateReleased y "
         + "LEFT JOIN p.prices pr " // Join prices
         + "WHERE (:brandId IS NULL OR b.id = :brandId) "
         + "AND (:countryId IS NULL OR c.id = :countryId) "
-        + "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) "
+//        + "AND (:notesIds IS NULL OR tn.id IN :notesIds OR mn.id IN :notesIds OR bn.id IN :notesIds) "
         + "AND (:productName IS NULL OR p.name LIKE %:productName%) ")
     Page<ListProductDto> findAllProducts(Pageable pageable,
         @Param("brandId") Long brandId,
         @Param("countryId") Long countryId,
-        @Param("notesIds") List<Long> notesIds,
+//        @Param("notesIds") List<Long> notesIds,
         @Param("productName") String productName
         );
 

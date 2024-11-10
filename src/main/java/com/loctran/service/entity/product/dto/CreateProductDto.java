@@ -43,9 +43,6 @@ public class CreateProductDto {
         .brand(this.brand)
         .country(this.country)
         .dateReleased(this.dateReleased)
-        .topNotes(this.topNotes)
-        .middleNotes(this.middleNotes)
-        .baseNotes(this.baseNotes)
         .prices(this.prices)
         .build();
   }

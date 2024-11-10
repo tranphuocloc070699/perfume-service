@@ -110,8 +110,9 @@ public class ProductController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<ResponseDto> updateProductDetail(@PathVariable("id") String id,
                                                            @RequestBody CreateProductDto dto) {
-
+        System.out.println("update product detail...");
         Product product = productService.updateProduct(Long.parseLong(id), dto);
+        System.out.println("product after updated...");
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Update thông tin sản phẩm thành công");
         responseDto.setStatus(200);

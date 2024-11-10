@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -78,38 +79,50 @@ public class Product {
   @OrderBy
   private Set<String> outfits;
 
-  @ManyToMany
-  @JoinTable(name = "tbl_product_top_note",
-          joinColumns = @JoinColumn(name = "product_id"),
-          inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "product_top_notes", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "topNoteIds")
+  @OrderBy
+  @JsonIgnore
+  private Set<Long> topNoteIds;
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "product_middle_notes", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "middleNoteIds")
+  @OrderBy
+  @JsonIgnore
+  private Set<Long> middleNoteIds;
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "product_base_notes", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "baseNoteIds")
+  @OrderBy
+  @JsonIgnore
+  private Set<Long> baseNoteIds;
+
+
+  @Transient
+  @ToString.Exclude
+
   private Set<ProductNote> topNotes;
 
-  @ManyToMany
-  @JoinTable(name = "tbl_product_middle_note",
-          joinColumns = @JoinColumn(name = "product_id"),
-          inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
+  @Transient
+  @ToString.Exclude
   private Set<ProductNote> middleNotes;
 
-  @ManyToMany
-  @JoinTable(name = "tbl_product_base_note",
-          joinColumns = @JoinColumn(name = "product_id"),
-          inverseJoinColumns = @JoinColumn(name = "note_id"))
-  @JsonManagedReference
+  @Transient
+  @ToString.Exclude
   private Set<ProductNote> baseNotes;
-
-
-
-
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "country_id")
+  @ToString.Exclude
   private Country country;
 
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "brand_id")
+  @ToString.Exclude
   private Brand brand;
 
 
@@ -127,6 +140,7 @@ public class Product {
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "dateReleased_id")
+  @ToString.Exclude
   private Year dateReleased;
 
   @CreationTimestamp

@@ -11,6 +11,7 @@ import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
 import com.loctran.service.entity.productNote.ProductNote;
+import com.loctran.service.entity.productNote.ProductNoteRepository;
 import com.loctran.service.entity.productPrice.LabelType;
 import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.productPrice.ProductPriceRepository;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,6 +47,7 @@ public class ProductService {
   private final ProductCompareRepository productCompareRepository;
   private final ProductPriceRepository productPriceRepository;
   private final BrandRepository brandRepository;
+  private final ProductNoteRepository productNoteRepository;
 
 
   public Page<ListProductDto> getAllProduct(int page, int size, String sortBy, String sortDir,
@@ -62,7 +65,7 @@ public class ProductService {
     else if (sortByPrice.contains(sortBy)) {
       Pageable pageable = PageRequest.of(page - 1, size, sort);
       Page<ListProductDto> response = productRepository.findAllProducts(pageable, brandId,
-          countryId, notesIds, productName);
+          countryId, productName);
       ;
       response.get().forEach(listProductDto -> {
         List<ProductPrice> prices = productPriceRepository.findByProductId(listProductDto.getId());
@@ -94,7 +97,7 @@ public class ProductService {
     }
 
     Pageable pageable = PageRequest.of(page - 1, size, sort);
-    return productRepository.findAllProducts(pageable, brandId, countryId, notesIds, productName);
+    return productRepository.findAllProducts(pageable, brandId, countryId, productName);
   }
 
   public List<Long> getAllProductId() {
@@ -104,10 +107,16 @@ public class ProductService {
   public Product createProduct(CreateProductDto dto) {
     Product product = dto.mapToProduct();
 
-    // Set the product reference in each ProductPrice
+    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
+    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
+    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
+
+    product.setTopNoteIds(topNoteIds);
+    product.setMiddleNoteIds(middleNoteIds);
+    product.setBaseNoteIds(baseNoteIds);
+
     product.getPrices().forEach(price -> price.setProduct(product));
 
-    // Save the product, which will also save prices due to cascade setting
     return productRepository.save(product);
   }
 
@@ -138,9 +147,14 @@ public class ProductService {
     product.setDateReleased(dto.getDateReleased());
     product.setBrand(dto.getBrand());
     product.setCountry(dto.getCountry());
-    product.setTopNotes(dto.getTopNotes());
-    product.setMiddleNotes(dto.getMiddleNotes());
-    product.setBaseNotes(dto.getBaseNotes());
+
+    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
+    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
+    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
+
+    product.setTopNoteIds(topNoteIds);
+    product.setMiddleNoteIds(middleNoteIds);
+    product.setBaseNoteIds(baseNoteIds);
 
 
     return productRepository.save(product);
@@ -193,9 +207,22 @@ public class ProductService {
     return product;
   }
 
+  public Set<Long> getNoteIds(Set<ProductNote> notes){
+      return notes.stream().map(ProductNote::getId).collect(Collectors.toSet());
+  }
+  public Set<ProductNote> getProductNotes(Set<Long> noteIds) {
+          return productNoteRepository.findByIdIn(noteIds);
+  }
+
   public Product findProductById(Long id) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
+
+    product.setTopNotes(getProductNotes(product.getTopNoteIds()));
+    product.setMiddleNotes(getProductNotes(product.getMiddleNoteIds()));
+    product.setBaseNotes(getProductNotes(product.getBaseNoteIds()));
+
+
     List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);
     List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
     objectResponse.forEach((object) -> {

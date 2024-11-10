@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -38,6 +39,7 @@ public class Year {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dateReleased")
     @JsonIgnore
+    @ToString.Exclude
     private List<Product> products;
 
 }

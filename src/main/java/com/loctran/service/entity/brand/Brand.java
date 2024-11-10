@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -47,11 +48,13 @@ public class Brand {
   @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "country_id")
+  @ToString.Exclude
   private Country country;
 
 
   @JsonIgnore
   @OneToMany(fetch = FetchType.EAGER,mappedBy = "brand")
+  @ToString.Exclude
   private List<Product> products;
 
   @CreationTimestamp

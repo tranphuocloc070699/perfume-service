@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -41,10 +43,12 @@ public class Country {
 
   @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
+  @ToString.Exclude
   private List<Product> products;
 
   @JsonIgnore
   @OneToMany(mappedBy = "country",fetch = FetchType.LAZY)
+  @ToString.Exclude
   private List<Brand> brands;
 
   @CreationTimestamp
