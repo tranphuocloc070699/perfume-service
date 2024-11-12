@@ -214,14 +214,14 @@ public class ServiceApplication implements CommandLineRunner {
             productNote3.setThumbnail("https://fimgs.net/mdimg/sastojci/m.901.jpg?1598641517");
             ProductNote productNoteSaved3 = productNoteRepository.save(productNote3);
 
+            product.setTopNotes(new HashSet<>());
+            product.setMiddleNotes(new HashSet<>());
+            product.setBaseNotes(new HashSet<>());
 
-            product.setTopNoteIds(new HashSet<>());
-            product.setMiddleNoteIds(new HashSet<>());
-            product.setBaseNoteIds(new HashSet<>());
-
-            product.getTopNoteIds().add(productNoteSaved1.getId());
-            product.getMiddleNoteIds().add(productNoteSaved1.getId());
-            product.getBaseNoteIds().add(productNoteSaved1.getId());
+            product.getTopNotes().add(productNoteSaved1);
+            product.getMiddleNotes().add(productNoteSaved1);
+            product.getMiddleNotes().add(productNoteSaved2);
+            product.getBaseNotes().add(productNoteSaved1);
 
             Product productSaved = productRepository.save(product);
             for (int j = 0; j < 20; j++) {

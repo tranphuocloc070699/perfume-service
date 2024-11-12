@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.loctran.service.entity.product.Product;
+import com.loctran.service.entity.productNote.dto.ProductNoteSerializer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,7 +43,7 @@ import org.hibernate.annotations.UpdateTimestamp;
     name = "tbl_product_note"
 )
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//@JsonSerialize(using = ProductNoteSerializer.class)
+@JsonSerialize(using = ProductNoteSerializer.class)
 public class ProductNote {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

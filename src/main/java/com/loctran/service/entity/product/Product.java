@@ -79,39 +79,23 @@ public class Product {
   @OrderBy
   private Set<String> outfits;
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "product_top_notes", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "topNoteIds")
-  @OrderBy
-  @JsonIgnore
-  private Set<Long> topNoteIds;
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "product_middle_notes", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "middleNoteIds")
-  @OrderBy
-  @JsonIgnore
-  private Set<Long> middleNoteIds;
-
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "product_base_notes", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "baseNoteIds")
-  @OrderBy
-  @JsonIgnore
-  private Set<Long> baseNoteIds;
-
-
-  @Transient
-  @ToString.Exclude
-
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "product_top_notes",
+          joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "note_id"))
   private Set<ProductNote> topNotes;
 
-  @Transient
-  @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "product_middle_notes",
+          joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "note_id"))
   private Set<ProductNote> middleNotes;
 
-  @Transient
-  @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "product_base_notes",
+          joinColumns = @JoinColumn(name = "product_id"),
+          inverseJoinColumns = @JoinColumn(name = "note_id"))
   private Set<ProductNote> baseNotes;
 
   @ManyToOne(cascade = CascadeType.MERGE)

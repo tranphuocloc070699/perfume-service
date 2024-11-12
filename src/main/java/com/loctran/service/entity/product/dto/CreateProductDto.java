@@ -4,6 +4,7 @@ import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.productNote.ProductNote;
+import com.loctran.service.entity.productNote.dto.ProductNoteDto;
 import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.year.Year;
 import java.util.List;
@@ -27,9 +28,9 @@ public class CreateProductDto {
   private Brand brand;
   private Country country;
   private Year dateReleased;
-  private Set<ProductNote> topNotes;
-  private Set<ProductNote> middleNotes;
-  private Set<ProductNote> baseNotes;
+  private Set<ProductNoteDto> topNotes;
+  private Set<ProductNoteDto> middleNotes;
+  private Set<ProductNoteDto> baseNotes;
   private List<ProductPrice> prices;
 
   public Product mapToProduct(){

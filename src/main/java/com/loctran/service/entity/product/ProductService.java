@@ -21,13 +21,7 @@ import com.loctran.service.exception.custom.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -107,13 +101,13 @@ public class ProductService {
   public Product createProduct(CreateProductDto dto) {
     Product product = dto.mapToProduct();
 
-    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
-    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
-    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
-
-    product.setTopNoteIds(topNoteIds);
-    product.setMiddleNoteIds(middleNoteIds);
-    product.setBaseNoteIds(baseNoteIds);
+//    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
+//    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
+//    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
+//
+//    product.setTopNoteIds(topNoteIds);
+//    product.setMiddleNoteIds(middleNoteIds);
+//    product.setBaseNoteIds(baseNoteIds);
 
     product.getPrices().forEach(price -> price.setProduct(product));
 
@@ -137,7 +131,25 @@ public class ProductService {
       return productPrice;
     }).collect(Collectors.toList());
 
-    product.setName(dto.getName());
+
+    List<ProductNote> topNotes = dto.getTopNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList();
+
+    List<ProductNote> middleNotes = dto.getMiddleNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList();
+
+    List<ProductNote> baseNotes = ( dto.getBaseNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList());
+
+    System.out.println("topNotes:" + topNotes.size());
+    System.out.println("middleNotes:" + middleNotes.size());
+    System.out.println("baseNotes:" + baseNotes.size());
+
+
+      product.setName(dto.getName());
     product.setSlug(dto.getSlug());
     product.setThumbnail(dto.getThumbnail());
     product.setDescription(dto.getDescription());
@@ -146,15 +158,18 @@ public class ProductService {
     product.setPrices(productPrices);
     product.setDateReleased(dto.getDateReleased());
     product.setBrand(dto.getBrand());
+    product.setTopNotes(new HashSet<>(topNotes));
+    product.setMiddleNotes(new HashSet<>(middleNotes));
+    product.setBaseNotes(new HashSet<>(baseNotes));
     product.setCountry(dto.getCountry());
 
-    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
-    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
-    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
-
-    product.setTopNoteIds(topNoteIds);
-    product.setMiddleNoteIds(middleNoteIds);
-    product.setBaseNoteIds(baseNoteIds);
+//    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
+//    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
+//    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
+//
+//    product.setTopNoteIds(topNoteIds);
+//    product.setMiddleNoteIds(middleNoteIds);
+//    product.setBaseNoteIds(baseNoteIds);
 
 
     return productRepository.save(product);
@@ -218,9 +233,9 @@ public class ProductService {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
 
-    product.setTopNotes(getProductNotes(product.getTopNoteIds()));
-    product.setMiddleNotes(getProductNotes(product.getMiddleNoteIds()));
-    product.setBaseNotes(getProductNotes(product.getBaseNoteIds()));
+//    product.setTopNotes(getProductNotes(product.getTopNoteIds()));
+//    product.setMiddleNotes(getProductNotes(product.getMiddleNoteIds()));
+//    product.setBaseNotes(getProductNotes(product.getBaseNoteIds()));
 
 
     List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);
