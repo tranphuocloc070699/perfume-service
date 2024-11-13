@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -41,6 +43,18 @@ private final PostService postService;
             .status(200)
             .data(posts)
             .build();
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @GetMapping("/id")
+  public ResponseEntity<ResponseDto> getAllPostId() {
+
+    List<Long> ids = postService.getAllPostId();
+
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Lấy IDs thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(ids);
     return ResponseEntity.ok(responseDto);
   }
 

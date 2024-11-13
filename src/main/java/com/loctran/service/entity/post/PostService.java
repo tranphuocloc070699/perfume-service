@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +26,10 @@ public class PostService {
     Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
     Pageable pageable = PageRequest.of(page, size, sort);
     return postRepository.findAll(pageable);
+  }
+
+  public List<Long> getAllPostId() {
+    return postRepository.findAllIds();
   }
 
   public Page<Post> getPostsByTitle(String title, int page, int size, String sortBy, String sortDir) {

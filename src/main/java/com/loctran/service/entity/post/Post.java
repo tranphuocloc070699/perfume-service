@@ -40,12 +40,14 @@ public class Post {
   private String title;
 
   @Column
+  @Lob
   private String excerpt;
 
   @Column
   private String slug;
 
   @Column
+  @Lob
   private String content;
 
   @Column
