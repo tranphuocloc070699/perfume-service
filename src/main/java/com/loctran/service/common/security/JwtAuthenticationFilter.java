@@ -36,11 +36,9 @@ public class JwtAuthenticationFilter   extends OncePerRequestFilter {
     try{
 
       if(request.getHeader("Authorization")!=null && !request.getHeader("Authorization").isEmpty()){
-        System.out.println("trigger...");
         String authHeader = request.getHeader("Authorization");
         String jwt = authHeader.substring(7);
         String userEmail = jwtService.extractUsername(jwt);
-        System.out.println("userEmail:"+userEmail);
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User","email",userEmail));
         if(jwtService.isTokenValid(jwt,user)  && SecurityContextHolder.getContext().getAuthentication()==null){
           UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

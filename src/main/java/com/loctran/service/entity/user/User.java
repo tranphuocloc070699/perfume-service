@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.post.Post;
 import com.loctran.service.entity.product.Product;
+import com.loctran.service.entity.question.Question;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -93,6 +94,10 @@ public class User implements UserDetails {
   @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Comment> comments;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+  private List<Question> questions;
 
   @JsonIgnore
   @Override

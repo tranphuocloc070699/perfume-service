@@ -82,6 +82,17 @@ public class CommentController {
     return ResponseEntity.ok(responseDto);
   }
 
+  @PostMapping("/answer/{answerId}")
+  public ResponseEntity<ResponseDto> createAnswerComment(HttpServletRequest request,@PathVariable("answerId")Long answerId,@RequestBody CreateCommentDto createCommentDto) {
+    Long userId = commonService.getUserId(request);
+    Comment comment = commentService.saveAnswerComment(userId, answerId, createCommentDto);
+    ResponseDto responseDto = ResponseDto.builder().build();
+    responseDto.setMessage("Tạo bình luận thành công");
+    responseDto.setStatus(200);
+    responseDto.setData(comment);
+    return ResponseEntity.ok(responseDto);
+  }
+
   @PutMapping("/{id}")
   public ResponseEntity<ResponseDto> update(@PathVariable("id") Long id, @RequestBody UpdateCommentDto dto) {
     Comment comment = commentService.update(id,dto);

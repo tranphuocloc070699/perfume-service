@@ -1,6 +1,8 @@
 package com.loctran.service.entity.comment;
 
 
+import com.loctran.service.entity.answer.Answer;
+import com.loctran.service.entity.answer.AnswerRepository;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.BrandService;
 import com.loctran.service.entity.comment.dto.CreateCommentDto;
@@ -32,6 +34,7 @@ public class CommentService {
   private final ProductRepository productRepository;
   private final PostRepository postRepository;
   private final ProductCompareRepository productCompareRepository;
+  private final AnswerRepository answerRepository;
 
   public List<Comment> findAll(Long userId) {
     return commentRepository.findAllByUserId(userId);
@@ -92,4 +95,16 @@ public class CommentService {
     return comment;
   }
 
+    public Comment saveAnswerComment(Long userId, Long answerId, CreateCommentDto createCommentDto) {
+      User user = userRepository.findById(userId)
+              .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
+      Answer answer = answerRepository.findById(answerId)
+              .orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId.toString()));
+      Comment comment = Comment.builder()
+              .content(createCommentDto.getContent())
+              .user(user)
+              .answer(answer)
+              .build();
+      return commentRepository.save(comment);
+    }
 }

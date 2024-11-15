@@ -30,7 +30,7 @@ public class UserController {
   private final UserService userService;
   private final JwtService jwtService;
   private final CommonService commonService;
-  private final ProductService productService;
+
 
   @PostMapping("/signup")
   public Object signup(@RequestBody @Valid UserRegisterDto dto, BindingResult bindingResult,

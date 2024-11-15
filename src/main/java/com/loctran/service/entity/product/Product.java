@@ -55,8 +55,11 @@ public class Product {
   @Column
   private String thumbnail;
 
-  @ManyToMany(mappedBy = "productVotedList")
-  private List<User> votes;
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "votes")
+  @OrderBy
+  private Set<Long> votes;
 
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.MERGE)

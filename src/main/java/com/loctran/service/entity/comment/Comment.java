@@ -3,6 +3,7 @@ package com.loctran.service.entity.comment;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
+import com.loctran.service.entity.answer.Answer;
 import com.loctran.service.entity.country.Country;
 
 import com.loctran.service.entity.post.Post;
@@ -54,6 +55,11 @@ public class Comment {
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   private Product product;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+  private Answer answer;
+
 
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
