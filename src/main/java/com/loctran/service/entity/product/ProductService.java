@@ -179,7 +179,7 @@ public class ProductService {
     Product product = productRepository.findById(productId)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
     if (product.getVotes() == null) {
-      product.setVotes(new ArrayList<>());
+      product.setVotes(new HashSet<>());
     }
 
 //    if (product.getVotes().contains(userId)) {

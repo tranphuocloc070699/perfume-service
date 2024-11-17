@@ -42,7 +42,7 @@ public class Answer {
     private User user;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     private List<Comment> comments;
 
     @JsonIgnore

@@ -188,8 +188,8 @@ public class ServiceApplication implements CommandLineRunner {
                     .build();
 
             // Assuming you have a ProductRepository to save the Product entities
-            product.setVotes(new ArrayList<>());
-            product.getVotes().add(user);
+            product.setVotes(new HashSet<>());
+            product.getVotes().add(user.getId());
             product.setGalleries(generateGallery());
             product.setOutfits(generateOutfit());
 
