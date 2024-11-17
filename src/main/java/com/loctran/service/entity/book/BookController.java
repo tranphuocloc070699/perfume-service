@@ -16,7 +16,6 @@ import java.util.List;
 public class BookController {
 
   private final BookService bookService;
-  private final CommonService commonService;
 
 
   @GetMapping("")
