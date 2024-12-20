@@ -84,6 +84,7 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String name;
 
+  @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
   private List<Post> posts;
 

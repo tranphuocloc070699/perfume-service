@@ -39,15 +39,14 @@ public class Post {
   @Column
   private String title;
 
-  @Column
-  @Lob
+  @Column(columnDefinition = "TEXT")
   private String excerpt;
 
   @Column
   private String slug;
 
-  @Column
-  @Lob
+
+  @Column(columnDefinition = "TEXT")
   private String content;
 
   @Column

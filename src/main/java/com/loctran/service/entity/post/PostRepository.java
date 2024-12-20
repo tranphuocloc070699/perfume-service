@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     @Query("SELECT p.id FROM Post p ORDER BY p.id ASC")
     List<Long> findAllIds();
+
+    Page<Post> findAllByIsPinned(Boolean isPinned, Pageable pageable);
 }

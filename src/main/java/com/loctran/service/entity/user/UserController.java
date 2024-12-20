@@ -54,6 +54,7 @@ public class UserController {
   @PostMapping("/login")
   public Object login(@RequestBody @Valid UserLoginDto dto, BindingResult bindingResult,
       HttpServletResponse httpServletResponse) throws Exception {
+
     commonService.validate(bindingResult);
 
     ResponseDto responseDto = ResponseDto.builder().build();

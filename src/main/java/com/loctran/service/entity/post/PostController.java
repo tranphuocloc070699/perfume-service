@@ -29,11 +29,15 @@ private final PostService postService;
           @RequestParam(defaultValue = "10") int size,
           @RequestParam(defaultValue = "id") String sortBy,
           @RequestParam(defaultValue = "asc") String sortDir,
-          @RequestParam(required = false) String title) {
-
+          @RequestParam(required = false) String title,
+          @RequestParam(required = false) Boolean isPinned
+  ) {
     Page<Post> posts;
+
     if (title != null && !title.isEmpty()) {
       posts = postService.getPostsByTitle(title, page, size, sortBy, sortDir);
+    } else if (isPinned != null) {
+      posts = postService.getPostsByIsPinned(isPinned, page, size, sortBy, sortDir);
     } else {
       posts = postService.getAllPost(page, size, sortBy, sortDir);
     }
@@ -45,6 +49,7 @@ private final PostService postService;
             .build();
     return ResponseEntity.ok(responseDto);
   }
+
 
   @GetMapping("/id")
   public ResponseEntity<ResponseDto> getAllPostId() {
@@ -72,6 +77,7 @@ private final PostService postService;
   @PostMapping("")
   public ResponseEntity<ResponseDto> createPost(HttpServletRequest request,@RequestBody UpsavePostDto dto) {
     Long userId = (Long) request.getAttribute("userId");
+    System.out.println("userId: " + userId);
     Post post = postService.createPost(userId,dto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bài viết thành công");

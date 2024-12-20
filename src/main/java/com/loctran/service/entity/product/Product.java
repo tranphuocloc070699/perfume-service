@@ -48,8 +48,7 @@ public class Product {
   @Column
   private String slug;
 
-  @Column
-  @Lob
+  @Column(columnDefinition = "TEXT")
   private String description;
 
   @Column

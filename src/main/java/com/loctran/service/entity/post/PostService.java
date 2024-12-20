@@ -28,6 +28,12 @@ public class PostService {
     return postRepository.findAll(pageable);
   }
 
+  public Page<Post> getPostsByIsPinned(Boolean isPinned, int page, int size, String sortBy, String sortDir) {
+    Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+    Pageable pageable = PageRequest.of(page, size, sort);
+    return postRepository.findAllByIsPinned(isPinned, pageable);
+  }
+
   public List<Long> getAllPostId() {
     return postRepository.findAllIds();
   }
@@ -46,8 +52,10 @@ public class PostService {
     User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","id",
         userId.toString()));
     Post post = dto.mapToPost();
+    System.out.println("after map to Post");
     post.setThumbnail(dto.getThumbnail());
     post.setUser(user);
+    System.out.println("after set user");
     return postRepository.save(post);
   }
 
