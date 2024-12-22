@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MediaService {
   private final MediaRepository mediaRepository;
+  private final R2Service r2Service;
 
   public List<Media> findAll() {
     return mediaRepository.findAll();
@@ -21,6 +22,7 @@ public class MediaService {
   }
 
   public Media create(Media media) {
+
     return mediaRepository.save(media);
   }
 

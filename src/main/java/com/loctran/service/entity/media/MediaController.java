@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MediaController {
 
   private final MediaService mediaService;
-
+private final R2Service r2Service;
   @GetMapping("")
   public ResponseEntity<ResponseDto> findAllMedia() {
     List<Media> mediaList = mediaService.findAll();
@@ -37,25 +37,19 @@ public class MediaController {
   }
 
   @PostMapping("")
-  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("image") MultipartFile multipartFile) {
-    String filename = multipartFile.getOriginalFilename();
-    String uploadDir = "";
+  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("uploadDir") String uploadDir ,@RequestParam("image") MultipartFile multipartFile) {
     try {
-      String path = FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
+        String path = r2Service.uploadFile(uploadDir,multipartFile);
+            ResponseDto responseDto = ResponseDto.builder()
+          .message("Upload file thành công").status(200).data(path).build();
       Media media = new Media();
       media.setPath(path);
       media.setType(MediaType.IMAGE);
-
       mediaService.create(media);
-
-      ResponseDto responseDto = ResponseDto.builder()
-          .message("Upload file thành công").status(200).data(path).build();
-
+      
       return ResponseEntity.ok(responseDto);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    catch (RuntimeException e) {
+
+    } catch (RuntimeException | IOException e) {
       throw new RuntimeException(e);
     }
   }
