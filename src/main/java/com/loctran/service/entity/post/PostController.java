@@ -77,7 +77,6 @@ private final PostService postService;
   @PostMapping("")
   public ResponseEntity<ResponseDto> createPost(HttpServletRequest request,@RequestBody UpsavePostDto dto) {
     Long userId = (Long) request.getAttribute("userId");
-    System.out.println("userId: " + userId);
     Post post = postService.createPost(userId,dto);
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Tạo bài viết thành công");
