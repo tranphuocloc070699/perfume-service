@@ -1,6 +1,7 @@
 package com.loctran.service.entity.collection;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.loctran.service.entity.product.Product;
 import jakarta.persistence.*;
@@ -21,13 +22,11 @@ public class  CollectionProduct {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "collection_id", nullable = false)
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection collection;
 
     @Column(nullable = false)

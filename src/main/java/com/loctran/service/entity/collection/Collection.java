@@ -30,13 +30,13 @@ public class Collection {
     private Long id;
 
     @Column
-    private String iconPage;
+    private String icon;
 
     @Column
     private String title;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "collection",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "collection",cascade = CascadeType.ALL)
     private Set<CollectionProduct> collectionProducts;
 
     @Column
