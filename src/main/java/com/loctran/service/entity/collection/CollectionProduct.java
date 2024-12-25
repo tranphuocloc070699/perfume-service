@@ -15,18 +15,20 @@ import lombok.*;
 @Table(
     name = "tbl_collection_product"
 )
-@JsonIdentityInfo(scope = CollectionProduct.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(scope = CollectionProduct.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class  CollectionProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonIgnore
     private Collection collection;
 
     @Column(nullable = false)

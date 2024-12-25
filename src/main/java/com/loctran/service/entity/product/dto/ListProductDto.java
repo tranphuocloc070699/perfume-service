@@ -1,5 +1,6 @@
 package com.loctran.service.entity.product.dto;
 
+import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.productPrice.ProductPrice;
 import com.loctran.service.entity.productPrice.dto.ProductPriceDto;
 import com.loctran.service.entity.year.dto.YearDto;
@@ -24,5 +25,20 @@ public class ListProductDto {
   private List<ProductPrice> prices;
   private Date createdAt;
   private Date updatedAt;
+
+
+  public void mapFromProduct(Product product) {
+    this.id = product.getId();
+    this.name = product.getName();
+    this.slug = product.getSlug();
+    this.description = product.getDescription();
+    this.thumbnail = product.getThumbnail();
+    this.dateReleased = new YearDto(product.getDateReleased().getId(), product.getDateReleased().getValue());
+    this.prices = product.getPrices();
+    this.createdAt = product.getCreatedAt();
+    this.updatedAt = product.getUpdatedAt();
+  }
+
+
 }
 

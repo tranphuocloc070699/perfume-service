@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,7 +38,8 @@ public class Collection {
     private String title;
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "collection",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "collection",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<CollectionProduct> collectionProducts;
 
     @Column

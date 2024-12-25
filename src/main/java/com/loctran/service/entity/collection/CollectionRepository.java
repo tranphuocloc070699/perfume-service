@@ -9,4 +9,7 @@ public interface CollectionRepository extends JpaRepository<Collection,Long> {
 
     @Query("SELECT c FROM Collection c LEFT JOIN FETCH c.collectionProducts")
     List<Collection> findAllWithProducts();
+
+
+    List<Collection> findAllByOrderByIndexAsc();
 }

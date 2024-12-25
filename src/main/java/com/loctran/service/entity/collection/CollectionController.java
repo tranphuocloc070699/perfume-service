@@ -3,6 +3,8 @@ package com.loctran.service.entity.collection;
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.dto.CreateBrandDto;
+import com.loctran.service.entity.collection.dto.CollectionDto;
+import com.loctran.service.entity.collection.dto.UpdateCollectIndexDto;
 import com.loctran.service.entity.collection.dto.UpsaveCollectionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,14 +22,28 @@ public class CollectionController {
     private final CollectionService collectionService;
 
 
+
+
+
     @GetMapping("")
     public ResponseEntity<ResponseDto> getAll() {
-        List<Collection> collections = collectionService.getAll();
+      try {
+
+        List<CollectionDto> collections = collectionService.getAll();
+
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin thành công");
         responseDto.setStatus(200);
         responseDto.setData(collections);
         return ResponseEntity.ok(responseDto);
+      } catch (Exception e) {
+          System.out.println("Error: " + e.getMessage());
+          ResponseDto responseDto = ResponseDto.builder().build();
+          responseDto.setMessage("Process failure");
+          responseDto.setStatus(500);
+          responseDto.setErrors(e.getMessage());
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+      }
     }
 
     @PostMapping("")
@@ -41,6 +57,31 @@ public class CollectionController {
         return ResponseEntity.ok(responseDto);
     }
 
+
+    @PutMapping("/index")
+    public ResponseEntity<ResponseDto> updateCollectionIndexes(@RequestBody List<UpdateCollectIndexDto> updateCollectIndexDtos) {
+        try {
+            for (UpdateCollectIndexDto dto : updateCollectIndexDtos) {
+                Optional<Collection> optionalCollection = collectionService.updateCollectionIndex(dto.getCollectionId(), dto.getIndex());
+                if (optionalCollection.isEmpty()) {
+                    throw new IllegalArgumentException("Collection not found with ID: " + dto.getCollectionId());
+                }
+            }
+            ResponseDto responseDto = ResponseDto.builder().build();
+            responseDto.setMessage("Updated collection indexes successfully");
+            responseDto.setStatus(200);
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            ResponseDto responseDto = ResponseDto.builder().build();
+            responseDto.setMessage("Process failure");
+            responseDto.setStatus(500);
+            responseDto.setErrors(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+        }
+    }
+
+
     // Update a Collection
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updateCollection(@PathVariable Long id, @RequestBody UpsaveCollectionDto upsaveCollectionDto) {
@@ -51,6 +92,8 @@ public class CollectionController {
         responseDto.setData(updatedCollection);
         return ResponseEntity.ok(responseDto);
     }
+
+
 
 
     @DeleteMapping("/{id}")
