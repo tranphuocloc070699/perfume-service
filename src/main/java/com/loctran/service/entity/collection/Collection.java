@@ -38,7 +38,7 @@ public class Collection {
     private String title;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "collection",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "collection",cascade = CascadeType.MERGE)
     @ToString.Exclude
     private Set<CollectionProduct> collectionProducts;
 

@@ -68,7 +68,7 @@ public class Post {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
   private List<Comment> comments;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id")
   private User user;
 

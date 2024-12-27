@@ -1,12 +1,22 @@
 package com.loctran.service;
 
 import com.github.javafaker.Faker;
+import com.loctran.service.entity.book.Book;
+import com.loctran.service.entity.book.BookRepository;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.BrandRepository;
+import com.loctran.service.entity.collection.CollectionProduct;
+import com.loctran.service.entity.collection.CollectionProductRepository;
+import com.loctran.service.entity.collection.CollectionRepository;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.comment.CommentRepository;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.country.CountryRepository;
+import com.loctran.service.entity.post.Post;
+import com.loctran.service.entity.post.PostRepository;
+import com.loctran.service.entity.post.PostService;
+import com.loctran.service.entity.post.PostType;
+import com.loctran.service.entity.post.dto.UpsavePostDto;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.productCompare.ProductCompare;
@@ -25,9 +35,11 @@ import com.loctran.service.entity.year.YearService;
 import com.loctran.service.entity.year.dto.CreateYearDto;
 import com.loctran.service.utils.StringUtil;
 
+import jakarta.transaction.Transactional;
 import java.util.*;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,7 +47,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class ServiceApplication implements CommandLineRunner {
+public class ServiceApplication implements  CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -47,6 +59,11 @@ public class ServiceApplication implements CommandLineRunner {
     private final ProductPriceRepository productPriceRepository;
     private final CountryRepository countryRepository;
     private final BrandRepository brandRepository;
+    private final PostRepository postRepository;
+    private final PostService postService;
+    private final BookRepository bookRepository;
+    private final CollectionRepository collectionRepository;
+    private final CollectionProductRepository collectionProductRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
@@ -61,9 +78,73 @@ public class ServiceApplication implements CommandLineRunner {
                 .password(passwordEncoded).role(Role.ADMIN).build();
         User userSaved = userRepository.save(user);
 
-        createDummyProduct(userSaved);
-        createProductCompare(userSaved);
+        User managedUser = userRepository.findById(userSaved.getId()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        createDummyProduct(managedUser);
+        createProductCompare(managedUser);
+        createDummyPost(managedUser);
+        createDummyBook(managedUser);
+//        createDummyCollection(managedUser);
     }
+
+    private void createDummyBook(User userSaved) {
+        Faker faker = new Faker(new Locale("vi"));
+        for (int i = 0; i < 5; i++) {
+            Book book = Book.builder()
+                .name(faker.book().title())
+                .description(faker.lorem().paragraph())
+                .link(faker.internet().url())
+                .thumbnail(generateBookThumbnail())
+                .build();
+
+            bookRepository.save(book);
+        }
+    }
+
+    @Transactional
+    private void createDummyCollection(User user) {
+        Faker faker = new Faker(new Locale("vi"));
+        Random random = new Random();
+
+        for (int i = 0; i < 4; i++) {
+            // Create a new Collection
+            com.loctran.service.entity.collection.Collection collection = com.loctran.service.entity.collection.Collection.builder()
+                .icon(faker.internet().avatar())
+                .title(faker.book().title())
+                .index(i)
+                .build();
+
+            Set<CollectionProduct> collectionProducts = new HashSet<>();
+            int numberOfProducts = random.nextInt(6) + 5; // Ensure between 5 and 10 products
+
+            for (int j = 0; j < numberOfProducts; j++) {
+                Long randomProductId = (long) (random.nextInt(10) + 1); // Random product ID between 1 and 10
+                Optional<Product> productOptional = productRepository.findById(randomProductId);
+
+                if (productOptional.isPresent()) {
+                    Product product = productOptional.get();
+
+                    // Initialize lazy-loaded fields, if needed
+                    Hibernate.initialize(product.getGalleries());
+                    Hibernate.initialize(product.getOutfits());
+
+                    // Build and add CollectionProduct
+                    CollectionProduct collectionProduct = CollectionProduct.builder()
+                        .product(product)
+                        .collection(collection)
+                        .index(j)
+                        .build();
+
+                    collectionProducts.add(collectionProduct);
+                }
+            }
+
+            // Associate collectionProducts and save the collection
+            collection.setCollectionProducts(collectionProducts);
+            collectionRepository.save(collection);
+        }
+    }
+
 
 
     public static Long generateRandomExcluding(int min, int max, Long exclude) {
@@ -82,6 +163,27 @@ public class ServiceApplication implements CommandLineRunner {
         } while (randomNumber == exclude); // Regenerate if it matches the excluded value
 
         return randomNumber;
+    }
+
+    private void createDummyPost(User user) {
+        Faker faker = new Faker(new Locale("vi"));
+        for (int i = 0; i < 20; i++) {
+            String title = faker.book().title();
+            String content = faker.lorem().paragraph();
+            boolean isPinned = i < 8;
+
+            UpsavePostDto post = UpsavePostDto.builder()
+                .title(title)
+                .content(content)
+                .excerpt(faker.lorem().sentence())
+                .slug(faker.lorem().word())
+                .isPinned(isPinned)
+                .thumbnail(generatePostThumbnail())
+                .type(PostType.NEWS)
+                .build();
+
+            postService.createPost(user.getId(),post);
+        }
     }
 
     private void createProductCompare(User user) {
@@ -123,6 +225,34 @@ public class ServiceApplication implements CommandLineRunner {
         return images.get(randomIndex);
     }
 
+    private String generatePostThumbnail() {
+        List<String> images = new ArrayList<>() {
+        };
+        images.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStdxet3zX9keprAnh_Ba2VTYf5VQKhZ2RRQQ&s");
+        images.add("https://theperfumebox.com/cdn/shop/articles/08.11.2024.jpg?v=1731052526");
+        images.add("https://perfumeonline.ca/cdn/shop/files/Boxing_day_and_Christmas_Mobile_2fac571a-8b7e-4387-8a78-6020ce7907fd.png?v=1735074276");
+        images.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_VUOmrrUWJiHR_PHJlmh7b22gIEA8xBuheg&s");
+        images.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbFyCQsencz2Qx7o2mWyPRSz-HCG0wkV1FiA&s");
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(images.size());
+        return images.get(randomIndex);
+    }
+
+    private String generateBookThumbnail() {
+        List<String> images = new ArrayList<>() {
+        };
+        images.add("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSDzRlS4jJKaMV0bKtv_LsTBFbYGHUpWFC-sYxkpqaASJw5XjLZ");
+        images.add("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTRWSolGesc9VzyA7hw1nyn2RDJRiYQI6kDYsyomLsMg_mRX1Lq");
+        images.add("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRLBT-_DQe88Uhedc9bbsM8QZGpG-KwYdPhDyWcYlFniumLTz79");
+        images.add("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQkhrnpslzeScNq2QOT37BhkqWHiTE74dk4pscld8ucPLlatKNf");
+
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(images.size());
+        return images.get(randomIndex);
+    }
+
     private Set<String> generateGallery() {
         Set<String> images = new HashSet<>();
         images.add("https://plus.unsplash.com/premium_photo-1679106770086-f4355693be1b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyZnVtZXxlbnwwfHwwfHx8MA%3D%3D");
@@ -132,6 +262,7 @@ public class ServiceApplication implements CommandLineRunner {
         images.add("https://images.unsplash.com/photo-1590156221719-02e2d5ae7345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
         images.add("https://images.unsplash.com/photo-1590156221187-1710315f710b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
         images.add("https://plus.unsplash.com/premium_photo-1678449464118-75786d816fac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D");
+
 
         return images;
     }

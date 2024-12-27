@@ -54,7 +54,7 @@ public class Product {
   @Column
   private String thumbnail;
 
-  @ElementCollection(fetch = FetchType.LAZY)
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "product_votes", joinColumns = @JoinColumn(name = "product_id"))
   @Column(name = "votes")
   @OrderBy

@@ -3,6 +3,7 @@ package com.loctran.service.entity.post.dto;
 import com.loctran.service.entity.post.Post;
 import com.loctran.service.entity.post.PostType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UpsavePostDto {
   private String title;
   private String excerpt;
