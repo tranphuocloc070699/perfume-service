@@ -51,6 +51,9 @@ public class Product {
   @Column(columnDefinition = "TEXT")
   private String description;
 
+  @Column(columnDefinition = "TEXT")
+  private String fengShui;
+
   @Column
   private String thumbnail;
 
@@ -75,11 +78,11 @@ public class Product {
   private Set<String> galleries;
 
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = "product_outfits", joinColumns = @JoinColumn(name = "product_id"))
-  @Column(name = "outfits")
-  @OrderBy
-  private Set<String> outfits;
+//  @ElementCollection(fetch = FetchType.LAZY)
+//  @CollectionTable(name = "product_outfits", joinColumns = @JoinColumn(name = "product_id"))
+//  @Column(name = "outfits")
+//  @OrderBy
+//  private Set<String> outfits;
 
 
   @ManyToMany(fetch = FetchType.EAGER)
