@@ -4,7 +4,6 @@ import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
-import com.loctran.service.entity.product.dto.UpdateProductDto;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
@@ -72,7 +71,7 @@ public class ProductController {
     }
 
     @GetMapping("product-compare/{id}")
-    public ResponseEntity<ResponseDto> findProducCompareById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseDto> findProductCompareById(@PathVariable("id") Long id) {
         ProductCompareDto productCompare = productService.findProductCompare(id);
         ResponseDto responseDto = ResponseDto.builder().build();
         responseDto.setMessage("Lấy thông tin sản phẩm thành công");

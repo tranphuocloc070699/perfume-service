@@ -5,7 +5,6 @@ import com.loctran.service.entity.brand.BrandRepository;
 import com.loctran.service.entity.product.dto.CreateProductDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.entity.product.dto.ProductDetailDto;
-import com.loctran.service.entity.product.dto.UpdateProductDto;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
@@ -101,15 +100,18 @@ public class ProductService {
   public Product createProduct(CreateProductDto dto) {
     Product product = dto.mapToProduct();
 
-//    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
-//    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
-//    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
-//
-//    product.setTopNoteIds(topNoteIds);
-//    product.setMiddleNoteIds(middleNoteIds);
-//    product.setBaseNoteIds(baseNoteIds);
-
     product.getPrices().forEach(price -> price.setProduct(product));
+
+    List<ProductNote> topNotes = dto.getTopNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList();
+    List<ProductNote> middleNotes = dto.getMiddleNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList();
+
+    List<ProductNote> baseNotes = ( dto.getBaseNotes().stream().map((item) -> {
+      return item.mapToEntity();
+    }).toList());
 
     return productRepository.save(product);
   }
@@ -144,17 +146,16 @@ public class ProductService {
       return item.mapToEntity();
     }).toList());
 
-    System.out.println("topNotes:" + topNotes.size());
-    System.out.println("middleNotes:" + middleNotes.size());
-    System.out.println("baseNotes:" + baseNotes.size());
-
+    System.out.println("top notes size: " + topNotes.size());
+    System.out.println("middle notes size: " + middleNotes.size());
+    System.out.println("base notes size: " + baseNotes.size());
 
       product.setName(dto.getName());
     product.setSlug(dto.getSlug());
     product.setThumbnail(dto.getThumbnail());
     product.setDescription(dto.getDescription());
+    product.setFengShui(dto.getFengShui());
     product.setGalleries(dto.getGalleries());
-    product.setOutfits(dto.getOutfits());
     product.setPrices(productPrices);
     product.setDateReleased(dto.getDateReleased());
     product.setBrand(dto.getBrand());
@@ -162,15 +163,7 @@ public class ProductService {
     product.setMiddleNotes(new HashSet<>(middleNotes));
     product.setBaseNotes(new HashSet<>(baseNotes));
     product.setCountry(dto.getCountry());
-
-//    Set<Long> topNoteIds = getNoteIds(dto.getTopNotes());
-//    Set<Long> middleNoteIds = getNoteIds(dto.getMiddleNotes());
-//    Set<Long> baseNoteIds = getNoteIds(dto.getBaseNotes());
-//
-//    product.setTopNoteIds(topNoteIds);
-//    product.setMiddleNoteIds(middleNoteIds);
-//    product.setBaseNoteIds(baseNoteIds);
-
+    product.setColors(dto.getColors());
 
     return productRepository.save(product);
   }
@@ -190,28 +183,7 @@ public class ProductService {
     return productRepository.save(product);
   }
 
-//  public Media addProductGallery(Long productId, MultipartFile file){
-//    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
-//
-//    String fileDir = "product-" + productId;
-//    try {
-//     String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
-//      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_GALLERY).product(product).build());
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
-//  }
 
-//  public Media addProductOutfit(Long productId, MultipartFile file){
-//    Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
-//    String fileDir = "product-" + productId;
-//    try {
-//      String path = FileUploadUtil.saveFile(fileDir,file.getOriginalFilename(),file);
-//      return mediaRepository.save(Media.builder().path(path).type(MediaType.PRODUCT_OUTFIT).product(product).build());
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
-//  }
 
 
   public Product deleteProduct(Long id) {
@@ -232,10 +204,6 @@ public class ProductService {
   public Product findProductById(Long id) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
-
-//    product.setTopNotes(getProductNotes(product.getTopNoteIds()));
-//    product.setMiddleNotes(getProductNotes(product.getMiddleNoteIds()));
-//    product.setBaseNotes(getProductNotes(product.getBaseNoteIds()));
 
 
     List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);

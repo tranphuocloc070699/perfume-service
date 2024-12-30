@@ -126,7 +126,7 @@ public class ServiceApplication implements  CommandLineRunner {
 
                     // Initialize lazy-loaded fields, if needed
                     Hibernate.initialize(product.getGalleries());
-                    Hibernate.initialize(product.getOutfits());
+//                    Hibernate.initialize(product.getOutfits());
 
                     // Build and add CollectionProduct
                     CollectionProduct collectionProduct = CollectionProduct.builder()
@@ -322,7 +322,7 @@ public class ServiceApplication implements  CommandLineRunner {
             product.setVotes(new HashSet<>());
             product.getVotes().add(user.getId());
             product.setGalleries(generateGallery());
-            product.setOutfits(generateOutfit());
+//            product.setOutfits(generateOutfit());
 
 
             ProductNote productNote1 = new ProductNote();

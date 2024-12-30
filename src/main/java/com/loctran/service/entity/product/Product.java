@@ -2,17 +2,15 @@ package com.loctran.service.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
+import com.loctran.service.entity.color.Color;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
 import com.loctran.service.entity.productCompare.ProductCompare;
 import com.loctran.service.entity.productCompare.dto.ListProductCompareDto;
 import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.productPrice.ProductPrice;
-import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.year.Year;
 import jakarta.persistence.*;
 import java.util.Set;
@@ -102,6 +100,12 @@ public class Product {
           joinColumns = @JoinColumn(name = "product_id"),
           inverseJoinColumns = @JoinColumn(name = "note_id"))
   private Set<ProductNote> baseNotes;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "product_colors",
+      joinColumns = @JoinColumn(name = "product_id"),
+      inverseJoinColumns = @JoinColumn(name = "color_id"))
+  private Set<Color> colors;
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "country_id")
