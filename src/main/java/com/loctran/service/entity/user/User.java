@@ -47,7 +47,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 )
 public class User implements UserDetails {
 
-  @jakarta.persistence.Id
   @Id
   @SequenceGenerator(
       name = "tbl_user_id_seq",

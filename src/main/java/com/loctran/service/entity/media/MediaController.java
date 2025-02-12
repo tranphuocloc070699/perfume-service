@@ -5,6 +5,8 @@ import com.loctran.service.entity.media.dto.MediaDto;
 import com.loctran.service.entity.media.dto.UpsaveMediaDto;
 import com.loctran.service.entity.product.dto.ListProductDto;
 import com.loctran.service.utils.FileUploadUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +21,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * API for managing media files.
+ * Provides endpoints for retrieving, uploading, and deleting media files.
+ */
+@Tag(name = "Media", description = "APIs for managing media files")
 @RestController
 @RequestMapping("/media")
 @RequiredArgsConstructor
 public class MediaController {
-
   private final MediaService mediaService;
 private final R2Service r2Service;
+  /**
+   * Retrieves all media files.
+   */
+  @Operation(summary = "Get all media", description = "Retrieves all available media files")
   @GetMapping("")
   public ResponseEntity<ResponseDto> findAllMedia() {
     List<Media> mediaList = mediaService.findAll();
@@ -36,24 +46,33 @@ private final R2Service r2Service;
     return ResponseEntity.ok(responseDto);
   }
 
+  /**
+   * Uploads a media file.
+   */
+  @Operation(summary = "Upload a media file", description = "Uploads a media file and saves it to the database")
   @PostMapping("")
-  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("uploadDir") String uploadDir ,@RequestParam("image") MultipartFile multipartFile) {
+  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("uploadDir") String uploadDir, @RequestParam("image") MultipartFile multipartFile) {
     try {
-        String path = r2Service.uploadFile(uploadDir,multipartFile);
-            ResponseDto responseDto = ResponseDto.builder()
-          .message("Upload file thành công").status(200).data(path).build();
+      String path = r2Service.uploadFile(uploadDir, multipartFile);
+      ResponseDto responseDto = ResponseDto.builder()
+          .message("Upload file thành công")
+          .status(200)
+          .data(path)
+          .build();
       Media media = new Media();
       media.setPath(path);
       media.setType(MediaType.IMAGE);
       mediaService.create(media);
-      
       return ResponseEntity.ok(responseDto);
-
     } catch (RuntimeException | IOException e) {
       throw new RuntimeException(e);
     }
   }
 
+  /**
+   * Deletes a media file by its ID.
+   */
+  @Operation(summary = "Delete a media file", description = "Deletes a media file by its unique identifier")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deleteMedia(@PathVariable Long id) {
     Media media = mediaService.delete(id);

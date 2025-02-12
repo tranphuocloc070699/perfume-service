@@ -39,7 +39,6 @@ public class R2Service {
     return String.format("%s/%s", domain, key);
   }
 
-  // Delete file and return the URI of the deleted file
   public String deleteFile(String key) {
     DeleteObjectRequest request = DeleteObjectRequest.builder()
         .bucket(bucketName)
@@ -48,6 +47,6 @@ public class R2Service {
 
     s3Client.deleteObject(request);
 
-    return String.format("%s/%s/%s", endpointUrl, bucketName, key); // Return the deleted file URI
+    return String.format("%s/%s/%s", endpointUrl, bucketName, key);
   }
 }
