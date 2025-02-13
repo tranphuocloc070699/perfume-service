@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -29,7 +30,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,8 +60,8 @@ public class User implements UserDetails {
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  @Column(columnDefinition = "varchar(50) default 'ADMIN'")
-  private Role role = Role.ADMIN;
+  @Column(columnDefinition = "varchar(50) default 'USER'")
+  private Role role = Role.USER;
 
   @Column
   private String avatar;
