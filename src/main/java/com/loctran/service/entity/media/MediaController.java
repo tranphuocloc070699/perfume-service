@@ -51,7 +51,7 @@ private final R2Service r2Service;
    */
   @Operation(summary = "Upload a media file", description = "Uploads a media file and saves it to the database")
   @PostMapping("")
-  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("uploadDir") String uploadDir, @RequestParam("image") MultipartFile multipartFile) {
+  public ResponseEntity<ResponseDto> saveMedia(@RequestParam("entityType") EntityType entityType,@RequestParam("uploadDir") String uploadDir, @RequestParam("image") MultipartFile multipartFile) {
     try {
       String path = r2Service.uploadFile(uploadDir, multipartFile);
       ResponseDto responseDto = ResponseDto.builder()
@@ -61,6 +61,7 @@ private final R2Service r2Service;
           .build();
       Media media = new Media();
       media.setPath(path);
+      media.setEntityType(entityType);
       media.setType(MediaType.IMAGE);
       mediaService.create(media);
       return ResponseEntity.ok(responseDto);

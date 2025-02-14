@@ -1,10 +1,14 @@
 package com.loctran.service.entity.user;
 
+import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.media.MediaService;
 import com.loctran.service.entity.user.dto.UserLoginDto;
 import com.loctran.service.entity.user.dto.UserRegisterDto;
 import com.loctran.service.entity.user.dto.UserUpdateDto;
 import com.loctran.service.exception.custom.BadRequestException;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +20,11 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final MediaService mediaService;
 
   public User register(UserRegisterDto dto) {
     if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
-      throw new BadRequestException("Email này đã tồn tại, vui lòng chọn email khác");
+      throw new BadRequestException(ResponseMessage.USER_EMAIL_EXISTED);
     }
     String encodedPassword = passwordEncoder.encode(dto.getPassword());
     User user = dto.mapToUser();
@@ -31,22 +36,25 @@ public class UserService {
     Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
 
     if (userOptional.isEmpty()) {
-      throw new ResourceNotFoundException("User", "email", dto.getEmail());
+      throw new ResourceNotFoundException(ResponseMessage.USER_LOGIN_FAILED);
     }
 
     User user = userOptional.get();
     if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-      throw new BadRequestException("Tài khoản hoặc mật khẩu không chính xác");
+      throw new BadRequestException(ResponseMessage.USER_LOGIN_FAILED);
     }
     return user;
   }
   public User update(Long id, UserUpdateDto dto) {
     User user = userRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     if (!dto.getName().equals(user.getName())) {
       user.setName(dto.getName());
     }
-    user.setAvatar(dto.getAvatar());
+    if(!Objects.equals(user.getAvatar().getId(), dto.getAvatarId())){
+      Media media = mediaService.findById(dto.getAvatarId());
+      user.setAvatar(media);
+    }
     return userRepository.save(user);
 
   }

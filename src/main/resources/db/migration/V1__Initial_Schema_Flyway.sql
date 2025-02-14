@@ -1,25 +1,25 @@
 --
--- PostgreSQL database dump
+
 --
 
--- Dumped from database version 17.0 (Debian 17.0-1.pgdg120+1)
--- Dumped by pg_dump version 17.0 (Debian 17.0-1.pgdg120+1)
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+
+
+
+
+
+
+
+
 SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
 
-SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+
+
+
+
+
+
 
 --
 -- Name: answer_thumbnails; Type: TABLE; Schema: public; Owner: loctran
@@ -31,7 +31,7 @@ CREATE TABLE public.answer_thumbnails (
 );
 
 
-ALTER TABLE public.answer_thumbnails OWNER TO loctran;
+
 
 --
 -- Name: answer_votes; Type: TABLE; Schema: public; Owner: loctran
@@ -43,7 +43,7 @@ CREATE TABLE public.answer_votes (
 );
 
 
-ALTER TABLE public.answer_votes OWNER TO loctran;
+
 
 --
 -- Name: note_category_color; Type: TABLE; Schema: public; Owner: loctran
@@ -55,7 +55,7 @@ CREATE TABLE public.note_category_color (
 );
 
 
-ALTER TABLE public.note_category_color OWNER TO loctran;
+
 
 --
 -- Name: post_votes; Type: TABLE; Schema: public; Owner: loctran
@@ -67,7 +67,7 @@ CREATE TABLE public.post_votes (
 );
 
 
-ALTER TABLE public.post_votes OWNER TO loctran;
+
 
 --
 -- Name: product_base_notes; Type: TABLE; Schema: public; Owner: loctran
@@ -79,7 +79,7 @@ CREATE TABLE public.product_base_notes (
 );
 
 
-ALTER TABLE public.product_base_notes OWNER TO loctran;
+
 
 --
 -- Name: product_colors; Type: TABLE; Schema: public; Owner: loctran
@@ -91,7 +91,7 @@ CREATE TABLE public.product_colors (
 );
 
 
-ALTER TABLE public.product_colors OWNER TO loctran;
+
 
 --
 -- Name: product_compare_compare_votes; Type: TABLE; Schema: public; Owner: loctran
@@ -103,7 +103,7 @@ CREATE TABLE public.product_compare_compare_votes (
 );
 
 
-ALTER TABLE public.product_compare_compare_votes OWNER TO loctran;
+
 
 --
 -- Name: product_compare_original_votes; Type: TABLE; Schema: public; Owner: loctran
@@ -115,7 +115,7 @@ CREATE TABLE public.product_compare_original_votes (
 );
 
 
-ALTER TABLE public.product_compare_original_votes OWNER TO loctran;
+
 
 --
 -- Name: product_galleries; Type: TABLE; Schema: public; Owner: loctran
@@ -127,7 +127,7 @@ CREATE TABLE public.product_galleries (
 );
 
 
-ALTER TABLE public.product_galleries OWNER TO loctran;
+
 
 --
 -- Name: product_middle_notes; Type: TABLE; Schema: public; Owner: loctran
@@ -139,7 +139,7 @@ CREATE TABLE public.product_middle_notes (
 );
 
 
-ALTER TABLE public.product_middle_notes OWNER TO loctran;
+
 
 --
 -- Name: product_outfits; Type: TABLE; Schema: public; Owner: loctran
@@ -151,7 +151,7 @@ CREATE TABLE public.product_outfits (
 );
 
 
-ALTER TABLE public.product_outfits OWNER TO loctran;
+
 
 --
 -- Name: product_top_notes; Type: TABLE; Schema: public; Owner: loctran
@@ -163,7 +163,7 @@ CREATE TABLE public.product_top_notes (
 );
 
 
-ALTER TABLE public.product_top_notes OWNER TO loctran;
+
 
 --
 -- Name: product_votes; Type: TABLE; Schema: public; Owner: loctran
@@ -175,7 +175,7 @@ CREATE TABLE public.product_votes (
 );
 
 
-ALTER TABLE public.product_votes OWNER TO loctran;
+
 
 --
 -- Name: tbl_answer; Type: TABLE; Schema: public; Owner: loctran
@@ -190,7 +190,7 @@ CREATE TABLE public.tbl_answer (
 );
 
 
-ALTER TABLE public.tbl_answer OWNER TO loctran;
+
 
 --
 -- Name: tbl_answer_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -221,7 +221,7 @@ CREATE TABLE public.tbl_book (
 );
 
 
-ALTER TABLE public.tbl_book OWNER TO loctran;
+
 
 --
 -- Name: tbl_book_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -253,7 +253,7 @@ CREATE TABLE public.tbl_brand (
 );
 
 
-ALTER TABLE public.tbl_brand OWNER TO loctran;
+
 
 --
 -- Name: tbl_brand_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -283,7 +283,7 @@ CREATE TABLE public.tbl_collection (
 );
 
 
-ALTER TABLE public.tbl_collection OWNER TO loctran;
+
 
 --
 -- Name: tbl_collection_product; Type: TABLE; Schema: public; Owner: loctran
@@ -297,7 +297,7 @@ CREATE TABLE public.tbl_collection_product (
 );
 
 
-ALTER TABLE public.tbl_collection_product OWNER TO loctran;
+
 
 --
 -- Name: tbl_collection_product_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -338,7 +338,7 @@ CREATE TABLE public.tbl_color (
 );
 
 
-ALTER TABLE public.tbl_color OWNER TO loctran;
+
 
 --
 -- Name: tbl_color_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -371,7 +371,7 @@ CREATE TABLE public.tbl_comment (
 );
 
 
-ALTER TABLE public.tbl_comment OWNER TO loctran;
+
 
 --
 -- Name: tbl_comment_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -401,7 +401,7 @@ CREATE TABLE public.tbl_country (
 );
 
 
-ALTER TABLE public.tbl_country OWNER TO loctran;
+
 
 --
 -- Name: tbl_country_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -431,7 +431,7 @@ CREATE TABLE public.tbl_media (
 );
 
 
-ALTER TABLE public.tbl_media OWNER TO loctran;
+
 
 --
 -- Name: tbl_media_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -458,7 +458,7 @@ CREATE TABLE public.tbl_note_category (
 );
 
 
-ALTER TABLE public.tbl_note_category OWNER TO loctran;
+
 
 --
 -- Name: tbl_note_category_id_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -494,7 +494,7 @@ CREATE TABLE public.tbl_post (
 );
 
 
-ALTER TABLE public.tbl_post OWNER TO loctran;
+
 
 --
 -- Name: tbl_post_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -529,7 +529,7 @@ CREATE TABLE public.tbl_product (
 );
 
 
-ALTER TABLE public.tbl_product OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_base_note; Type: TABLE; Schema: public; Owner: loctran
@@ -541,7 +541,7 @@ CREATE TABLE public.tbl_product_base_note (
 );
 
 
-ALTER TABLE public.tbl_product_base_note OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_compare; Type: TABLE; Schema: public; Owner: loctran
@@ -556,7 +556,7 @@ CREATE TABLE public.tbl_product_compare (
 );
 
 
-ALTER TABLE public.tbl_product_compare OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_compare_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -582,7 +582,7 @@ CREATE TABLE public.tbl_product_middle_note (
 );
 
 
-ALTER TABLE public.tbl_product_middle_note OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_note; Type: TABLE; Schema: public; Owner: loctran
@@ -599,7 +599,7 @@ CREATE TABLE public.tbl_product_note (
 );
 
 
-ALTER TABLE public.tbl_product_note OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_note_id_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -648,7 +648,7 @@ CREATE TABLE public.tbl_product_price (
 );
 
 
-ALTER TABLE public.tbl_product_price OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_price_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -688,7 +688,7 @@ CREATE TABLE public.tbl_product_tbl_user (
 );
 
 
-ALTER TABLE public.tbl_product_tbl_user OWNER TO loctran;
+
 
 --
 -- Name: tbl_product_top_note; Type: TABLE; Schema: public; Owner: loctran
@@ -700,7 +700,7 @@ CREATE TABLE public.tbl_product_top_note (
 );
 
 
-ALTER TABLE public.tbl_product_top_note OWNER TO loctran;
+
 
 --
 -- Name: tbl_question; Type: TABLE; Schema: public; Owner: loctran
@@ -716,7 +716,7 @@ CREATE TABLE public.tbl_question (
 );
 
 
-ALTER TABLE public.tbl_question OWNER TO loctran;
+
 
 --
 -- Name: tbl_question_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -747,7 +747,7 @@ CREATE TABLE public.tbl_user (
 );
 
 
-ALTER TABLE public.tbl_user OWNER TO loctran;
+
 
 --
 -- Name: tbl_user_id_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -774,7 +774,7 @@ CREATE TABLE public.tbl_voting (
 );
 
 
-ALTER TABLE public.tbl_voting OWNER TO loctran;
+
 
 --
 -- Name: tbl_voting_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -798,9 +798,6 @@ CREATE TABLE public.tbl_year (
     value integer,
     id bigint NOT NULL
 );
-
-
-ALTER TABLE public.tbl_year OWNER TO loctran;
 
 --
 -- Name: tbl_year_seq; Type: SEQUENCE; Schema: public; Owner: loctran
@@ -1313,6 +1310,6 @@ ALTER TABLE ONLY public.product_compare_original_votes
 
 
 --
--- PostgreSQL database dump complete
+
 --
 

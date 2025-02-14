@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserUpdateDto {
   private String name;
-  private String avatar;
+  private Long avatarId;
 }

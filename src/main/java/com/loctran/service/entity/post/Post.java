@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.comment.Comment;
 import com.loctran.service.entity.country.Country;
+import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.media.MediaType;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.user.User;
@@ -52,8 +53,9 @@ public class Post {
   @Column
   private Boolean isPinned;
 
-  @Column
-  private String thumbnail;
+  @OneToOne
+  @JoinColumn(name = "media_id")
+  private Media thumbnail;
 
 
   @Enumerated(EnumType.STRING)

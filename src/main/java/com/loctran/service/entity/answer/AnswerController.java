@@ -66,7 +66,7 @@ public class AnswerController {
    * @return A ResponseEntity containing the created answer and status message.
    */
   @Operation(summary = "Create an answer", description = "Creates a new answer for a specific question")
-  @PostMapping("question/{id}")
+  @PostMapping("/question/{id}")
   public ResponseEntity<ResponseDto> create(HttpServletRequest request, @PathVariable("id") Long questionId, @RequestBody AnswerDto dto) {
     Long userId = commonService.getUserId(request);
     Answer answer = answerService.create(userId, questionId, dto);

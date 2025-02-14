@@ -1,11 +1,16 @@
 package com.loctran.service.entity.post;
 
 
+import com.loctran.service.entity.media.Media;
+import com.loctran.service.entity.media.MediaRepository;
+import com.loctran.service.entity.media.MediaService;
 import com.loctran.service.entity.post.dto.UpsavePostDto;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +25,8 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final MediaService mediaService;
+    private final ModelMapper modelMapper;
 
 
   public Page<Post> getAllPost(int page, int size, String sortBy, String sortDir) {
@@ -51,21 +58,26 @@ public class PostService {
   public Post createPost(Long userId, UpsavePostDto dto) {
     User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","id",
         userId.toString()));
-    Post post = dto.mapToPost();
-    System.out.println("after map to Post");
-    post.setThumbnail(dto.getThumbnail());
+    Post post =  modelMapper.map(dto, Post.class);
+
+    Media thumbnail = mediaService.findById(dto.getMediaId());
+
+    post.setThumbnail(thumbnail);
     post.setUser(user);
-    System.out.println("after set user");
+
     return postRepository.save(post);
   }
 
   public Post updatePost(Long id, UpsavePostDto dto) {
       Post post = getPostById(id);
+
+      Media thumbnail = mediaService.findById(dto.getMediaId());
+
     post.setTitle(dto.getTitle());
     post.setExcerpt(dto.getExcerpt());
     post.setContent(dto.getContent());
     post.setIsPinned(dto.getIsPinned());
-    post.setThumbnail(dto.getThumbnail());
+    post.setThumbnail(thumbnail);
     return postRepository.save(post);
   }
 
