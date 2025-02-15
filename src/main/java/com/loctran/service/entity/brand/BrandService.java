@@ -9,6 +9,7 @@ import com.loctran.service.entity.country.dto.CreateCountryDto;
 import com.loctran.service.entity.country.dto.UpdateCountryDto;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ public class BrandService {
   }
 
   public Brand findById(Long id) {
-    return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand", "id", id.toString()));
+    return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public Brand save(CreateBrandDto dto) {
@@ -36,7 +38,7 @@ public class BrandService {
 
 
   public Brand update(Long id, UpdateBrandDto dto) {
-    Brand brand = brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand", "id", id.toString()));
+    Brand brand = brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     brand.setName(dto.getName());
     brand.setDescription(dto.getDescription());
     brand.setHomepageLink(dto.getHomepageLink());

@@ -2,6 +2,8 @@ package com.loctran.service.entity.answer;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
+import com.loctran.service.entity.answer.dto.AnswerDto;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +36,7 @@ public class AnswerController {
   public ResponseEntity<ResponseDto> getAll(@PathVariable("id") Long id) {
     List<Answer> answers = answerService.getAll(id);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
+    responseDto.setMessage(ResponseMessage.GET_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answers);
     return ResponseEntity.ok(responseDto);
@@ -51,7 +53,7 @@ public class AnswerController {
   public ResponseEntity<ResponseDto> getById(@PathVariable Long id) {
     Answer answer = answerService.findById(id);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
+    responseDto.setMessage(ResponseMessage.GET_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answer);
     return ResponseEntity.ok(responseDto);
@@ -72,7 +74,7 @@ public class AnswerController {
     Answer answer = answerService.create(userId, questionId, dto);
 
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Tạo câu trả lời thành công");
+    responseDto.setMessage(ResponseMessage.CREATE_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answer);
     return ResponseEntity.ok(responseDto);
@@ -88,9 +90,9 @@ public class AnswerController {
   @Operation(summary = "Update an answer", description = "Updates an existing answer")
   @PutMapping("{id}")
   public ResponseEntity<ResponseDto> update(@PathVariable("id") Long answerId, @RequestBody AnswerDto dto) {
-    Answer answer = answerService.update(answerId, dto);
+    Answer answer = answerService.updateById(answerId, dto);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Chỉnh sửa câu trả lời thành công");
+    responseDto.setMessage(ResponseMessage.UPDATE_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answer);
     return ResponseEntity.ok(responseDto);
@@ -109,7 +111,7 @@ public class AnswerController {
     Long userId = commonService.getUserId(request);
     Answer answer = answerService.toggleVote(answerId, userId);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Toggle vote thành công");
+    responseDto.setMessage(ResponseMessage.UPDATE_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answer);
     return ResponseEntity.ok(responseDto);
@@ -124,9 +126,9 @@ public class AnswerController {
   @Operation(summary = "Delete an answer", description = "Deletes an answer by its ID")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long answerId) {
-    Answer answer = answerService.delete(answerId);
+    Answer answer = answerService.deleteById(answerId);
     ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa câu trả lời thành công");
+    responseDto.setMessage(ResponseMessage.DELETE_DATA_SUCCESS);
     responseDto.setStatus(200);
     responseDto.setData(answer);
     return ResponseEntity.ok(responseDto);

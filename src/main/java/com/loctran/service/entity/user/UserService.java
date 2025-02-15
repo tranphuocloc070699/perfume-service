@@ -45,6 +45,13 @@ public class UserService {
     }
     return user;
   }
+
+  public User findById(Long id){
+
+    return userRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+  }
+
   public User update(Long id, UserUpdateDto dto) {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
@@ -61,7 +68,7 @@ public class UserService {
 
   public User findByEmail(String email) {
     return userRepository.findByEmail(email)
-        .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
   }
 
 }

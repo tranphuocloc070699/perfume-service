@@ -6,6 +6,7 @@ import com.loctran.service.entity.country.dto.CreateCountryDto;
 import com.loctran.service.entity.country.dto.UpdateCountryDto;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class CountryService {
   }
 
   public Country findById(Long id) {
-    return countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Country","id",id.toString()));
+    return countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public Country save(CreateCountryDto dto) {
@@ -35,7 +37,7 @@ public class CountryService {
 
 
   public Country update(Long id, UpdateCountryDto dto) {
-    Country country = countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Country","id",id.toString()));
+    Country country = countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     country.setName(dto.getName());
     country.setCode(dto.getCode());
     country.setThumbnail(dto.getThumbnail());

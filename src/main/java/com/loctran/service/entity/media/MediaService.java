@@ -3,6 +3,7 @@ package com.loctran.service.entity.media;
 import com.loctran.service.entity.media.dto.MediaDto;
 import com.loctran.service.entity.media.dto.UpsaveMediaDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ public class MediaService {
   }
 
   public Media findById(Long id) {
-    return mediaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Media", "id", id.toString()));
+    return mediaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public Media create(Media media) {

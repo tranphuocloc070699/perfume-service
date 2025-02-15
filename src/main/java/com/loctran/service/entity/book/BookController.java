@@ -1,12 +1,13 @@
 package com.loctran.service.entity.book;
 
 
-import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
+import com.loctran.service.entity.book.dto.BookDto;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.spi.Resolution;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +32,7 @@ public class BookController {
   @GetMapping("")
   public ResponseEntity<ResponseDto> getAll() {
     List<Book> books = bookService.getAll();
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(books);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(books));
   }
 
   /**
@@ -45,11 +42,7 @@ public class BookController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getById(@PathVariable Long id) {
     Book book = bookService.findById(id);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(book);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(book));
   }
 
   /**
@@ -59,11 +52,7 @@ public class BookController {
   @PostMapping("")
   public ResponseEntity<ResponseDto> create(@RequestBody BookDto dto) {
     Book book = bookService.create(dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Tạo sách thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(book);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(book));
   }
 
   /**
@@ -72,12 +61,8 @@ public class BookController {
   @Operation(summary = "Update a book", description = "Updates an existing book entry")
   @PutMapping("{id}")
   public ResponseEntity<ResponseDto> update(@PathVariable("id") Long bookId, @RequestBody BookDto dto) {
-    Book book = bookService.update(bookId, dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Chỉnh sửa sách thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(book);
-    return ResponseEntity.ok(responseDto);
+    Book book = bookService.updateById(bookId, dto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(book));
   }
 
   /**
@@ -86,11 +71,7 @@ public class BookController {
   @Operation(summary = "Delete a book", description = "Deletes a book by its unique identifier")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long bookId) {
-    Book book = bookService.delete(bookId);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa sách thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(book);
-    return ResponseEntity.ok(responseDto);
+    Book book = bookService.deleteById(bookId);
+    return ResponseEntity.ok(ResponseDto.deleteDataSuccess(book));
   }
 }

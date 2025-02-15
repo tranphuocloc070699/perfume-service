@@ -17,6 +17,7 @@ import com.loctran.service.entity.productPrice.ProductPriceRepository;
 import com.loctran.service.entity.year.Year;
 import com.loctran.service.entity.year.YearService;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.transaction.Transactional;
 
 import java.lang.reflect.Array;
@@ -118,7 +119,7 @@ public class ProductService {
 
   public Product findProductBySlug(String slug) {
     Product product = productRepository.findById(1L)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "slug", slug));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
 
     return product;
   }
@@ -126,7 +127,7 @@ public class ProductService {
 
   public Product updateProduct(Long id, CreateProductDto dto) {
     Product product = productRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
 
     List<ProductPrice> productPrices = dto.getPrices().stream().map(productPrice -> {
       productPrice.setProduct(product);
@@ -170,7 +171,7 @@ public class ProductService {
 
   public Product toggleVote(Long userId, Long productId) {
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
     if (product.getVotes() == null) {
       product.setVotes(new HashSet<>());
     }
@@ -188,7 +189,7 @@ public class ProductService {
 
   public Product deleteProduct(Long id) {
     Product product = productRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
 
     productRepository.delete(product);
     return product;
@@ -203,7 +204,7 @@ public class ProductService {
 
   public Product findProductById(Long id) {
     Product product = productRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
 
 
     List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);
@@ -220,7 +221,7 @@ public class ProductService {
 
   public ProductCompareDto findProductCompare(Long id) {
     ProductCompare productCompareExisting = productCompareRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("ProductCompare", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
 
     List<Object[]> rawDataResponse = productCompareRepository.findByProductCompareId(id);
     Object[] rawData = rawDataResponse.get(0);

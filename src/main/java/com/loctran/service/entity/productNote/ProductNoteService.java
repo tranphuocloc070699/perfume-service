@@ -6,6 +6,7 @@ import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.productNote.dto.CreateProductNoteDto;
 import com.loctran.service.entity.productNote.dto.UpdateProductNoteDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ public class ProductNoteService {
   }
 
   public ProductNote findById(Long id) {
-    return productNoteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductNote","id",id.toString()));
+    return productNoteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public ProductNote save(CreateProductNoteDto dto) {
@@ -31,7 +33,7 @@ public class ProductNoteService {
 
 
   public ProductNote update(Long id, UpdateProductNoteDto dto) {
-    ProductNote productNote = productNoteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductNote","id",id.toString()));
+    ProductNote productNote = productNoteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     productNote.setName(dto.getName());
     productNote.setSlug(dto.getSlug());
     productNote.setThumbnail(dto.getThumbnail());
@@ -44,9 +46,9 @@ public class ProductNoteService {
   @Transactional
   public ProductNote addNoteToProduct(Long noteId, Long productId){
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new ResourceNotFoundException("Product","id",productId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.POST_NOT_FOUND));
     ProductNote productNote = productNoteRepository.findById(noteId)
-        .orElseThrow(() -> new ResourceNotFoundException("ProductNote","id",noteId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
 
 //    if (!productNote.getProducts().contains(product)) {
 //      productNote.getProducts().add(product);

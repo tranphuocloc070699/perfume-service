@@ -8,6 +8,7 @@ import com.loctran.service.entity.post.dto.UpsavePostDto;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -52,12 +53,12 @@ public class PostService {
   }
 
   public Post getPostById(Long id) {
-    return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post","id",id.toString()));
+    return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.POST_NOT_FOUND));
   }
 
   public Post createPost(Long userId, UpsavePostDto dto) {
-    User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","id",
-        userId.toString()));
+    User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     Post post =  modelMapper.map(dto, Post.class);
 
     Media thumbnail = mediaService.findById(dto.getMediaId());
@@ -83,7 +84,7 @@ public class PostService {
 
   public Post toggleVote(Long userId, Long postId) {
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.POST_NOT_FOUND));
     if (post.getVotes() == null) {
       post.setVotes(new ArrayList<>());
     }

@@ -9,6 +9,7 @@ import com.loctran.service.entity.year.Year;
 import com.loctran.service.entity.year.dto.CreateYearDto;
 import com.loctran.service.exception.custom.ForbiddenException;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,13 @@ public class QuestionService {
     }
 
     public Question findById (Long id){
-        return questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Question","id",id.toString()));
+        return questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     }
 
 
     public Question create( Long userId,QuestionDto dto){
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","Id",userId.toString()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(
+            ResponseMessage.USER_NOT_FOUND));
         Question question = Question.builder().title(dto.getTitle()).description(dto.getDescription()).user(user).build();
 
 
@@ -41,7 +43,7 @@ public class QuestionService {
     }
 
     public Question update( Long id,QuestionDto dto){
-        Question question = questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Question","id",id.toString()));
+        Question question = questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
         List<Answer> answers = answerRepository.findAllByQuestionId(id);
         if(!answers.isEmpty()) throw new ForbiddenException("Không thể chỉnh sửa câu hỏi");
 
@@ -51,7 +53,7 @@ public class QuestionService {
     }
 
     public Question delete(Long id){
-        Question question = questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Question","id",id.toString()));
+        Question question = questionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
         List<Answer> answers = answerRepository.findAllByQuestionId(id);
         if(!answers.isEmpty()) throw new ForbiddenException("Không thể xóa câu hỏi");
         questionRepository.delete(question);

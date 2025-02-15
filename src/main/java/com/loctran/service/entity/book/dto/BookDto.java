@@ -1,6 +1,5 @@
-package com.loctran.service.entity.book;
+package com.loctran.service.entity.book.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

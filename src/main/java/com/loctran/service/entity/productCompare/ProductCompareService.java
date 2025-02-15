@@ -2,6 +2,7 @@ package com.loctran.service.entity.productCompare;
 
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,11 +23,12 @@ public class ProductCompareService {
   }
 
   public ProductCompare findById(Long id) {
-    return productCompareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductCompare","id",id.toString()));
+    return productCompareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public ProductCompare createProductCompare(Long id) {
-    return productCompareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductCompare","id",id.toString()));
+    return productCompareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
   }
 
   public ProductCompare deleteProductCompare(Long id) {

@@ -1,6 +1,7 @@
 package com.loctran.service.entity.NoteCategory;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class NoteCategoryService {
 
   public NoteCategory updateNoteCategory(Long id, NoteCategory noteCategoryDetails) {
     NoteCategory noteCategory = noteCategoryRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("NoteCategory", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
 
     noteCategory.setTitle(noteCategoryDetails.getTitle());
     noteCategory.setDescription(noteCategoryDetails.getDescription());
@@ -37,7 +38,7 @@ public class NoteCategoryService {
 
   public void deleteNoteCategory(Long id) {
     NoteCategory noteCategory = noteCategoryRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("NoteCategory", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     noteCategoryRepository.delete(noteCategory);
   }
 }

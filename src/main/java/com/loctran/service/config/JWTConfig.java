@@ -2,6 +2,7 @@ package com.loctran.service.config;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.entity.user.UserRepository;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class JWTConfig {
       @Override
       public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-            .orElseThrow(() -> new ResourceNotFoundException("User", "email", username));
+            .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
       }
     };
   }

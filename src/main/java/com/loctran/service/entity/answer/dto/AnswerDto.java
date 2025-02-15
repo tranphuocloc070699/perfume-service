@@ -1,4 +1,4 @@
-package com.loctran.service.entity.answer;
+package com.loctran.service.entity.answer.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

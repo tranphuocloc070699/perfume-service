@@ -1,19 +1,18 @@
 package com.loctran.service.entity.book;
 
-import com.loctran.service.entity.answer.Answer;
-import com.loctran.service.entity.question.Question;
-import com.loctran.service.entity.question.dto.QuestionDto;
-import com.loctran.service.entity.user.User;
-import com.loctran.service.exception.custom.ForbiddenException;
+import com.loctran.service.entity.book.dto.BookDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
 private final BookRepository bookRepository;
+private final ModelMapper modelMapper;
 
 
   public List<Book> getAll(){
@@ -21,20 +20,18 @@ private final BookRepository bookRepository;
   }
 
   public Book findById (Long id){
-    return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book","id",id.toString()));
+    return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
 
   public Book create( BookDto dto){
-
-    Book book = Book.builder().name(dto.getName()).description(dto.getDescription()).link(dto.getLink()).thumbnail(dto.getThumbnail()).build();
-
-
+    Book book = modelMapper.map(dto,Book.class);
     return bookRepository.save(book);
   }
 
-  public Book update( Long id,BookDto dto){
-    Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book","id",id.toString()));
+  public Book updateById( Long id,BookDto dto){
+    Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     book.setName(dto.getName());
     book.setDescription(dto.getDescription());
     book.setLink(dto.getLink());
@@ -42,8 +39,8 @@ private final BookRepository bookRepository;
     return bookRepository.save(book);
   }
 
-  public Book delete(Long id){
-    Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book","id",id.toString()));
+  public Book deleteById(Long id){
+    Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     bookRepository.delete(book);
     return book;
   }

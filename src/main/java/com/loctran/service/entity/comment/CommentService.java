@@ -20,6 +20,7 @@ import com.loctran.service.entity.productCompare.ProductCompareRepository;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -40,15 +41,22 @@ public class CommentService {
     return commentRepository.findAllByUserId(userId);
   }
 
+  public List<Comment> findAllByAnswerId(Long answerId) {
+    return commentRepository.findAllByAnswerId(answerId);
+  }
+
+
+
   public Comment findById(Long id) {
-    return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment","id",id.toString()));
+    return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
   public Comment saveProductComment(Long userId, Long productId, CreateCommentDto dto) {
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
     Comment comment = Comment.builder()
         .content(dto.getContent())
         .user(user)
@@ -59,9 +67,9 @@ public class CommentService {
 
   public Comment savePostComment(Long userId, Long postId, CreateCommentDto dto) {
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.POST_NOT_FOUND));
     Comment comment = Comment.builder()
         .content(dto.getContent())
         .user(user)
@@ -72,9 +80,9 @@ public class CommentService {
 
   public Comment saveProductCompareComment(Long userId, Long productCompareId, CreateCommentDto dto) {
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     ProductCompare productCompare = productCompareRepository.findById(productCompareId)
-        .orElseThrow(() -> new ResourceNotFoundException("Post", "id", productCompareId.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.POST_NOT_FOUND));
     Comment comment = Comment.builder()
         .content(dto.getContent())
         .user(user)
@@ -84,22 +92,22 @@ public class CommentService {
   }
 
   public Comment update(Long commentId, UpdateCommentDto dto) {
-    Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment","id",commentId.toString()));
+    Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     comment.setContent(dto.getContent());
     return commentRepository.save(comment);
   }
 
   public Comment delete(Long commentId) {
-    Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment","id",commentId.toString()));
+    Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     commentRepository.delete(comment);
     return comment;
   }
 
     public Comment saveAnswerComment(Long userId, Long answerId, CreateCommentDto createCommentDto) {
       User user = userRepository.findById(userId)
-              .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
+              .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
       Answer answer = answerRepository.findById(answerId)
-              .orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId.toString()));
+              .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
       Comment comment = Comment.builder()
               .content(createCommentDto.getContent())
               .user(user)

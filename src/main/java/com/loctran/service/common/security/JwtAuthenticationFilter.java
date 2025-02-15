@@ -5,6 +5,8 @@ import com.loctran.service.entity.user.JwtService;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,7 +41,8 @@ public class JwtAuthenticationFilter   extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String jwt = authHeader.substring(7);
         String userEmail = jwtService.extractUsername(jwt);
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User","email",userEmail));
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException(
+            ResponseMessage.USER_NOT_FOUND));
         if(jwtService.isTokenValid(jwt,user)  && SecurityContextHolder.getContext().getAuthentication()==null){
           UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
               user,

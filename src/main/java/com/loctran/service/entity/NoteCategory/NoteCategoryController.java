@@ -2,6 +2,7 @@ package com.loctran.service.entity.NoteCategory;
 
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class NoteCategoryController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getNoteCategoryById(@PathVariable Long id) {
     NoteCategory noteCategory = noteCategoryService.getNoteCategoryById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("NoteCategory", "id", id.toString()));
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     ResponseDto responseDto = ResponseDto.builder().build();
     responseDto.setMessage("Lấy thông tin danh mục ghi chú thành công");
     responseDto.setStatus(200);
