@@ -1,11 +1,11 @@
 package com.loctran.service.entity.collection;
 
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.brand.dto.CreateBrandDto;
 import com.loctran.service.entity.collection.dto.CollectionDto;
 import com.loctran.service.entity.collection.dto.UpdateCollectIndexDto;
 import com.loctran.service.entity.collection.dto.UpsaveCollectionDto;
+import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -34,20 +34,8 @@ public class CollectionController {
     @Operation(summary = "Get all collections", description = "Retrieves all available collections")
     @GetMapping("")
     public ResponseEntity<ResponseDto> getAll() {
-        try {
             List<CollectionDto> collections = collectionService.getAll();
-            ResponseDto responseDto = ResponseDto.builder().build();
-            responseDto.setMessage("Lấy thông tin thành công");
-            responseDto.setStatus(200);
-            responseDto.setData(collections);
-            return ResponseEntity.ok(responseDto);
-        } catch (Exception e) {
-            ResponseDto responseDto = ResponseDto.builder().build();
-            responseDto.setMessage("Process failure");
-            responseDto.setStatus(500);
-            responseDto.setErrors(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
-        }
+            return ResponseEntity.ok(ResponseDto.getDataSuccess(collections));
     }
 
     /**
@@ -56,12 +44,8 @@ public class CollectionController {
     @Operation(summary = "Create a collection", description = "Creates a new collection")
     @PostMapping("")
     public ResponseEntity<ResponseDto> createCollection(@RequestBody UpsaveCollectionDto dto) {
-        Collection collection = collectionService.save(dto);
-        ResponseDto responseDto = ResponseDto.builder().build();
-        responseDto.setMessage("Tạo Collection thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(collection);
-        return ResponseEntity.ok(responseDto);
+        Collection collection = collectionService.create(dto);
+        return ResponseEntity.ok(ResponseDto.getDataSuccess(collection));
     }
 
     /**
@@ -70,24 +54,16 @@ public class CollectionController {
     @Operation(summary = "Update collection indexes", description = "Updates the indexes of multiple collections")
     @PutMapping("/index")
     public ResponseEntity<ResponseDto> updateCollectionIndexes(@RequestBody List<UpdateCollectIndexDto> updateCollectIndexDtos) {
-        try {
             for (UpdateCollectIndexDto dto : updateCollectIndexDtos) {
                 Optional<Collection> optionalCollection = collectionService.updateCollectionIndex(dto.getCollectionId(), dto.getIndex());
                 if (optionalCollection.isEmpty()) {
-                    throw new IllegalArgumentException("Collection not found with ID: " + dto.getCollectionId());
+                    throw new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND);
                 }
             }
             ResponseDto responseDto = ResponseDto.builder().build();
-            responseDto.setMessage("Updated collection indexes successfully");
+            responseDto.setMessage(ResponseMessage.UPDATE_DATA_SUCCESS);
             responseDto.setStatus(200);
             return ResponseEntity.ok(responseDto);
-        } catch (Exception e) {
-            ResponseDto responseDto = ResponseDto.builder().build();
-            responseDto.setMessage("Process failure");
-            responseDto.setStatus(500);
-            responseDto.setErrors(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
-        }
     }
 
     /**
@@ -96,12 +72,8 @@ public class CollectionController {
     @Operation(summary = "Update a collection", description = "Updates an existing collection")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updateCollection(@PathVariable Long id, @RequestBody UpsaveCollectionDto upsaveCollectionDto) {
-        Optional<Collection> updatedCollection = collectionService.updateCollection(id, upsaveCollectionDto);
-        ResponseDto responseDto = ResponseDto.builder().build();
-        responseDto.setMessage("Chỉnh sửa Collection thành công");
-        responseDto.setStatus(200);
-        responseDto.setData(updatedCollection);
-        return ResponseEntity.ok(responseDto);
+        Optional<Collection> updatedCollection = collectionService.updateById(id, upsaveCollectionDto);
+        return ResponseEntity.ok(ResponseDto.updateDataSuccess(updatedCollection));
     }
 
     /**
@@ -114,10 +86,10 @@ public class CollectionController {
         Integer status;
 
         if (collectionService.deleteCollection(id)) {
-            message = "Xóa Collection thành công";
+            message = ResponseMessage.DELETE_DATA_SUCCESS;
             status = HttpStatus.OK.value();
         } else {
-            message = "Xóa Collection thất bại";
+            message = ResponseMessage.DELETE_DATA_FORBIDDEN;
             status = HttpStatus.BAD_REQUEST.value();
         }
 

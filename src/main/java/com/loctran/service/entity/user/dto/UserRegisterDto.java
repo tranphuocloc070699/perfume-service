@@ -2,6 +2,7 @@ package com.loctran.service.entity.user.dto;
 
 import com.loctran.service.entity.user.Role;
 import com.loctran.service.entity.user.User;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -16,15 +17,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegisterDto {
-  @NotBlank(message = "Trường này không được để trống")
-  @Email(message = "Email không hợp lệ")
+  @NotBlank(message = ResponseMessage.VALIDATE_NOT_BLANK)
+  @Email(message = ResponseMessage.VALIDATE_EMAIL_INVALID)
   private String email;
 
-  @NotBlank(message = "Trường này không được để trống")
+  @NotBlank(message = ResponseMessage.VALIDATE_NOT_BLANK)
   private String name;
 
-  @NotBlank(message = "Trường này không được để trống")
-  @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
+  @NotBlank(message = ResponseMessage.VALIDATE_NOT_BLANK)
+  @Size(min = 6, message = ResponseMessage.VALIDATE_PASSWORD_INVALID)
   private String password;
 
   public User mapToUser(){

@@ -1,6 +1,5 @@
 package com.loctran.service.entity.book;
 
-import com.loctran.service.entity.book.dto.BookDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.List;
@@ -25,17 +24,16 @@ private final ModelMapper modelMapper;
   }
 
 
-  public Book create( BookDto dto){
+  public Book create( UpsaveBookDto dto){
     Book book = modelMapper.map(dto,Book.class);
     return bookRepository.save(book);
   }
 
-  public Book updateById( Long id,BookDto dto){
+  public Book updateById( Long id,UpsaveBookDto dto){
     Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
-    book.setName(dto.getName());
-    book.setDescription(dto.getDescription());
-    book.setLink(dto.getLink());
-    book.setThumbnail(dto.getThumbnail());
+    modelMapper.typeMap(UpsaveBookDto.class, Book.class)
+        .addMappings(mapper -> mapper.skip(Book::setId));
+    modelMapper.map(dto, book);
     return bookRepository.save(book);
   }
 

@@ -1,7 +1,5 @@
 package com.loctran.service.entity.media;
 
-import com.loctran.service.entity.media.dto.MediaDto;
-import com.loctran.service.entity.media.dto.UpsaveMediaDto;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.List;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MediaService {
   private final MediaRepository mediaRepository;
-  private final R2Service r2Service;
 
   public List<Media> findAll() {
     return mediaRepository.findAll();
@@ -24,11 +21,17 @@ public class MediaService {
   }
 
   public Media create(Media media) {
-
     return mediaRepository.save(media);
   }
 
-  public Media delete (Long id) {
+  public Media updateEntityId(Long mediaId, Long entityId){
+    Media media = mediaRepository.findById(mediaId).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
+    media.setEntityId(entityId);
+    media = mediaRepository.save(media);
+    return media;
+  }
+
+  public Media deleteById(Long id) {
     Media media = findById(id);
     mediaRepository.delete(media);
     return media;

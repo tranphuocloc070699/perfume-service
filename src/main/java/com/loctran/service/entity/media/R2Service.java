@@ -22,11 +22,11 @@ public class R2Service {
   @Value("${cloudflare.r2.endpoint}")
   private String endpointUrl;
 
+  @Value("${cloudflare.r2.domain}")
+  private String domain;
 
-
-  public String uploadFile(String folderDir, MultipartFile file) throws IOException {
-
-    String key = folderDir + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+  public String uploadFile(EntityType folderDir, MultipartFile file) throws IOException {
+    String key = folderDir.name() + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
     PutObjectRequest request = PutObjectRequest.builder()
         .bucket(bucketName)
         .key(key)
@@ -34,8 +34,6 @@ public class R2Service {
         .build();
 
     s3Client.putObject(request, software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes()));
-    String domain = "https://pub-f221da3c242c439c95b488d3133bc92f.r2.dev";
-
     return String.format("%s/%s", domain, key);
   }
 
@@ -44,9 +42,7 @@ public class R2Service {
         .bucket(bucketName)
         .key(key)
         .build();
-
     s3Client.deleteObject(request);
-
     return String.format("%s/%s/%s", endpointUrl, bucketName, key);
   }
 }

@@ -1,8 +1,9 @@
-package com.loctran.service.entity.NoteCategory;
+package com.loctran.service.entity.noteCategory;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,31 +13,36 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NoteCategoryService {
   private final NoteCategoryRepository noteCategoryRepository;
+  private final ModelMapper modelMapper;
 
-  public List<NoteCategory> getAllNoteCategories() {
+  public List<NoteCategory> getAll() {
     return noteCategoryRepository.findAll();
   }
 
-  public Optional<NoteCategory> getNoteCategoryById(Long id) {
-    return noteCategoryRepository.findById(id);
+  public NoteCategory getById(Long id) {
+    return noteCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
   }
 
-  public NoteCategory createNoteCategory(NoteCategory noteCategory) {
+  public NoteCategory create(UpsaveNoteCategoryDto dto) {
+            NoteCategory noteCategory = modelMapper.map(dto,NoteCategory.class);
+
     return noteCategoryRepository.save(noteCategory);
   }
 
-  public NoteCategory updateNoteCategory(Long id, NoteCategory noteCategoryDetails) {
+  public NoteCategory updateById(Long id, UpsaveNoteCategoryDto dto) {
     NoteCategory noteCategory = noteCategoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
 
-    noteCategory.setTitle(noteCategoryDetails.getTitle());
-    noteCategory.setDescription(noteCategoryDetails.getDescription());
-    noteCategory.setNotes(noteCategoryDetails.getNotes());
+
+
+    noteCategory.setTitle(dto.getTitle());
+    noteCategory.setDescription(dto.getDescription());
+//    noteCategory.setNotes(noteCategoryDetails.getNotes());
 
     return noteCategoryRepository.save(noteCategory);
   }
 
-  public void deleteNoteCategory(Long id) {
+  public void deleteById(Long id) {
     NoteCategory noteCategory = noteCategoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     noteCategoryRepository.delete(noteCategory);

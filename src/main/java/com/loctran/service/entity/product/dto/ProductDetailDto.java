@@ -1,6 +1,7 @@
 package com.loctran.service.entity.product.dto;
 
-import com.loctran.service.entity.brand.dto.BrandDto;
+
+import com.loctran.service.entity.brand.UpsaveBrandDto;
 import com.loctran.service.entity.comment.dto.CommentDto;
 import com.loctran.service.entity.country.dto.CountryDto;
 import com.loctran.service.entity.productCompare.dto.ProductCompareDto;
@@ -32,7 +33,7 @@ public class ProductDetailDto {
 
   private YearDto dateReleased;
   private List<ProductCompareDto> productCompare;
-  private BrandDto brand;
+  private UpsaveBrandDto brand;
   private CountryDto country;
   private CommentDto comments;
   private ProductNoteDto notes;
@@ -43,7 +44,7 @@ public class ProductDetailDto {
 
   public ProductDetailDto(Long id, String name, String slug, String description, String thumbnail,
       Object galleries, List<String> outfits, YearDto dateReleased,
-      List<ProductCompareDto> productCompare, BrandDto brand, CountryDto country,
+      List<ProductCompareDto> productCompare, UpsaveBrandDto brand, CountryDto country,
       CommentDto comments,
       ProductNoteDto notes, List<UserDto> votes, Date createdAt, Date updatedAt) {
     this.id = id;

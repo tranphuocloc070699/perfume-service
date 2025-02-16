@@ -51,7 +51,6 @@ public class Brand {
   @ToString.Exclude
   private Country country;
 
-
   @JsonIgnore
   @OneToMany(fetch = FetchType.EAGER,mappedBy = "brand")
   @ToString.Exclude

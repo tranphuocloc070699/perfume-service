@@ -1,15 +1,10 @@
-package com.loctran.service.entity.post.dto;
+package com.loctran.service.entity.post;
 
-import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.post.Post;
-import com.loctran.service.entity.post.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
 
 
 @Getter

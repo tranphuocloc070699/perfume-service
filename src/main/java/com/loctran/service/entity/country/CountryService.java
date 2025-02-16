@@ -3,12 +3,13 @@ package com.loctran.service.entity.country;
 import com.loctran.service.entity.brand.Brand;
 import com.loctran.service.entity.brand.BrandService;
 import com.loctran.service.entity.country.dto.CreateCountryDto;
-import com.loctran.service.entity.country.dto.UpdateCountryDto;
+import com.loctran.service.entity.country.dto.UpsaveCountryDto;
 
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CountryService {
   private final CountryRepository countryRepository;
 
   private final BrandService brandService;
+  private final ModelMapper modelMapper;
 
   public List<Country> findAll() {
     return countryRepository.findAll();
@@ -30,19 +32,23 @@ public class CountryService {
         ResponseMessage.DATA_NOT_FOUND));
   }
 
-  public Country save(CreateCountryDto dto) {
-    return countryRepository.save(dto.maptoCountry());
+  public Country create(UpsaveCountryDto dto) {
+    Country country = modelMapper.map(dto,Country.class);
+
+
+    return countryRepository.save(country);
   }
 
 
 
-  public Country update(Long id, UpdateCountryDto dto) {
+  public Country updateById(Long id, UpsaveCountryDto dto) {
     Country country = countryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     country.setName(dto.getName());
     country.setCode(dto.getCode());
     country.setThumbnail(dto.getThumbnail());
-    Country countrySaved = countryRepository.save(country);
-    return countrySaved;
+
+    modelMapper.map(dto,country);
+    return countryRepository.save(country);
   }
 
 
@@ -68,7 +74,7 @@ public class CountryService {
 
 
   @Transactional
-  public Country deleteCountry(Long id) {
+  public Country deleteById(Long id) {
     Country country = countryRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Country not found"));
     countryRepository.delete(country);

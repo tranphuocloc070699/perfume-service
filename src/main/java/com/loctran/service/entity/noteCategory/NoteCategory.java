@@ -1,9 +1,8 @@
-package com.loctran.service.entity.NoteCategory;
+package com.loctran.service.entity.noteCategory;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.loctran.service.entity.color.Color;
 import com.loctran.service.entity.productNote.ProductNote;
 import com.loctran.service.entity.productNote.dto.ProductNoteSerializer;
 import jakarta.persistence.Column;

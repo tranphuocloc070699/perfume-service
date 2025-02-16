@@ -1,27 +1,17 @@
 package com.loctran.service.entity.brand;
 
-import com.loctran.service.entity.brand.dto.CreateBrandDto;
-import com.loctran.service.entity.brand.dto.UpdateBrandDto;
-import com.loctran.service.entity.country.Country;
-import com.loctran.service.entity.country.CountryRepository;
-import com.loctran.service.entity.country.CountryService;
-import com.loctran.service.entity.country.dto.CreateCountryDto;
-import com.loctran.service.entity.country.dto.UpdateCountryDto;
-
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BrandService {
-
   private final BrandRepository brandRepository;
-
-
+  private final ModelMapper modelMapper;
 
   public List<Brand> findAll() {
     return brandRepository.findAll();
@@ -32,43 +22,21 @@ public class BrandService {
         ResponseMessage.DATA_NOT_FOUND));
   }
 
-  public Brand save(CreateBrandDto dto) {
-    return brandRepository.save(dto.mapToBrand());
+  public Brand create(UpsaveBrandDto dto) {
+    Brand brand = modelMapper.map(dto,Brand.class);
+    return brandRepository.save(brand);
   }
 
-
-  public Brand update(Long id, UpdateBrandDto dto) {
+  public Brand updateById(Long id, UpsaveBrandDto dto) {
     Brand brand = brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
-    brand.setName(dto.getName());
-    brand.setDescription(dto.getDescription());
-    brand.setHomepageLink(dto.getHomepageLink());
-    brand.setThumbnail(dto.getThumbnail());
-
+    modelMapper.map(dto, brand);
     return brand;
   }
 
-
-
-
-//  @Transactional
-//  public ProductNote removeNoteFromProduct(Long noteId, Long productId) {
-//    Product product = productRepository.findById(productId)
-//        .orElseThrow(() -> new RuntimeException("Product not found"));
-//    ProductNote productNote = productNoteRepository.findById(noteId)
-//        .orElseThrow(() -> new RuntimeException("ProductNote not found"));
-//
-//    if (productNote.getProducts().contains(product)) {
-//      productNote.getProducts().remove(product);
-//    }
-//
-//    return productNoteRepository.save(productNote);
-//  }
-
-  @Transactional
-  public Brand deleteBrand(Long id) {
-    Brand country = brandRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Brand not found"));
-    brandRepository.delete(country);
-    return country;
+  public Brand deleteById(Long id) {
+    Brand brand = brandRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
+    brandRepository.delete(brand);
+    return brand;
   }
 }

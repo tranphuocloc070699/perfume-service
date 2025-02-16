@@ -7,6 +7,8 @@ public class MessageUtil {
         public static final String USER_EMAIL_EXISTED = "Email này đã tồn tại, vui lòng chọn email khác";
         public static final String USER_LOGIN_FAILED = "Tài khoản hoặc mật khẩu không chính xác";
 
+        public static final String MEDIA_BAD_REQUEST = "Không thể upload file";
+
         public static final String USER_NOT_FOUND = String.format(ENTITY_NOT_FOUND, "người dùng");
         public static final String PRODUCT_NOT_FOUND = String.format(ENTITY_NOT_FOUND, "sản phẩm");
         public static final String POST_NOT_FOUND = String.format(ENTITY_NOT_FOUND, "bài viết");
@@ -16,6 +18,9 @@ public class MessageUtil {
         public static final String UPDATE_DATA_FORBIDDEN = "Không thể chỉnh sửa dữ liệu";
         public static final String DELETE_DATA_FORBIDDEN = "Không thể xóa dữ liệu";
 
+        public static final String VALIDATE_NOT_BLANK = "Trường này không được để trống";
+        public static final String VALIDATE_EMAIL_INVALID = "Email không đúng định dạng";
+        public static final String VALIDATE_PASSWORD_INVALID = "Mật khẩu phải có ít nhất 6 ký tự";
 
 
         public static final String GET_DATA_SUCCESS = "Lấy thông tin thành công";

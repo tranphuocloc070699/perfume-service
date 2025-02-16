@@ -1,5 +1,4 @@
-package com.loctran.service.entity.country.dto;
-
+package com.loctran.service.entity.brand;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCountryDto {
+public class UpsaveBrandDto {
   private String name;
-  private String code;
+  private String description;
+  private String homepageLink;
   private String thumbnail;
+  private Long countryId;
+
 }

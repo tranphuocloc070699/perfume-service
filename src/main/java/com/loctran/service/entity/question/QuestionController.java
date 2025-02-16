@@ -3,9 +3,6 @@ package com.loctran.service.entity.question;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.comment.Comment;
-import com.loctran.service.entity.comment.dto.CreateCommentDto;
-import com.loctran.service.entity.comment.dto.UpdateCommentDto;
 import com.loctran.service.entity.question.dto.QuestionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

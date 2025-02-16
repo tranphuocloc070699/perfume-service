@@ -2,11 +2,7 @@ package com.loctran.service.entity.comment;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.brand.Brand;
-import com.loctran.service.entity.brand.dto.CreateBrandDto;
-import com.loctran.service.entity.brand.dto.UpdateBrandDto;
-import com.loctran.service.entity.comment.dto.CreateCommentDto;
-import com.loctran.service.entity.comment.dto.UpdateCommentDto;
+import com.loctran.service.entity.comment.dto.UpsaveCommentDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,11 +38,7 @@ public class CommentController {
   public ResponseEntity<ResponseDto> getAllComment(HttpServletRequest request) {
     Long userId = commonService.getUserId(request);
     List<Comment> comments = commentService.findAll(userId);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(comments);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(comments));
   }
 
   /**
@@ -56,11 +48,7 @@ public class CommentController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getComment(@PathVariable Long id) {
     Comment comment = commentService.findById(id);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(comment);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(comment));
   }
 
   /**
@@ -68,14 +56,10 @@ public class CommentController {
    */
   @Operation(summary = "Create a product comment", description = "Creates a new comment for a product")
   @PostMapping("/product/{productId}")
-  public ResponseEntity<ResponseDto> createProductComment(HttpServletRequest request, @PathVariable("productId") Long productId, @RequestBody CreateCommentDto createCommentDto) {
+  public ResponseEntity<ResponseDto> createProductComment(HttpServletRequest request, @PathVariable("productId") Long productId, @RequestBody UpsaveCommentDto createCommentDto) {
     Long userId = commonService.getUserId(request);
     Comment comment = commentService.saveProductComment(userId, productId, createCommentDto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Tạo bình luận thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(comment);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(comment));
   }
 
   /**
@@ -83,13 +67,9 @@ public class CommentController {
    */
   @Operation(summary = "Update a comment", description = "Updates an existing comment")
   @PutMapping("/{id}")
-  public ResponseEntity<ResponseDto> update(@PathVariable("id") Long id, @RequestBody UpdateCommentDto dto) {
-    Comment comment = commentService.update(id, dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Update bình luận thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(comment);
-    return ResponseEntity.ok(responseDto);
+  public ResponseEntity<ResponseDto> update(@PathVariable("id") Long id, @RequestBody UpsaveCommentDto dto) {
+    Comment comment = commentService.updateById(id, dto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(comment));
   }
 
   /**
@@ -98,12 +78,8 @@ public class CommentController {
   @Operation(summary = "Delete a comment", description = "Deletes a comment by its ID")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long id) {
-    Comment comment = commentService.delete(id);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa bình luận thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(comment);
-    return ResponseEntity.ok(responseDto);
+    Comment comment = commentService.deleteById(id);
+    return ResponseEntity.ok(ResponseDto.deleteDataSuccess(comment));
   }
 
 }

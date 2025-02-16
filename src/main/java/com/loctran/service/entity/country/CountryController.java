@@ -2,7 +2,7 @@ package com.loctran.service.entity.country;
 
 import com.loctran.service.common.ResponseDto;
 import com.loctran.service.entity.country.dto.CreateCountryDto;
-import com.loctran.service.entity.country.dto.UpdateCountryDto;
+import com.loctran.service.entity.country.dto.UpsaveCountryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -35,11 +35,7 @@ public class CountryController {
   @GetMapping("")
   public ResponseEntity<ResponseDto> getAllCountry() {
     List<Country> countries = countryService.findAll();
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(countries);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(countries));
   }
 
   /**
@@ -49,11 +45,7 @@ public class CountryController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getCountry(@PathVariable String id) {
     Country country = countryService.findById(Long.parseLong(id));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(country));
   }
 
   /**
@@ -61,13 +53,9 @@ public class CountryController {
    */
   @Operation(summary = "Create a country", description = "Creates a new country")
   @PostMapping("")
-  public ResponseEntity<ResponseDto> createCountry(@RequestBody CreateCountryDto dto) {
-    Country country = countryService.save(dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm quốc gia thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+  public ResponseEntity<ResponseDto> createCountry(@RequestBody UpsaveCountryDto dto) {
+    Country country = countryService.create(dto);
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(country));
   }
 
   /**
@@ -75,13 +63,9 @@ public class CountryController {
    */
   @Operation(summary = "Update a country", description = "Updates an existing country")
   @PutMapping("/{id}")
-  public ResponseEntity<ResponseDto> updateCountry(@PathVariable("id") String id, @RequestBody UpdateCountryDto dto) {
-    Country country = countryService.update(Long.parseLong(id), dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Update quốc gia thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+  public ResponseEntity<ResponseDto> updateCountry(@PathVariable("id") String id, @RequestBody UpsaveCountryDto dto) {
+    Country country = countryService.updateById(Long.parseLong(id), dto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(country));
   }
 
   /**
@@ -91,11 +75,7 @@ public class CountryController {
   @PutMapping("/{id}/brand/{brandId}/add")
   public ResponseEntity<ResponseDto> addBrandToCountry(@PathVariable("id") String countryId, @PathVariable("brandId") String brandId) {
     Country country = countryService.addBrandToCountry(Long.parseLong(countryId), Long.parseLong(brandId));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm thương hiệu vào quốc gia thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(country));
   }
 
   /**
@@ -105,11 +85,8 @@ public class CountryController {
   @PutMapping("/{id}/brand/{brandId}/remove")
   public ResponseEntity<ResponseDto> removeBrandFromCountry(@PathVariable("id") String countryId, @PathVariable("brandId") String brandId) {
     Country country = countryService.removeBrandFromCountry(Long.parseLong(countryId), Long.parseLong(brandId));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa thương hiệu khỏi quốc gia thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(country));
   }
 
   /**
@@ -118,11 +95,7 @@ public class CountryController {
   @Operation(summary = "Delete a country", description = "Deletes a country by its ID")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deleteCountry(@PathVariable("id") String id) {
-    Country country = countryService.deleteCountry(Long.parseLong(id));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa quốc gia thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(country);
-    return ResponseEntity.ok(responseDto);
+    Country country = countryService.deleteById(Long.parseLong(id));
+    return ResponseEntity.ok(ResponseDto.deleteDataSuccess(country));
   }
 }

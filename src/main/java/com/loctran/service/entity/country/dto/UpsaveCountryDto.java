@@ -1,17 +1,17 @@
-package com.loctran.service.entity.answer.dto;
+package com.loctran.service.entity.country.dto;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnswerDto {
-    private Long id;
-    private Set<String> thumbnails;
-
+public class UpsaveCountryDto {
+  private String name;
+  private String code;
+  private String thumbnail;
 }

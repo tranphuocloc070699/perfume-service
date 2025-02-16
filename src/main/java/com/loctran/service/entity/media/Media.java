@@ -50,10 +50,12 @@ public class Media {
   @Column(columnDefinition = "varchar(50) default 'IMAGE'")
   private MediaType type = MediaType.IMAGE;
 
+  @Column
+  private Long entityId;
+
   @Enumerated(EnumType.STRING)
   @Column
   private EntityType entityType;
-
 
   @CreationTimestamp
   @Column(name = "created_at")

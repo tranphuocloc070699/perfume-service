@@ -1,6 +1,6 @@
-package com.loctran.service.entity.brand.dto;
+package com.loctran.service.entity.noteCategory;
 
-
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateBrandDto {
-  private String name;
+public class UpsaveNoteCategoryDto {
+
+  private String title;
   private String description;
-  private String homepageLink;
   private String thumbnail;
+
 }

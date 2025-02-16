@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.loctran.service.entity.comment.Comment;
+import com.loctran.service.entity.media.Media;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.question.Question;
 import com.loctran.service.entity.user.User;
@@ -31,11 +32,8 @@ public class Answer {
     @Column(name = "id")
     private Long id;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "answer_thumbnails", joinColumns = @JoinColumn(name = "answer_id"))
-    @Column(name = "thumbnails")
-    @OrderBy
-    private Set<String> thumbnails;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Media> mediaList;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)

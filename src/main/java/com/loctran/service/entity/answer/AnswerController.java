@@ -2,8 +2,6 @@ package com.loctran.service.entity.answer;
 
 import com.loctran.service.common.CommonService;
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.answer.dto.AnswerDto;
-import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,11 +33,7 @@ public class AnswerController {
   @GetMapping("/question/{id}")
   public ResponseEntity<ResponseDto> getAll(@PathVariable("id") Long id) {
     List<Answer> answers = answerService.getAll(id);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.GET_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answers);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(answers));
   }
 
   /**
@@ -52,11 +46,8 @@ public class AnswerController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getById(@PathVariable Long id) {
     Answer answer = answerService.findById(id);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.GET_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answer);
-    return ResponseEntity.ok(responseDto);
+
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(answer));
   }
 
   /**
@@ -73,11 +64,7 @@ public class AnswerController {
     Long userId = commonService.getUserId(request);
     Answer answer = answerService.create(userId, questionId, dto);
 
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.CREATE_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answer);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(answer));
   }
 
   /**
@@ -91,11 +78,8 @@ public class AnswerController {
   @PutMapping("{id}")
   public ResponseEntity<ResponseDto> update(@PathVariable("id") Long answerId, @RequestBody AnswerDto dto) {
     Answer answer = answerService.updateById(answerId, dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.UPDATE_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answer);
-    return ResponseEntity.ok(responseDto);
+
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(answer));
   }
 
   /**
@@ -110,11 +94,7 @@ public class AnswerController {
   public ResponseEntity<ResponseDto> toggleVote(HttpServletRequest request, @PathVariable("id") Long answerId) {
     Long userId = commonService.getUserId(request);
     Answer answer = answerService.toggleVote(answerId, userId);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.UPDATE_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answer);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(answer));
   }
 
   /**
@@ -127,10 +107,6 @@ public class AnswerController {
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long answerId) {
     Answer answer = answerService.deleteById(answerId);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage(ResponseMessage.DELETE_DATA_SUCCESS);
-    responseDto.setStatus(200);
-    responseDto.setData(answer);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.deleteDataSuccess(answer));
   }
 }

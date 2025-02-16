@@ -10,6 +10,4 @@ import java.util.Optional;
 
 public interface BrandRepository extends JpaRepository<Brand,Long> {
 
-    @Query("SELECT b.id,b.name,b.description,b.homepageLink,b.thumbnail FROM Brand b WHERE b.id = :id")
-    List<Object[]> findBrandById(@Param("id") Long id);
 }

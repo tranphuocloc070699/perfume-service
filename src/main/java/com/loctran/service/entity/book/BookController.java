@@ -2,12 +2,10 @@ package com.loctran.service.entity.book;
 
 
 import com.loctran.service.common.ResponseDto;
-import com.loctran.service.entity.book.dto.BookDto;
-import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.spi.Resolution;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +48,7 @@ public class BookController {
    */
   @Operation(summary = "Create a new book", description = "Creates a new book entry in the database")
   @PostMapping("")
-  public ResponseEntity<ResponseDto> create(@RequestBody BookDto dto) {
+  public ResponseEntity<ResponseDto> create(@RequestBody @Valid UpsaveBookDto dto) {
     Book book = bookService.create(dto);
     return ResponseEntity.ok(ResponseDto.createDataSuccess(book));
   }
@@ -60,7 +58,7 @@ public class BookController {
    */
   @Operation(summary = "Update a book", description = "Updates an existing book entry")
   @PutMapping("{id}")
-  public ResponseEntity<ResponseDto> update(@PathVariable("id") Long bookId, @RequestBody BookDto dto) {
+  public ResponseEntity<ResponseDto> update(@PathVariable("id") Long bookId, @RequestBody UpsaveBookDto dto) {
     Book book = bookService.updateById(bookId, dto);
     return ResponseEntity.ok(ResponseDto.updateDataSuccess(book));
   }

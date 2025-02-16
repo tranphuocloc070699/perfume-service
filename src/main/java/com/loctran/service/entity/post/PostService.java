@@ -2,14 +2,11 @@ package com.loctran.service.entity.post;
 
 
 import com.loctran.service.entity.media.Media;
-import com.loctran.service.entity.media.MediaRepository;
 import com.loctran.service.entity.media.MediaService;
-import com.loctran.service.entity.post.dto.UpsavePostDto;
 import com.loctran.service.entity.user.User;
 import com.loctran.service.entity.user.UserRepository;
 import com.loctran.service.exception.custom.ResourceNotFoundException;
 import com.loctran.service.utils.MessageUtil.ResponseMessage;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -57,7 +54,7 @@ public class PostService {
         ResponseMessage.POST_NOT_FOUND));
   }
 
-  public Post createPost(Long userId, UpsavePostDto dto) {
+  public Post create(Long userId, UpsavePostDto dto) {
     User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
     Post post =  modelMapper.map(dto, Post.class);
 
@@ -69,7 +66,7 @@ public class PostService {
     return postRepository.save(post);
   }
 
-  public Post updatePost(Long id, UpsavePostDto dto) {
+  public Post updateById(Long id, UpsavePostDto dto) {
       Post post = getPostById(id);
 
       Media thumbnail = mediaService.findById(dto.getMediaId());
@@ -97,7 +94,7 @@ public class PostService {
     return postRepository.save(post);
   }
 
-  public Post deletePost(Long id) {
+  public Post deleteById(Long id) {
     Post post = getPostById(id);
     postRepository.delete(post);
     return post;

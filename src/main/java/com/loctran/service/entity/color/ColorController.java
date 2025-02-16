@@ -1,6 +1,7 @@
 package com.loctran.service.entity.color;
 
 import com.loctran.service.common.ResponseDto;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,8 @@ public class ColorController {
   @Operation(summary = "Get all colors", description = "Retrieves all available colors")
   @GetMapping
   public ResponseEntity<ResponseDto> getAllColors() {
-    List<Color> colors = colorService.getAllColors();
-    ResponseDto responseDto = ResponseDto.builder()
-        .message("Lấy tất cả thông tin màu sắc thành công")
-        .status(200)
-        .data(colors)
-        .build();
-    return ResponseEntity.ok(responseDto);
+    List<Color> colors = colorService.getAll();
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(colors));
   }
 
   /**
@@ -43,13 +39,8 @@ public class ColorController {
   @Operation(summary = "Get a color by ID", description = "Retrieves a color by its unique identifier")
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getColorById(@PathVariable Long id) {
-    Color color = colorService.getColorById(id);
-    ResponseDto responseDto = ResponseDto.builder()
-        .message("Lấy thông tin màu sắc thành công")
-        .status(200)
-        .data(color)
-        .build();
-    return ResponseEntity.ok(responseDto);
+    Color color = colorService.getById(id);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(color));
   }
 
   /**
@@ -58,13 +49,9 @@ public class ColorController {
   @Operation(summary = "Create a new color", description = "Creates a new color entry in the database")
   @PostMapping
   public ResponseEntity<ResponseDto> createColor(@RequestBody Color color) {
-    Color newColor = colorService.createColor(color);
-    ResponseDto responseDto = ResponseDto.builder()
-        .message("Tạo màu sắc thành công")
-        .status(200)
-        .data(newColor)
-        .build();
-    return ResponseEntity.ok(responseDto);
+    Color newColor = colorService.create(color);
+
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(newColor));
   }
 
   /**
@@ -73,13 +60,8 @@ public class ColorController {
   @Operation(summary = "Update a color", description = "Updates an existing color entry")
   @PutMapping("/{id}")
   public ResponseEntity<ResponseDto> updateColor(@PathVariable Long id, @RequestBody Color colorDetails) {
-    Color updatedColor = colorService.updateColor(id, colorDetails);
-    ResponseDto responseDto = ResponseDto.builder()
-        .message("Cập nhật màu sắc thành công")
-        .status(200)
-        .data(updatedColor)
-        .build();
-    return ResponseEntity.ok(responseDto);
+    Color updatedColor = colorService.updateById(id, colorDetails);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(updatedColor));
   }
 
   /**
@@ -88,9 +70,9 @@ public class ColorController {
   @Operation(summary = "Delete a color", description = "Deletes a color by its unique identifier")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deleteColor(@PathVariable Long id) {
-    colorService.deleteColor(id);
+    colorService.deleteById(id);
     ResponseDto responseDto = ResponseDto.builder()
-        .message("Xóa màu sắc thành công")
+        .message(ResponseMessage.DELETE_DATA_SUCCESS)
         .status(200)
         .build();
     return ResponseEntity.ok(responseDto);

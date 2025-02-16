@@ -6,6 +6,8 @@ import com.loctran.service.entity.collection.dto.UpsaveCollectionDto;
 import com.loctran.service.entity.product.Product;
 import com.loctran.service.entity.product.ProductRepository;
 import com.loctran.service.entity.product.dto.ListProductDto;
+import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,7 @@ public class CollectionService {
 
 
 
-    public Collection save(UpsaveCollectionDto upsaveCollectionDto) {
+    public Collection create(UpsaveCollectionDto upsaveCollectionDto) {
         long totalCollection =  collectionRepository.count();
 
 
@@ -68,7 +70,7 @@ public class CollectionService {
                     CollectionProduct collectionProduct = new CollectionProduct();
                     collectionProduct.setIndex(productDto.getIndex());
                     collectionProduct.setProduct(productRepository.findById(productDto.getProductId()).orElseThrow(() ->
-                            new IllegalArgumentException("Product not found with ID: " + productDto.getProductId())));
+                            new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND)));
                     collectionProduct.setCollection(collectionSaved);
                     return  collectionProductRepository.save(collectionProduct);
                 }).collect(Collectors.toSet());
@@ -77,7 +79,7 @@ public class CollectionService {
     }
 
 
-    public Optional<Collection> updateCollection(Long id, UpsaveCollectionDto upsaveCollectionDto) {
+    public Optional<Collection> updateById(Long id, UpsaveCollectionDto upsaveCollectionDto) {
         Optional<Collection> optionalCollection = collectionRepository.findById(id);
         if (optionalCollection.isPresent()) {
             Collection collection = optionalCollection.get();
@@ -91,7 +93,7 @@ public class CollectionService {
                         CollectionProduct collectionProduct = new CollectionProduct();
                         collectionProduct.setIndex(productDto.getIndex());
                         collectionProduct.setProduct(productRepository.findById(productDto.getProductId()).orElseThrow(() ->
-                                new IllegalArgumentException("Product not found with ID: " + productDto.getProductId())));
+                                new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND)));
                         collectionProduct.setCollection(collectionSaved);
                         return  collectionProductRepository.save(collectionProduct);
                     }).collect(Collectors.toSet());

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCommentDto {
+public class UpsaveCommentDto {
   String content;
 }

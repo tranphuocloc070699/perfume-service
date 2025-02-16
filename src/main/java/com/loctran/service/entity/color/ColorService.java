@@ -1,5 +1,7 @@
 package com.loctran.service.entity.color;
 
+import com.loctran.service.exception.custom.ResourceNotFoundException;
+import com.loctran.service.utils.MessageUtil.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,27 +12,28 @@ import java.util.List;
 public class ColorService {
   private final ColorRepository colorRepository;
 
-  public List<Color> getAllColors() {
+  public List<Color> getAll() {
     return colorRepository.findAll();
   }
 
-  public Color getColorById(Long id) {
-    return colorRepository.findById(id).orElseThrow(() -> new RuntimeException("Color not found"));
+  public Color getById(Long id) {
+    return colorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+        ResponseMessage.DATA_NOT_FOUND));
   }
 
-  public Color createColor(Color color) {
+  public Color create(Color color) {
     return colorRepository.save(color);
   }
 
-  public Color updateColor(Long id, Color colorDetails) {
-    Color color = colorRepository.findById(id).orElseThrow(() -> new RuntimeException("Color not found"));
+  public Color updateById(Long id, Color colorDetails) {
+    Color color = colorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     color.setName(colorDetails.getName());
     color.setHexCode(colorDetails.getHexCode());
     return colorRepository.save(color);
   }
 
-  public void deleteColor(Long id) {
-    Color color = colorRepository.findById(id).orElseThrow(() -> new RuntimeException("Color not found"));
+  public void deleteById(Long id) {
+    Color color = colorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.DATA_NOT_FOUND));
     colorRepository.delete(color);
   }
 }

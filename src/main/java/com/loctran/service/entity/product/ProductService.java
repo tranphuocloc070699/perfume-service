@@ -102,28 +102,8 @@ public class ProductService {
     Product product = dto.mapToProduct();
 
     product.getPrices().forEach(price -> price.setProduct(product));
-
-    List<ProductNote> topNotes = dto.getTopNotes().stream().map((item) -> {
-      return item.mapToEntity();
-    }).toList();
-    List<ProductNote> middleNotes = dto.getMiddleNotes().stream().map((item) -> {
-      return item.mapToEntity();
-    }).toList();
-
-    List<ProductNote> baseNotes = ( dto.getBaseNotes().stream().map((item) -> {
-      return item.mapToEntity();
-    }).toList());
-
     return productRepository.save(product);
   }
-
-  public Product findProductBySlug(String slug) {
-    Product product = productRepository.findById(1L)
-        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
-
-    return product;
-  }
-
 
   public Product updateProduct(Long id, CreateProductDto dto) {
     Product product = productRepository.findById(id)
@@ -146,10 +126,6 @@ public class ProductService {
     List<ProductNote> baseNotes = ( dto.getBaseNotes().stream().map((item) -> {
       return item.mapToEntity();
     }).toList());
-
-    System.out.println("top notes size: " + topNotes.size());
-    System.out.println("middle notes size: " + middleNotes.size());
-    System.out.println("base notes size: " + baseNotes.size());
 
       product.setName(dto.getName());
     product.setSlug(dto.getSlug());
