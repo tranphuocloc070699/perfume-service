@@ -36,11 +36,7 @@ public class ProductNoteController {
   @GetMapping("")
   public ResponseEntity<ResponseDto> getAllProductNotes() {
     List<ProductNote> productNotes = productNoteService.findAll();
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNotes);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(productNotes));
   }
 
   /**
@@ -50,11 +46,7 @@ public class ProductNoteController {
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getProductNote(@PathVariable String id) {
     ProductNote productNotes = productNoteService.findById(Long.parseLong(id));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Lấy thông tin thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNotes);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.getDataSuccess(productNotes));
   }
 
   /**
@@ -64,11 +56,7 @@ public class ProductNoteController {
   @PostMapping("")
   public ResponseEntity<ResponseDto> createProductNote(@RequestBody CreateProductNoteDto dto) {
     ProductNote productNote = productNoteService.save(dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm nốt hương thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNote);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.createDataSuccess(productNote));
   }
 
   /**
@@ -78,11 +66,7 @@ public class ProductNoteController {
   @PutMapping("/{id}")
   public ResponseEntity<ResponseDto> updateProductNote(@PathVariable("id") String id, @RequestBody UpdateProductNoteDto dto) {
     ProductNote productNote = productNoteService.update(Long.parseLong(id), dto);
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Update nốt hương thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNote);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(productNote));
   }
 
   /**
@@ -92,11 +76,7 @@ public class ProductNoteController {
   @PutMapping("/notes/{id}/product/{productId}/add")
   public ResponseEntity<ResponseDto> addProductNoteToProduct(@PathVariable("id") String noteId, @PathVariable("productId") String productId) {
     ProductNote productNote = productNoteService.addNoteToProduct(Long.parseLong(noteId), Long.parseLong(productId));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Thêm nốt hương vào sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNote);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(productNote));
   }
 
   /**
@@ -106,11 +86,7 @@ public class ProductNoteController {
   @PutMapping("/notes/{id}/product/{productId}/remove")
   public ResponseEntity<ResponseDto> removeProductNoteFromProduct(@PathVariable("id") String noteId, @PathVariable("productId") String productId) {
     ProductNote productNote = productNoteService.removeNoteFromProduct(Long.parseLong(noteId), Long.parseLong(productId));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa nốt hương khỏi sản phẩm thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNote);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.updateDataSuccess(productNote));
   }
 
   /**
@@ -120,10 +96,6 @@ public class ProductNoteController {
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deleteProductNote(@PathVariable("id") String id) {
     ProductNote productNote = productNoteService.deleteProductNote(Long.parseLong(id));
-    ResponseDto responseDto = ResponseDto.builder().build();
-    responseDto.setMessage("Xóa nốt hương thành công");
-    responseDto.setStatus(200);
-    responseDto.setData(productNote);
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(ResponseDto.deleteDataSuccess(productNote));
   }
 }

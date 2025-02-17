@@ -182,15 +182,14 @@ public class ProductService {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.PRODUCT_NOT_FOUND));
 
-
-    List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);
-    List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
-    objectResponse.forEach((object) -> {
-      ListProductCompareDto dto = new ListProductCompareDto();
-      dto.convertObjectToDto(object);
-      listProductCompareDtos.add(dto);
-    });
-    product.setProductCompares(listProductCompareDtos);
+//    List<Object[]> objectResponse = productCompareRepository.findProductCompare(id);
+//    List<ListProductCompareDto> listProductCompareDtos = new ArrayList<>();
+//    objectResponse.forEach((object) -> {
+//      ListProductCompareDto dto = new ListProductCompareDto();
+//      dto.convertObjectToDto(object);
+//      listProductCompareDtos.add(dto);
+//    });
+//    product.setProductCompares(listProductCompareDtos);
 
     return product;
   }
